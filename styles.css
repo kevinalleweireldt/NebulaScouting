@@ -1,3 +1,12 @@
-h1{
-    color: red;
-}
+body {
+    background-color: #0d0d1f;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  h1 {
+    font-size: 3rem;
+    color: #00ffff;
+  }
