@@ -1,0 +1,204 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.main{
+    width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(stars.jpg);
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 50px;
+
+}
+
+.navbar{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 20px;
+}
+
+.logo {
+    position: absolute; /* Position the logo relative to the screen */
+    top: 0; /* Align it to the top */
+    left: 40px; /* Align it to the left */
+    color: white;
+    font-size: 50px; /* Adjust the font size as needed */
+    font-family: monospace;
+    margin: 10px; /* Add some spacing from the edges */
+    padding: 0;
+}
+
+.logo a{
+    text-decoration: none;
+    color: white;
+    font-family: monospace;
+    font-weight: bold;
+    transition: 0.4s ease-in-out;
+}
+.logo a:hover{
+    color: purple;
+}
+
+.menu{
+    width: 400px;
+    float: left;
+    height: 700px;
+}
+ul{
+    float: left;
+    display: flex;
+    align-items: center;
+}
+
+ul li{
+    list-style: none;
+    margin-left: 62px;
+    margin-top: 27px;
+    font-size: 20px;
+}
+
+ul li a{
+    text-decoration: none;
+    color: white;
+    font-family: monospace;
+    font-weight: bold;
+    transition: 0.4s ease-in-out;
+}
+
+ul li a:hover{
+    color: purple;
+
+}
+
+.content{
+    width: 1200px;
+    height: auto;
+    margin: 0 auto;
+    color: white;
+    position: relative;
+    font-size: 24px;padding-top: 50px;
+}
+
+.content .par{
+    padding: 0 20px 25px 20px;
+    text-align: center;
+    font-family: monospace;
+    letter-spacing: 1.2px;
+    line-height: 30px;
+}
+
+.content h1{
+    font-size: 50px;
+    font-family: monospace;
+    margin-top: 20px;
+    letter-spacing: 2px;
+    text-align: center;
+    padding-left: 20px;
+}
+
+.content .btn{
+    width: 200px;
+    height: 60px;
+    background: purple;
+    border: none;
+    margin: 20px auto;
+    font-size: 22px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: .4s ease;
+    display: block;
+}
+
+.content .btn a{
+    text-decoration: none;
+    color: white;
+    transition: .3s ease;
+}
+
+.btn:hover{
+    background-color:lavenderblush;
+}
+
+.btn:hover a{
+    color: purple;
+}
+
+.content span{
+    color: purple;
+    font-size: 70px;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.match-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.match-info h3 {
+    font-family: monospace;
+    color: white;
+    font-size: 24px;
+    letter-spacing: 1.5px;
+}
+
+.match-info span {
+    color: purple;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: space-evenly; 
+    width: 300px; 
+    margin-top: 20px;
+    gap: 780px;
+}
+
+.coral-buttons,
+.algae-buttons {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center; /* Center buttons horizontally within each section */
+    gap: 15px;
+}
+
+.coral-buttons button,
+.algae-buttons button {
+    width: 60px;
+    height: 50px;
+    background-color: purple;
+    color: white;
+    font-size: 22px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+.coral-buttons button:hover,
+.algae-buttons button:hover {
+    background-color: lavenderblush;
+}
