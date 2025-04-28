@@ -24,8 +24,10 @@ addAlgaeButton.addEventListener('click', function() {
 });
 
 subtractAlgaeButton.addEventListener('click', function() {
-    algaeScore -= 1;
-    updateScores();
+    if (algaeScore > 0) {
+        algaeScore -= 1;
+        updateScores();
+    }
 });
 
 addCoralButton.addEventListener('click', function() {
@@ -34,8 +36,10 @@ addCoralButton.addEventListener('click', function() {
 });
 
 subtractCoralButton.addEventListener('click', function() {
-    coralScore -= 1;
-    updateScores();
+    if (coralScore > 0) {
+        coralScore -= 1;
+        updateScores();
+    }
 });
 
 // Initialize scores
