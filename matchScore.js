@@ -1,46 +1,109 @@
-let algaeScore = 0;
-let coralScore = 0;
+let levelOneScoreValue = 0;
+let levelTwoScoreValue = 0;
+let levelThreeScoreValue = 0;
+let levelFourScoreValue = 0;
+let processorValue = 0;
+let bargeValue = 0;
 
-// Get the elements to update the score
-const algaeScoreElement = document.getElementById('algae-score');
-const coralScoreElement = document.getElementById('coral-score');
 
-// Get buttons
-const addAlgaeButton = document.getElementById('addAlgae');
-const subtractAlgaeButton = document.getElementById('subtractAlgae');
-const addCoralButton = document.getElementById('addCoral');
-const subtractCoralButton = document.getElementById('subtractCoral');
+const levelOneScore = document.getElementById('level-one-score');
+const levelTwoScore = document.getElementById('level-two-score');
+const levelThreeScore = document.getElementById('level-three-score');
+const levelFourScore = document.getElementById('level-four-score');
+const processorScore = document.getElementById('processor-algae-score');
+const bargeScore = document.getElementById('barge-algae-score');
 
-// Update the display for the scores
+
+const addLevelOne = document.getElementById('addLevelOne');
+const subtractLevelOne = document.getElementById('subtractLevelOne');
+const addLevelTwo = document.getElementById('addLevelTwo');
+const subtractLevelTwo = document.getElementById('subtractLevelTwo');
+const addLevelThree = document.getElementById('addLevelThree');
+const subtractLevelThree = document.getElementById('subtractLevelThree');
+const addLevelFour = document.getElementById('addLevelFour');
+const subtractLevelFour = document.getElementById('subtractLevelFour');
+const addProcessorAlgae = document.getElementById('addProcessorAlgae');
+const subtractProcessorAlgae = document.getElementById('subtractProcessorAlgae');
+const addBargeAlgae = document.getElementById('addBargeAlgae');
+const subtractBargeAlgae = document.getElementById('subtractBargeAlgae');
+
 function updateScores() {
-    algaeScoreElement.textContent = algaeScore;
-    coralScoreElement.textContent = coralScore;
+    levelOneScore.textContent = levelOneScoreValue;
+    levelTwoScore.textContent = levelTwoScoreValue;
+    levelThreeScore.textContent = levelThreeScoreValue;
+    levelFourScore.textContent = levelFourScoreValue;
 }
 
-// Add event listeners for buttons
-addAlgaeButton.addEventListener('click', function() {
-    algaeScore += 1;
+addLevelOne.addEventListener('click', function() {
+    levelOneScoreValue += 1;
     updateScores();
 });
 
-subtractAlgaeButton.addEventListener('click', function() {
-    if (algaeScore > 0) {
-        algaeScore -= 1;
+subtractLevelOne.addEventListener('click', function() {
+    if (levelOneScoreValue > 0) {
+        levelOneScoreValue -= 1;
         updateScores();
     }
 });
 
-addCoralButton.addEventListener('click', function() {
-    coralScore += 1;
+addLevelTwo.addEventListener('click', function() {
+    levelTwoScoreValue += 1;
     updateScores();
 });
 
-subtractCoralButton.addEventListener('click', function() {
-    if (coralScore > 0) {
-        coralScore -= 1;
+subtractLevelTwo.addEventListener('click', function() {
+    if (levelTwoScoreValue > 0) {
+        levelTwoScoreValue -= 1;
         updateScores();
     }
 });
 
-// Initialize scores
+addLevelThree.addEventListener('click', function() {
+    levelThreeScoreValue += 1;
+    updateScores();
+});
+
+subtractLevelThree.addEventListener('click', function() {
+    if (levelThreeScoreValue > 0) {
+        levelThreeScoreValue -= 1;
+        updateScores();
+    }
+});
+
+addLevelFour.addEventListener('click', function() {
+    levelFourScoreValue += 1;
+    updateScores();
+});
+
+subtractLevelFour.addEventListener('click', function() {
+    if (levelFourScoreValue > 0) {
+        levelFourScoreValue -= 1;
+        updateScores();
+    }
+});
+
+addProcessorAlgae.addEventListener('click', function() {
+    processorValue += 1;
+    processorScore.textContent = processorValue;
+});
+
+subtractProcessorAlgae.addEventListener('click', function() {
+    if (processorValue > 0) {
+        processorValue -= 1;
+        processorScore.textContent = processorValue;
+    }
+});
+
+addBargeAlgae.addEventListener('click', function() {
+    bargeValue += 1;
+    bargeScore.textContent = bargeValue;
+});
+
+subtractBargeAlgae.addEventListener('click', function() {
+    if (bargeValue > 0) {
+        bargeValue -= 1;
+        bargeScore.textContent = bargeValue;
+    }
+});
+
 updateScores();

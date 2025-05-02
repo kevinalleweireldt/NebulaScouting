@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Data - View History</title>
+    <link rel="stylesheet" href="../style.css"> <!-- Link to your CSS if needed -->
+</head>
+<body>
+    <div class="navbar"></div>
+    <div class="main">
+        <!-- Display Match History -->
+        <div class="content">
+            <h1>Match History</h1>
+            <div id="matchHistory"></div>
+        </div>
+    </div>
+
+    <script>
+        // Display match history
+        function displayMatchHistory() {
+            const matchHistory = JSON.parse(localStorage.getItem('matchHistory')) || [];
+            const matchHistoryContainer = document.getElementById('matchHistory');
+            
+            matchHistoryContainer.innerHTML = ''; // Clear previous content
+            
+            if (matchHistory.length > 0) {
+                matchHistory.forEach(match => {
+                    const matchElement = document.createElement('div');
+                    matchElement.classList.add('match-item');
+                    matchElement.innerHTML = `<p><strong>Match ${match.matchNumber}</strong> - Team ${match.teamNumber} - Score: ${match.score}</p>`;
+                    matchHistoryContainer.appendChild(matchElement);
+                });
+            } else {
+                matchHistoryContainer.innerHTML = '<p>No match data available.</p>';
+            }
+        }
+
+        // Load match history on page load
+        window.onload = function() {
+            displayMatchHistory();
+        };
+    </script>
+</body>
+    <script src="../navbar.js"></script>
+</html>
