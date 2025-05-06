@@ -1,13 +1,11 @@
 {
-    "rewrites": [
-      { "source": "/", "destination": "/pages/index.html" },
-      { "source": "/about", "destination": "/pages/about.html" },
-      { "source": "/contact", "destination": "/pages/contact.html" },
-      { "source": "/dashboard", "destination": "/pages/dashboard.html" },
-      { "source": "/matchdata", "destination": "/pages/matchdata.html" },
-      { "source": "/matchform", "destination": "/pages/matchform.html" }
-    ],
-    "cleanUrls": true,
-    "trailingSlash": false
-  }
-  
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/pages/index.html" },
+    { "source": "/about", "destination": "/pages/about.html" },
+    { "source": "/contact", "destination": "/pages/contact.html" },
+    { "source": "/dashboard", "destination": "/pages/dashboard.html" },
+    { "source": "/matchdata", "destination": "/pages/matchdata.html" },
+    { "source": "/matchform", "destination": "/pages/matchform.html" }
+  ]
+}
