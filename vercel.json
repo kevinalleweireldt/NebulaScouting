@@ -1,0 +1,13 @@
+{
+    "rewrites": [
+      { "source": "/", "destination": "/Pages/index.html" },
+      { "source": "/about", "destination": "/Pages/about.html" },
+      { "source": "/contact", "destination": "/Pages/contact.html" },
+      { "source": "/dashboard", "destination": "/Pages/dashboard.html" },
+      { "source": "/matchdata", "destination": "/Pages/matchdata.html" },
+      { "source": "/matchform", "destination": "/Pages/matchform.html" }
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
+  }
+  
