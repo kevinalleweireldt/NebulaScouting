@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Match Data - View History</title>
-    <link rel="stylesheet" href="../style.css"> <!-- Link to your CSS if needed -->
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
     <div class="navbar"></div>
     <div class="main">
-        <!-- Display Match History -->
         <div class="content">
             <h1>Match History</h1>
             <div id="matchHistory"></div>
@@ -17,12 +16,11 @@
     </div>
 
     <script>
-        // Display match history
         function displayMatchHistory() {
             const matchHistory = JSON.parse(localStorage.getItem('matchHistory')) || [];
             const matchHistoryContainer = document.getElementById('matchHistory');
             
-            matchHistoryContainer.innerHTML = ''; // Clear previous content
+            matchHistoryContainer.innerHTML = '';
             
             if (matchHistory.length > 0) {
                 matchHistory.forEach(match => {
@@ -36,7 +34,6 @@
             }
         }
 
-        // Load match history on page load
         window.onload = function() {
             displayMatchHistory();
         };

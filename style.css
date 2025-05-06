@@ -8,7 +8,9 @@
     background: linear-gradient(to top, rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(stars.jpg);
     background-position: center;
     background-size: cover;
-    height: 100vh;
+    background-attachment: fixed;
+    min-height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -138,22 +140,7 @@ ul li a:hover{
     transition: color 0.3s ease;    
 }
 
-.btn:hover a {
-    color: purple;
-}
 
-.buttons-container button {
-    width: 100px;
-    height: 50px;
-    background-color: purple;
-    color: white;
-    font-size: 22px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.4s ease;
-    font-family: monospace;
-}
 
 .content .btn{
     width: 200px;
@@ -182,7 +169,7 @@ ul li a:hover{
     background-color: lavenderblush;
 }
 
-.btn:hover a {
+.content .btn:hover a {
     color: purple;
 }
 
@@ -228,19 +215,32 @@ ul li a:hover{
     align-items: center;
     width: 100%;
     max-width: 600px;
-    margin: 20px auto 0 auto; /* Ensure there's some space */
+    margin: 20px auto 0 auto;
     gap: 25%;
-    padding-top: 20px; /* Add some space at the top */
+    padding-top: 20px;
 }
 
 .buttons-container button {
     width: 100px;
     height: 50px;
     background-color: purple;
+    text-decoration: none;;
     color: white;
+    font-family: monospace;
     font-size: 22px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.4s ease;
+}
+
+.buttons-container a {
+    text-decoration: none;
+    color: white;
+    font-size: 22px;
+    font-family: monospace;
+}
+.buttons-container button:hover{
+    text-decoration: none;
+    color: purple;
 }
