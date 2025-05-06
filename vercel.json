@@ -1,11 +1,11 @@
 {
     "rewrites": [
-      { "source": "/", "destination": "/Pages/index.html" },
-      { "source": "/about", "destination": "/Pages/about.html" },
-      { "source": "/contact", "destination": "/Pages/contact.html" },
-      { "source": "/dashboard", "destination": "/Pages/dashboard.html" },
-      { "source": "/matchdata", "destination": "/Pages/matchdata.html" },
-      { "source": "/matchform", "destination": "/Pages/matchform.html" }
+      { "source": "/", "destination": "/pages/index.html" },
+      { "source": "/about", "destination": "/pages/about.html" },
+      { "source": "/contact", "destination": "/pages/contact.html" },
+      { "source": "/dashboard", "destination": "/pages/dashboard.html" },
+      { "source": "/matchdata", "destination": "/pages/matchdata.html" },
+      { "source": "/matchform", "destination": "/pages/matchform.html" }
     ],
     "cleanUrls": true,
     "trailingSlash": false
