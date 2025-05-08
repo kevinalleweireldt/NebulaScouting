@@ -1,4 +1,4 @@
-import { initScoreControls } from './matchScore.js';
+import { initScoreControls } from '../matchScore.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log("App initialized.");
