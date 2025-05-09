@@ -16,6 +16,7 @@
     </div>
 
     <script>
+        // Function to display match history
         function displayMatchHistory() {
             const matchHistory = JSON.parse(localStorage.getItem('matchHistory')) || [];
             const matchHistoryContainer = document.getElementById('matchHistory');
@@ -38,6 +39,7 @@
             displayMatchHistory();
         };
     </script>
-</body>
+    
     <script src="../script/navbar.js"></script>
+</body>
 </html>

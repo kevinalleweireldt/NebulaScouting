@@ -244,3 +244,33 @@ ul li a:hover{
     text-decoration: none;
     color: purple;
 }
+
+.match-inputs {
+    margin-bottom: 20px;
+}
+
+.match-inputs label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.match-inputs input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 0px solid #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Add focus effect to input fields */
+.match-inputs input:focus {
+    outline: none;
+    border-color: #ffcc00; /* Highlight border when focused */
+    background-color: rgba(255, 255, 255, 0.2); /* Slightly darker background when focused */
+}

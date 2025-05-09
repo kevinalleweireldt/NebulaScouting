@@ -1,12 +1,9 @@
-import { initScoreControls } from '../matchScore.js';
+import { initScoreControls } from './matchScore.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log("App initialized.");
     initScoreControls();
 
-});
-
-document.addEventListener("DOMContentLoaded", function () {
     const scoreElements = {
         levelOneScore: document.getElementById('level-one-score'),
         levelTwoScore: document.getElementById('level-two-score'),
@@ -16,18 +13,41 @@ document.addEventListener("DOMContentLoaded", function () {
         bargeScore: document.getElementById('barge-algae-score')
     };
 
-    function submitScores() {
+    const submitButton = document.getElementById('submitScores');
+    if (!submitButton) {
+        console.warn("Submit button not found.");
+        return;
+    }
+
+    submitButton.addEventListener('click', () => {
+        // Collect individual scores
         const scores = {};
         for (let key in scoreElements) {
             scores[key] = parseInt(scoreElements[key].textContent, 10) || 0;
         }
 
-        localStorage.setItem('submittedScores', JSON.stringify(scores));
-        alert("Scores submitted and saved locally!");
-    }
+        const totalScore = Object.values(scores).reduce((acc, val) => acc + val, 0);
 
-    const submitButton = document.getElementById('submitScores');
-    if (submitButton) {
-        submitButton.addEventListener('click', submitScores);
-    }
+        // Get match and team number from inputs (if available)
+        const matchNumber = document.getElementById('matchNumber')?.value.trim() || 'Unknown';
+        const teamNumber = document.getElementById('teamNumber')?.value.trim() || 'Unknown';
+
+        const matchData = {
+            matchNumber,
+            teamNumber,
+            score: totalScore,
+            timestamp: new Date().toISOString(), // optional, but useful
+            ...scores // include all individual scores
+        };
+
+        // Save to localStorage
+        const matchHistory = JSON.parse(localStorage.getItem('matchHistory')) || [];
+        matchHistory.push(matchData);
+        localStorage.setItem('matchHistory', JSON.stringify(matchHistory));
+
+        alert("Match data saved successfully!");
+
+        // Redirect to the dashboard after saving the match data
+        window.location.href = "./dashboard.html"; // Adjust the URL as needed for the correct dashboard path
+    });
 });
