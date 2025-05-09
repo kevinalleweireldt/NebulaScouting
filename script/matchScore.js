@@ -29,75 +29,76 @@ const elements = {
     subtractBargeAlgae: document.getElementById('subtractBargeAlgae')
 };
 
-// Ensure all elements exist before proceeding
-const allElements = Object.values(elements);
-if (allElements.every(element => element !== null)) {
-    // Function to update the scores in the DOM
-    function updateScores() {
-        elements.levelOneScore.textContent = levelOneScoreValue;
-        elements.levelTwoScore.textContent = levelTwoScoreValue;
-        elements.levelThreeScore.textContent = levelThreeScoreValue;
-        elements.levelFourScore.textContent = levelFourScoreValue;
-        elements.processorScore.textContent = processorValue;
-        elements.bargeScore.textContent = bargeValue;
-    }
-
-    // Function to handle adding and subtracting score values
-    function handleScoreUpdate(scoreType, scoreChange) {
-        switch (scoreType) {
-            case 'levelOne':
-                levelOneScoreValue += scoreChange;
-                break;
-            case 'levelTwo':
-                levelTwoScoreValue += scoreChange;
-                break;
-            case 'levelThree':
-                levelThreeScoreValue += scoreChange;
-                break;
-            case 'levelFour':
-                levelFourScoreValue += scoreChange;
-                break;
-            case 'processor':
-                processorValue += scoreChange;
-                break;
-            case 'barge':
-                bargeValue += scoreChange;
-                break;
-            default:
-                break;
+export function initScoreControls() {
+    // Ensure all elements exist before proceeding
+    const allElements = Object.values(elements);
+    if (allElements.every(element => element !== null)) {
+        // Function to update the scores in the DOM
+        function updateScores() {
+            elements.levelOneScore.textContent = levelOneScoreValue;
+            elements.levelTwoScore.textContent = levelTwoScoreValue;
+            elements.levelThreeScore.textContent = levelThreeScoreValue;
+            elements.levelFourScore.textContent = levelFourScoreValue;
+            elements.processorScore.textContent = processorValue;
+            elements.bargeScore.textContent = bargeValue;
         }
 
-        // Ensure no score goes below 0
-        if (levelOneScoreValue < 0) levelOneScoreValue = 0;
-        if (levelTwoScoreValue < 0) levelTwoScoreValue = 0;
-        if (levelThreeScoreValue < 0) levelThreeScoreValue = 0;
-        if (levelFourScoreValue < 0) levelFourScoreValue = 0;
-        if (processorValue < 0) processorValue = 0;
-        if (bargeValue < 0) bargeValue = 0;
+        // Function to handle adding and subtracting score values
+        function handleScoreUpdate(scoreType, scoreChange) {
+            switch (scoreType) {
+                case 'levelOne':
+                    levelOneScoreValue += scoreChange;
+                    break;
+                case 'levelTwo':
+                    levelTwoScoreValue += scoreChange;
+                    break;
+                case 'levelThree':
+                    levelThreeScoreValue += scoreChange;
+                    break;
+                case 'levelFour':
+                    levelFourScoreValue += scoreChange;
+                    break;
+                case 'processor':
+                    processorValue += scoreChange;
+                    break;
+                case 'barge':
+                    bargeValue += scoreChange;
+                    break;
+                default:
+                    break;
+            }
 
-        // Update the scores in the DOM
-        updateScores();
+            // Ensure no score goes below 0
+            if (levelOneScoreValue < 0) levelOneScoreValue = 0;
+            if (levelTwoScoreValue < 0) levelTwoScoreValue = 0;
+            if (levelThreeScoreValue < 0) levelThreeScoreValue = 0;
+            if (levelFourScoreValue < 0) levelFourScoreValue = 0;
+            if (processorValue < 0) processorValue = 0;
+            if (bargeValue < 0) bargeValue = 0;
+
+            // Update the scores in the DOM
+            updateScores();
+        }
+
+        // Add event listeners for all the buttons
+        elements.addLevelOne.addEventListener('click', () => handleScoreUpdate('levelOne', 1));
+        elements.subtractLevelOne.addEventListener('click', () => handleScoreUpdate('levelOne', -1));
+
+        elements.addLevelTwo.addEventListener('click', () => handleScoreUpdate('levelTwo', 1));
+        elements.subtractLevelTwo.addEventListener('click', () => handleScoreUpdate('levelTwo', -1));
+
+        elements.addLevelThree.addEventListener('click', () => handleScoreUpdate('levelThree', 1));
+        elements.subtractLevelThree.addEventListener('click', () => handleScoreUpdate('levelThree', -1));
+
+        elements.addLevelFour.addEventListener('click', () => handleScoreUpdate('levelFour', 1));
+        elements.subtractLevelFour.addEventListener('click', () => handleScoreUpdate('levelFour', -1));
+
+        elements.addProcessorAlgae.addEventListener('click', () => handleScoreUpdate('processor', 1));
+        elements.subtractProcessorAlgae.addEventListener('click', () => handleScoreUpdate('processor', -1));
+
+        elements.addBargeAlgae.addEventListener('click', () => handleScoreUpdate('barge', 1));
+        elements.subtractBargeAlgae.addEventListener('click', () => handleScoreUpdate('barge', -1));
+    } else {
+        console.error('One or more required DOM elements are missing.');
     }
-
-    // Add event listeners for all the buttons
-    elements.addLevelOne.addEventListener('click', () => handleScoreUpdate('levelOne', 1));
-    elements.subtractLevelOne.addEventListener('click', () => handleScoreUpdate('levelOne', -1));
-
-    elements.addLevelTwo.addEventListener('click', () => handleScoreUpdate('levelTwo', 1));
-    elements.subtractLevelTwo.addEventListener('click', () => handleScoreUpdate('levelTwo', -1));
-
-    elements.addLevelThree.addEventListener('click', () => handleScoreUpdate('levelThree', 1));
-    elements.subtractLevelThree.addEventListener('click', () => handleScoreUpdate('levelThree', -1));
-
-    elements.addLevelFour.addEventListener('click', () => handleScoreUpdate('levelFour', 1));
-    elements.subtractLevelFour.addEventListener('click', () => handleScoreUpdate('levelFour', -1));
-
-    elements.addProcessorAlgae.addEventListener('click', () => handleScoreUpdate('processor', 1));
-    elements.subtractProcessorAlgae.addEventListener('click', () => handleScoreUpdate('processor', -1));
-
-    elements.addBargeAlgae.addEventListener('click', () => handleScoreUpdate('barge', 1));
-    elements.subtractBargeAlgae.addEventListener('click', () => handleScoreUpdate('barge', -1));
-
-} else {
-    console.error('One or more required DOM elements are missing.');
 }
