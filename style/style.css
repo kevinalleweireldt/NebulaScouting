@@ -1,6 +1,7 @@
 *{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 .main{
@@ -273,4 +274,90 @@ ul li a:hover{
     outline: none;
     border-color: #ffcc00; /* Highlight border when focused */
     background-color: rgba(255, 255, 255, 0.2); /* Slightly darker background when focused */
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .main {
+        padding-top: 20px;
+    }
+
+    .navbar {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .logo {
+        font-size: 30px;
+        left: 20px;
+    }
+
+    .menu {
+        width: 100%;
+        height: auto;
+    }
+
+    ul {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0;
+    }
+
+    ul li {
+        margin: 10px 0;
+        font-size: 18px;
+    }
+
+    .content {
+        width: 90%;
+        font-size: 18px;
+        padding-top: 20px;
+    }
+
+    .content h1, .content h2 {
+        font-size: 30px;
+        padding-left: 0;
+    }
+
+    .content .par {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .btn {
+        font-size: 18px;
+        padding: 8px 16px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .buttons-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .buttons-container button {
+        width: 80%;
+        font-size: 18px;
+    }
+
+    .match-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .match-info h3 {
+        font-size: 20px;
+    }
+
+    .match-info span {
+        font-size: 24px;
+    }
+
+    .match-inputs input {
+        font-size: 14px;
+    }
 }
