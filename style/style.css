@@ -429,7 +429,7 @@ ul li a:hover{
     }
 
     .menu {
-        display: none;
+        display: none !important; /* Always hidden unless .open */
         position: absolute;
         top: 60px;
         left: 0;
@@ -443,7 +443,7 @@ ul li a:hover{
     }
 
     .menu.open {
-        display: flex;
+        display: flex !important; /* Only show when .open is present */
     }
 
     .hamburger {
