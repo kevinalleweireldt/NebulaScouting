@@ -417,66 +417,29 @@ ul li a:hover{
     }
 }
 
-/* Hide menu by default on mobile, show hamburger */
+/* Remove hamburger and dropdown menu styles */
 @media (max-width: 768px) {
-    .navbar {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 10px 0 10px;
-        position: relative;
-        z-index: 10;
-    }
-
-    .menu {
-        display: none !important; /* Always hidden unless .open */
-        position: absolute;
-        top: 60px;
-        left: 0;
-        width: 100vw;
-        background: rgba(40, 0, 60, 0.98);
-        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 20px 0 10px 20px;
-        z-index: 100;
-    }
-
+    .hamburger,
     .menu.open {
-        display: flex !important; /* Only show when .open is present */
+        display: none !important;
     }
-
-    .hamburger {
-        display: block;
-        width: 40px;
-        height: 40px;
-        cursor: pointer;
-        position: absolute;
-        right: 20px;
-        top: 10px;
-        z-index: 200;
-    }
-
-    .hamburger span {
-        display: block;
-        width: 30px;
-        height: 4px;
-        margin: 6px auto;
-        background: white;
-        border-radius: 2px;
-        transition: 0.3s;
-    }
-
-    /* Hide desktop menu items */
-    .menu ul {
-        flex-direction: column;
+    .menu {
+        display: block !important;
+        position: static !important;
+        background: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
         width: 100%;
-        padding: 0;
+        height: auto;
     }
-    .menu ul li {
-        margin: 16px 0;
-        font-size: 20px;
-        width: 100%;
+    ul {
+        flex-direction: row !important;
+        align-items: center !important;
+        padding: 0 !important;
+    }
+    ul li {
+        margin: 10px 0 10px 62px !important;
+        font-size: 18px !important;
     }
 }
 
