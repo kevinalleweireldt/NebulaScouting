@@ -497,11 +497,9 @@ ul li a:hover{
 /* Mobile navbar improvements */
 @media (max-width: 768px) {
     .navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
+        position: static; /* Not fixed */
         width: 100vw;
-        background: transparent; /* Transparent background */
+        background: transparent;
         box-shadow: none;
         z-index: 1000;
         padding: 0 0 0 0;
@@ -512,7 +510,7 @@ ul li a:hover{
     }
 
     .main {
-        padding-top: 66px; /* Offset for fixed navbar */
+        padding-top: 20px; /* Remove extra offset */
     }
 
     .logo {
