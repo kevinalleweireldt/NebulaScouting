@@ -417,29 +417,66 @@ ul li a:hover{
     }
 }
 
-/* Remove hamburger and dropdown menu styles */
+/* Hide menu by default on mobile, show hamburger */
 @media (max-width: 768px) {
-    .hamburger,
-    .menu.open {
-        display: none !important;
+    .navbar {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 10px 0 10px;
+        position: relative;
+        z-index: 10;
     }
+
     .menu {
-        display: block !important;
-        position: static !important;
-        background: none !important;
-        box-shadow: none !important;
-        padding: 0 !important;
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100vw;
+        background: rgba(40, 0, 60, 0.98);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px 0 10px 20px;
+        z-index: 100;
+    }
+
+    .menu.open {
+        display: flex;
+    }
+
+    .hamburger {
+        display: block;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        z-index: 200;
+    }
+
+    .hamburger span {
+        display: block;
+        width: 30px;
+        height: 4px;
+        margin: 6px auto;
+        background: white;
+        border-radius: 2px;
+        transition: 0.3s;
+    }
+
+    /* Hide desktop menu items */
+    .menu ul {
+        flex-direction: column;
         width: 100%;
-        height: auto;
+        padding: 0;
     }
-    ul {
-        flex-direction: row !important;
-        align-items: center !important;
-        padding: 0 !important;
-    }
-    ul li {
-        margin: 10px 0 10px 62px !important;
-        font-size: 18px !important;
+    .menu ul li {
+        margin: 16px 0;
+        font-size: 20px;
+        width: 100%;
     }
 }
 
