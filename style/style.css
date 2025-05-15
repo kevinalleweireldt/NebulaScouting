@@ -415,4 +415,10 @@ ul li a:hover{
     .match-inputs input {
         font-size: 14px;
     }
-}
+
+    @media (max-width: 768px) {
+    .navbar {
+        display: none !important;
+    }
+    }
+}   
