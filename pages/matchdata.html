@@ -16,20 +16,43 @@
     </div>
 
     <script>
-        // Function to display match history
+        // Function to display match history in a table with individual scores and comments
         function displayMatchHistory() {
             const matchHistory = JSON.parse(localStorage.getItem('matchHistory')) || [];
             const matchHistoryContainer = document.getElementById('matchHistory');
-            
             matchHistoryContainer.innerHTML = '';
-            
+
             if (matchHistory.length > 0) {
+                let table = `<table class="match-table">
+                    <thead>
+                        <tr>
+                            <th>Match #</th>
+                            <th>Team #</th>
+                            <th>Level 1</th>
+                            <th>Level 2</th>
+                            <th>Level 3</th>
+                            <th>Level 4</th>
+                            <th>Processor</th>
+                            <th>Barge</th>
+                            <th>Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
                 matchHistory.forEach(match => {
-                    const matchElement = document.createElement('div');
-                    matchElement.classList.add('match-item');
-                    matchElement.innerHTML = `<p><strong>Match ${match.matchNumber}</strong> - Team ${match.teamNumber} - Score: ${match.score}</p>`;
-                    matchHistoryContainer.appendChild(matchElement);
+                    table += `<tr>
+                        <td>${match.matchNumber}</td>
+                        <td>${match.teamNumber}</td>
+                        <td>${match.levelOneScore ?? 0}</td>
+                        <td>${match.levelTwoScore ?? 0}</td>
+                        <td>${match.levelThreeScore ?? 0}</td>
+                        <td>${match.levelFourScore ?? 0}</td>
+                        <td>${match.processorScore ?? 0}</td>
+                        <td>${match.bargeScore ?? 0}</td>
+                        <td>${match.extraComments ? match.extraComments : ''}</td>
+                    </tr>`;
                 });
+                table += `</tbody></table>`;
+                matchHistoryContainer.innerHTML = table;
             } else {
                 matchHistoryContainer.innerHTML = '<p>No match data available.</p>';
             }

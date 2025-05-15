@@ -31,13 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // Get match and team number from inputs (if available)
         const matchNumber = document.getElementById('matchNumber')?.value.trim() || 'Unknown';
         const teamNumber = document.getElementById('teamNumber')?.value.trim() || 'Unknown';
+        const extraComments = document.getElementById('extraComments')?.value.trim() || '';
 
         const matchData = {
             matchNumber,
             teamNumber,
             score: totalScore,
             timestamp: new Date().toISOString(), // optional, but useful
-            ...scores // include all individual scores
+            ...scores, // include all individual scores
+            extraComments // Save comments
         };
 
         // Save to localStorage
