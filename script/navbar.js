@@ -3,9 +3,8 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.text())
         .then(data => {
             document.querySelector('.navbar').innerHTML = data;
-            // Hamburger menu logic removed
         })
         .catch(error => {
             console.error('Error loading navbar:', error);
         });
-});
+    });
