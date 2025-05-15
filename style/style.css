@@ -339,58 +339,28 @@ ul li a:hover{
 
     .navbar {
         flex-direction: column;
-        align-items: flex-start;
-        position: static;
-        padding: 10px 0 0 0;
-        width: 100%;
-        min-height: unset;
-        height: auto;
-        background: transparent; /* Make background invisible */
-        box-shadow: none;        /* Remove shadow */
+        padding: 10px;
     }
 
     .logo {
         font-size: 30px;
         left: 20px;
-        position: static;
-        margin: 10px 0 0 16px;
-        top: 0;
-        z-index: 1;
     }
 
     .menu {
-        display: block !important;
         width: 100%;
         height: auto;
-        position: static;
-        background: none;
-        box-shadow: none;
-        padding: 0;
-        margin: 0;
     }
 
     ul {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        padding: 0 !important;
-        margin: 0;
-        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0;
     }
 
     ul li {
-        margin: 10px 0 10px 16px !important;
-        font-size: 18px !important;
-        width: 100%;
-    }
-
-    ul li a {
-        display: block;
-        width: 100%;
-        padding: 10px 0 10px 0;
-    }
-
-    .hamburger {
-        display: none !important;
+        margin: 10px 0;
+        font-size: 18px;
     }
 
     .content {
@@ -531,8 +501,8 @@ ul li a:hover{
         top: 0;
         left: 0;
         width: 100vw;
-        background: linear-gradient(to right, #4b006e 80%, #1a0026 100%);
-        box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+        background: transparent; /* Transparent background */
+        box-shadow: none;
         z-index: 1000;
         padding: 0 0 0 0;
         min-height: 56px;
@@ -583,14 +553,14 @@ ul li a:hover{
         top: 56px;
         left: 0;
         width: 100vw;
-        background: linear-gradient(to bottom right, #4b006e 80%, #1a0026 100%);
-        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        background: transparent; /* Transparent background */
+        box-shadow: none;
         flex-direction: column;
         align-items: flex-start;
-        padding: 20px 0 10px 0;
+        padding: 0;
         z-index: 1050;
-        border-bottom-left-radius: 16px;
-        border-bottom-right-radius: 16px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
         animation: fadeInMenu 0.2s;
     }
 
@@ -608,6 +578,7 @@ ul li a:hover{
         width: 100%;
         padding: 0;
         margin: 0;
+        background: transparent;
     }
     .menu ul li {
         margin: 0;
@@ -625,16 +596,11 @@ ul li a:hover{
         font-weight: bold;
         text-decoration: none;
         border-bottom: 1px solid rgba(255,255,255,0.08);
+        background: rgba(40,0,60,0.5); /* semi-transparent for button effect */
         transition: background 0.2s, color 0.2s;
     }
     .menu ul li a:hover {
         background: #fff;
         color: #4b006e;
     }
-}
-
-/* Remove dropdown/hamburger-specific styles */
-@media (max-width: 768px) {
-    .menu.open { display: block !important; }
-    .hamburger { display: none !important; }
 }
