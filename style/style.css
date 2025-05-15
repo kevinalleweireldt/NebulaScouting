@@ -420,21 +420,5 @@ ul li a:hover{
     .navbar {
         display: none !important;
     }
-    .algae-processor-buttons,
-    .algae-barge-buttons,
-    .buttons, /* If you use .buttons for plus/minus groups */
-    .score-buttons { /* Add any other relevant class here */
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
     }
-
-    /* Optional: make the inner .match-info not stretch */
-    .algae-processor-buttons .match-info,
-    .algae-barge-buttons .match-info {
-        margin: 0 8px;
-    }
-}
 }   
