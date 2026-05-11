@@ -741,6 +741,46 @@ select option:disabled {
     font-family: var(--font-body);
 }
 
+.required-mark {
+    color: var(--magenta);
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+.match-inputs input.is-invalid,
+.input-field input.is-invalid {
+    border-color: var(--rose);
+    background-color: rgba(244, 63, 94, 0.1);
+    animation: shake 0.4s ease;
+}
+.match-inputs input.is-invalid:focus,
+.input-field input.is-invalid:focus {
+    border-color: var(--rose);
+    box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.25);
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+}
+
+.form-error {
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.18), rgba(244, 63, 94, 0.08));
+    border: 1px solid rgba(244, 63, 94, 0.5);
+    color: #fca5a5;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius);
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    margin: var(--space-4) auto;
+    max-width: 480px;
+}
+
 /* ============================================================
    Radio + checkbox groups
    ============================================================ */
