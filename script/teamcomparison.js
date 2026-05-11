@@ -133,7 +133,7 @@ function renderDetails(teamStats) {
     let html = '';
     teamStats.forEach(t => {
         if (t.matchCount === 0) {
-            html += `<div class="section-card"><h2>Team ${escapeHtml(t.teamNumber)}</h2><p style="font-family:monospace; color:rgba(255,255,255,0.7);">No scouted matches.</p></div>`;
+            html += `<div class="section-card"><h2>Team ${escapeHtml(t.teamNumber)}</h2><p class="empty-state">No scouted matches.</p></div>`;
             return;
         }
         html += `<div class="section-card"><h2>Team ${escapeHtml(t.teamNumber)} — Recent Matches</h2>`;
