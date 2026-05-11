@@ -14,7 +14,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     navEl.innerHTML = html;
 
     onAuthStateChanged(auth, async user => {
-        if (!user) return;
+        if (!user) {
+            const navUser = document.querySelector('.nav-user');
+            if (navUser) navUser.innerHTML = '<a href="/login" class="btn btn-sm">Sign In</a>';
+            return;
+        }
 
         const emailEl   = document.getElementById('nav-user-email');
         const logoutBtn = document.getElementById('nav-logout-btn');

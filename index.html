@@ -7,25 +7,80 @@
     <title>Nebula Scouting</title>
     <link rel="stylesheet" href="style/style.css">
 </head>
-<body class="auth-loading">
+<body>
     <div class="main">
-        <div class="navbar"></div>
 
+        <nav class="navbar">
+            <h2 class="logo"><a href="/">Nebula Scouting</a></h2>
+            <div class="menu">
+                <ul>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </div>
+            <a href="/login" class="btn btn-sm">Sign In</a>
+        </nav>
+
+        <!-- Hero -->
         <div class="content content--hero">
             <p class="subtitle">2026 FRC REBUILT</p>
             <h1>Nebula Scouting</h1>
             <p class="par hero-tagline">A scouting platform built for speed in the pits and clarity at the strategy table.</p>
             <div class="buttons-container">
-                <a href="/dashboard"><button class="btn btn-lg">Open Dashboard</button></a>
-                <a href="/matchform"><button class="btn btn-ghost btn-lg">Quick Scout</button></a>
+                <a href="/login" class="btn btn-lg">Sign In to Scout</a>
             </div>
         </div>
-    </div>
 
-    <script type="module">
-        import { requireAuth } from './script/auth.js';
-        await requireAuth();
-    </script>
-    <script type="module" src="script/navbar.js"></script>
+        <!-- Features -->
+        <div class="content landing-section">
+            <p class="section-label">Features</p>
+            <h2>Everything your alliance selection needs</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <p class="feature-tag">Match Scouting</p>
+                    <h3>Fast data entry</h3>
+                    <p>Streamlined match form fills out in seconds. Track FUEL into the HUB, Tower climbing at L1 / L2 / L3, defense, and breakdown flags — all per match.</p>
+                </div>
+                <div class="feature-card">
+                    <p class="feature-tag">Data Review</p>
+                    <h3>Sortable match history</h3>
+                    <p>Admins see all scouted data across the event; scouters see their own submissions. Sort any column instantly.</p>
+                </div>
+                <div class="feature-card">
+                    <p class="feature-tag">Team Comparison</p>
+                    <h3>Side-by-side analysis</h3>
+                    <p>Compare any two teams across auto, teleop, and endgame averages to make informed pick decisions at the table.</p>
+                </div>
+                <div class="feature-card">
+                    <p class="feature-tag">Pick List</p>
+                    <h3>Drag-and-drop ordering</h3>
+                    <p>Admin-editable pick list backed by Firestore. Scouters get a live read-only view during alliance selection — no spreadsheet needed.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- About -->
+        <div class="content landing-section">
+            <p class="section-label">2026 Season</p>
+            <div class="section-card">
+                <h2>Built for REBUILT</h2>
+                <p class="text-left">This season's form tracks FUEL into the HUB during auto and teleop, Tower climbing at L1 (15 pts), L2 (20 pts), and L3 (30 pts) in both auto and endgame, plus per-match defense and breakdown flags. Every field flows directly into the comparison and pick-list views.</p>
+            </div>
+            <div class="section-card" style="margin-top: var(--space-5);">
+                <h2>Who it's for</h2>
+                <p class="text-left">Built for FRC teams that want real data, not spreadsheets. Scouters capture data on phones at the field; strategy leads pull up trends and comparisons on the pit laptop. No build step, no backend to manage — just Firebase and fast pages.</p>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="content">
+            <div class="landing-cta">
+                <h2>Ready to start scouting?</h2>
+                <p>Contact your team admin for an account, then sign in to access the platform.</p>
+                <a href="/login" class="btn btn-lg">Sign In</a>
+            </div>
+        </div>
+
+    </div>
 </body>
 </html>

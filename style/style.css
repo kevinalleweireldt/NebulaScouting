@@ -898,6 +898,90 @@ body.auth-loading .content { visibility: hidden; }
 }
 
 /* ============================================================
+   Landing page
+   ============================================================ */
+
+.landing-section {
+    padding-top: var(--space-8);
+}
+
+.section-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--purple-300);
+    text-align: center;
+    margin-bottom: var(--space-3);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-5);
+    margin-top: var(--space-5);
+}
+
+.feature-card {
+    background: var(--bg-1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.feature-card:hover {
+    border-color: var(--border-2);
+    transform: translateY(-2px);
+}
+
+.feature-tag {
+    font-family: var(--font-mono);
+    font-size: 11px !important;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--purple-300);
+    text-align: left !important;
+    margin: 0 0 var(--space-2) !important;
+}
+
+.feature-card h3 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    text-align: left;
+    margin-bottom: var(--space-3);
+}
+
+.feature-card p {
+    font-size: 14px !important;
+    color: var(--text-muted);
+    line-height: 1.6;
+    text-align: left !important;
+    margin: 0 !important;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.landing-cta {
+    text-align: center;
+    padding: var(--space-8) 0;
+    border-top: 1px solid var(--border-1);
+    margin-top: var(--space-7);
+}
+
+.landing-cta p {
+    margin-bottom: var(--space-5) !important;
+}
+
+/* ============================================================
    Data controls / search / filter / sort
    ============================================================ */
 
