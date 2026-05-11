@@ -1,5 +1,4 @@
 {
-  "cleanUrls": true,
   "rewrites": [
     { "source": "/login",     "destination": "/pages/login.html" },
     { "source": "/admin",     "destination": "/pages/admin.html" },
