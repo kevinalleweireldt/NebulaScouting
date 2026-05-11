@@ -3,66 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Match Data - View History</title>
+    <title>Match Data</title>
     <link rel="stylesheet" href="../style/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <div class="navbar"></div>
     <div class="main">
         <div class="content">
-            <h1>Match History</h1>
-            <div id="matchHistory"></div>
+            <h1>Match Data</h1>
+
+            <div class="data-controls">
+                <input type="text" id="filterTeam" placeholder="Filter by team #..." />
+                <select id="sortField" aria-label="Sort field">
+                    <option value="matchNumber">Sort: Match #</option>
+                    <option value="teamNumber">Sort: Team #</option>
+                    <option value="score">Sort: Score</option>
+                    <option value="autoFuel">Sort: Auto FUEL</option>
+                    <option value="teleopFuel">Sort: Teleop FUEL</option>
+                    <option value="endgameClimb">Sort: Endgame Climb</option>
+                    <option value="timestamp">Sort: Time</option>
+                </select>
+                <select id="sortDir" aria-label="Sort direction">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+                <button class="btn" id="exportCsv">Export CSV</button>
+                <button class="btn btn-danger" id="clearData">Clear All Data</button>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-btn active" data-tab="allMatches">All Matches</button>
+                <button class="tab-btn" data-tab="teamAverages">Team Averages</button>
+                <button class="tab-btn" data-tab="charts">Charts</button>
+            </div>
+
+            <div id="tab-allMatches" class="tab-panel">
+                <div id="matchTableContainer"></div>
+            </div>
+
+            <div id="tab-teamAverages" class="tab-panel" hidden>
+                <div id="avgTableContainer"></div>
+            </div>
+
+            <div id="tab-charts" class="tab-panel" hidden>
+                <div class="chart-grid">
+                    <div class="chart-card">
+                        <h3>Avg Total Score by Team</h3>
+                        <canvas id="chartAvgScore"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Avg Auto FUEL by Team</h3>
+                        <canvas id="chartAutoFuel"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Avg Teleop FUEL by Team</h3>
+                        <canvas id="chartTeleopFuel"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Endgame Climb Distribution</h3>
+                        <canvas id="chartClimb"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script>
-        // Function to display match history in a table with individual scores and comments
-        function displayMatchHistory() {
-            const matchHistory = JSON.parse(localStorage.getItem('matchHistory')) || [];
-            const matchHistoryContainer = document.getElementById('matchHistory');
-            matchHistoryContainer.innerHTML = '';
-
-            if (matchHistory.length > 0) {
-                let table = `<table class="match-table">
-                    <thead>
-                        <tr>
-                            <th>Match #</th>
-                            <th>Team #</th>
-                            <th>Level 1</th>
-                            <th>Level 2</th>
-                            <th>Level 3</th>
-                            <th>Level 4</th>
-                            <th>Processor</th>
-                            <th>Barge</th>
-                            <th>Comments</th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
-                matchHistory.forEach(match => {
-                    table += `<tr>
-                        <td>${match.matchNumber}</td>
-                        <td>${match.teamNumber}</td>
-                        <td>${match.levelOneScore ?? 0}</td>
-                        <td>${match.levelTwoScore ?? 0}</td>
-                        <td>${match.levelThreeScore ?? 0}</td>
-                        <td>${match.levelFourScore ?? 0}</td>
-                        <td>${match.processorScore ?? 0}</td>
-                        <td>${match.bargeScore ?? 0}</td>
-                        <td>${match.extraComments ? match.extraComments : ''}</td>
-                    </tr>`;
-                });
-                table += `</tbody></table>`;
-                matchHistoryContainer.innerHTML = table;
-            } else {
-                matchHistoryContainer.innerHTML = '<p>No match data available.</p>';
-            }
-        }
-
-        window.onload = function() {
-            displayMatchHistory();
-        };
-    </script>
-    
+    <script src="../script/matchdata.js"></script>
     <script src="../script/navbar.js"></script>
 </body>
 </html>
