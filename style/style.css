@@ -420,8 +420,7 @@ ul li a:hover{
     .navbar {
         display: none !important;
     }
-    .algae-processor-buttons,
-    .algae-barge-buttons,
+    .score-group,
     .buttons, /* If you use .buttons for plus/minus groups */
     .score-buttons { /* Add any other relevant class here */
         display: flex !important;
@@ -432,9 +431,293 @@ ul li a:hover{
     }
 
     /* Optional: make the inner .match-info not stretch */
-    .algae-processor-buttons .match-info,
-    .algae-barge-buttons .match-info {
+    .score-group .match-info {
         margin: 0 8px;
     }
 }
+}
+
+/* ===== 2026 REBUILT additions ===== */
+
+.score-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 10px;
+    justify-content: center;
+}
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: monospace;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: normal;
+}
+.radio-group input[type="radio"] {
+    accent-color: purple;
+    width: 18px;
+    height: 18px;
+}
+
+.checkbox-row {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 16px 0;
+}
+.checkbox-row label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #fff;
+    font-family: monospace;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: normal;
+}
+.checkbox-row input[type="checkbox"] {
+    accent-color: purple;
+    width: 20px;
+    height: 20px;
+}
+
+.data-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+    align-items: center;
+    justify-content: center;
+}
+.data-controls input,
+.data-controls select {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid purple;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: monospace;
+    font-size: 16px;
+}
+.data-controls input:focus,
+.data-controls select:focus {
+    outline: none;
+    border-color: lavenderblush;
+}
+
+.data-controls .btn {
+    padding: 8px 16px;
+    font-size: 16px;
+    width: auto;
+    height: auto;
+    margin: 0;
+    display: inline-block;
+}
+
+.tab-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.tab-btn {
+    background: rgba(128,0,128,0.4);
+    color: #fff;
+    border: 1px solid purple;
+    border-radius: 8px 8px 0 0;
+    padding: 8px 20px;
+    font-family: monospace;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+.tab-btn:hover {
+    background: rgba(128,0,128,0.7);
+}
+.tab-btn.active {
+    background: purple;
+    color: lavenderblush;
+}
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 16px;
+}
+.chart-card {
+    background: rgba(0,0,0,0.6);
+    border-radius: 10px;
+    padding: 16px;
+}
+.chart-card h3 {
+    font-family: monospace;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 12px;
+    font-size: 18px;
+}
+@media (max-width: 768px) {
+    .chart-grid { grid-template-columns: 1fr; }
+}
+
+.match-table th {
+    cursor: pointer;
+    user-select: none;
+}
+.match-table th.sort-active {
+    color: lavenderblush;
+}
+.match-table th .sort-arrow {
+    margin-left: 6px;
+    font-size: 14px;
+}
+
+.btn-danger {
+    background-color: #8b0000 !important;
+}
+.btn-danger:hover {
+    background-color: lavenderblush !important;
+    color: #8b0000 !important;
+}
+
+.btn-sm {
+    padding: 4px 12px !important;
+    font-size: 14px !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    border-radius: 6px !important;
+    display: inline-block !important;
+}
+
+.comparison-selectors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+    justify-content: center;
+    margin: 20px 0;
+}
+.selector-slot {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: #fff;
+    font-family: monospace;
+}
+.selector-slot label {
+    font-size: 16px;
+}
+.selector-slot select {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid purple;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: monospace;
+    font-size: 16px;
+    min-width: 160px;
+}
+
+.picklist-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(0,0,0,0.55);
+    border: 1px solid purple;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 8px;
+    cursor: grab;
+    font-family: monospace;
+    color: #fff;
+    font-size: 18px;
+    transition: background 0.2s, border-color 0.2s;
+}
+.picklist-row:active {
+    cursor: grabbing;
+}
+.picklist-row.drag-over {
+    background: rgba(128,0,128,0.5);
+    border-color: lavenderblush;
+}
+.drag-handle {
+    font-size: 24px;
+    color: purple;
+    cursor: grab;
+    user-select: none;
+}
+.rank-number {
+    min-width: 40px;
+    color: lavenderblush;
+    font-weight: bold;
+    font-size: 22px;
+    text-align: center;
+}
+.team-number-cell {
+    min-width: 80px;
+    font-weight: bold;
+}
+.team-stat {
+    color: rgba(255,255,255,0.75);
+    font-size: 15px;
+    flex: 1;
+}
+.row-actions {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+    align-items: center;
+}
+.arrow-btn {
+    background: rgba(128,0,128,0.5);
+    color: #fff;
+    border: 1px solid purple;
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 0;
+    font-family: monospace;
+}
+.arrow-btn:hover {
+    background: purple;
+}
+
+#pickListContainer {
+    margin-top: 16px;
+}
+.picklist-empty {
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 24px;
+    font-family: monospace;
+    border: 1px dashed rgba(128,0,128,0.6);
+    border-radius: 10px;
+}
+
+.section-card {
+    background: rgba(0,0,0,0.4);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid rgba(128,0,128,0.5);
+}
+.section-card h2 {
+    margin-top: 0 !important;
+    color: lavenderblush;
 }
