@@ -5,12 +5,12 @@ import { getFirestore }  from 'https://www.gstatic.com/firebasejs/11.6.0/firebas
 // Paste your Firebase project config here:
 // Firebase Console → Project Settings → Your apps → SDK setup and configuration
 const firebaseConfig = {
-    apiKey:            "PASTE_HERE",
-    authDomain:        "PASTE_HERE",
-    projectId:         "PASTE_HERE",
-    storageBucket:     "PASTE_HERE",
-    messagingSenderId: "PASTE_HERE",
-    appId:             "PASTE_HERE"
+    apiKey: "AIzaSyBwg4dGVSf5BFkzLR6W3o3chmUNvTtU4-Q",
+    authDomain: "nebulascouting.firebaseapp.com",
+    projectId: "nebulascouting",
+    storageBucket: "nebulascouting.firebasestorage.app",
+    messagingSenderId: "62781326097",
+    ppId: "1:62781326097:web:77959eb4cea66bc754c2b0"
 };
 
 const app = initializeApp(firebaseConfig);
