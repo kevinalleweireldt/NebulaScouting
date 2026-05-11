@@ -4,82 +4,207 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Nebula Scouting</title>
+    <title>Nebula Scouting — FRC Scouting, Reimagined</title>
     <link rel="stylesheet" href="style/style.css">
 </head>
-<body>
+<body class="landing">
     <div class="main">
 
         <nav class="navbar">
             <h2 class="logo"><a href="/">Nebula Scouting</a></h2>
             <div class="menu">
                 <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#workflow">Workflow</a></li>
+                    <li><a href="#season">2026</a></li>
                     <li><a href="/about">About</a></li>
-                    <li><a href="/contact">Contact</a></li>
                 </ul>
             </div>
             <a href="/login" class="btn btn-sm">Sign In</a>
         </nav>
 
-        <!-- Hero -->
-        <div class="content content--hero">
-            <p class="subtitle">2026 FRC REBUILT</p>
-            <h1>Nebula Scouting</h1>
-            <p class="par hero-tagline">A scouting platform built for speed in the pits and clarity at the strategy table.</p>
-            <div class="buttons-container">
-                <a href="/login" class="btn btn-lg">Sign In to Scout</a>
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-inner">
+                <span class="badge">
+                    <span class="badge-dot"></span>
+                    BUILT FOR 2026 · FRC REBUILT
+                </span>
+                <h1 class="hero-title">Scout faster.<br><span class="hero-title-accent">Strategize sharper.</span></h1>
+                <p class="hero-lead">A purpose-built scouting platform for FRC teams. Capture match data in seconds, surface trends instantly, and walk into alliance selection with real numbers — not gut feeling.</p>
+                <div class="hero-actions">
+                    <a href="/login" class="btn btn-lg">Sign In to Scout</a>
+                    <a href="#features" class="btn btn-ghost btn-lg">Explore Features</a>
+                </div>
+                <div class="hero-meta">
+                    <span class="hero-meta-item"><span class="hero-meta-dot"></span> No spreadsheets</span>
+                    <span class="hero-meta-item"><span class="hero-meta-dot"></span> Phone-first scouting</span>
+                    <span class="hero-meta-item"><span class="hero-meta-dot"></span> Live Firestore sync</span>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Features -->
-        <div class="content landing-section">
-            <p class="section-label">Features</p>
-            <h2>Everything your alliance selection needs</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <p class="feature-tag">Match Scouting</p>
-                    <h3>Fast data entry</h3>
-                    <p>Streamlined match form fills out in seconds. Track FUEL into the HUB, Tower climbing at L1 / L2 / L3, defense, and breakdown flags — all per match.</p>
-                </div>
-                <div class="feature-card">
-                    <p class="feature-tag">Data Review</p>
-                    <h3>Sortable match history</h3>
-                    <p>Admins see all scouted data across the event; scouters see their own submissions. Sort any column instantly.</p>
-                </div>
-                <div class="feature-card">
-                    <p class="feature-tag">Team Comparison</p>
-                    <h3>Side-by-side analysis</h3>
-                    <p>Compare any two teams across auto, teleop, and endgame averages to make informed pick decisions at the table.</p>
-                </div>
-                <div class="feature-card">
-                    <p class="feature-tag">Pick List</p>
-                    <h3>Drag-and-drop ordering</h3>
-                    <p>Admin-editable pick list backed by Firestore. Scouters get a live read-only view during alliance selection — no spreadsheet needed.</p>
-                </div>
-            </div>
-        </div>
+        <!-- FEATURES -->
+        <section id="features" class="section">
+            <div class="section-inner">
+                <p class="eyebrow">Features</p>
+                <h2 class="section-title">Everything you need to scout an event</h2>
+                <p class="section-lead">Four tools, one workflow. Built for speed in the pits and clarity at the strategy table.</p>
 
-        <!-- About -->
-        <div class="content landing-section">
-            <p class="section-label">2026 Season</p>
-            <div class="section-card">
-                <h2>Built for REBUILT</h2>
-                <p class="text-left">This season's form tracks FUEL into the HUB during auto and teleop, Tower climbing at L1 (15 pts), L2 (20 pts), and L3 (30 pts) in both auto and endgame, plus per-match defense and breakdown flags. Every field flows directly into the comparison and pick-list views.</p>
+                <div class="features-grid">
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="8" y="2" width="8" height="4" rx="1"/>
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                                <path d="M9 14l2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <p class="feature-tag">Match Scouting</p>
+                        <h3 class="feature-title">Fast data entry</h3>
+                        <p class="feature-desc">A streamlined match form built for the field. Track FUEL into the HUB, Tower climbing (L1 / L2 / L3), defense, and breakdowns — per match.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="3" y1="20" x2="21" y2="20"/>
+                                <line x1="7" y1="20" x2="7" y2="12"/>
+                                <line x1="12" y1="20" x2="12" y2="8"/>
+                                <line x1="17" y1="20" x2="17" y2="14"/>
+                            </svg>
+                        </div>
+                        <p class="feature-tag">Data Review</p>
+                        <h3 class="feature-title">Sortable history</h3>
+                        <p class="feature-desc">Admins see every match scouted across the event; scouters see their own submissions. Sort any column instantly.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="7" height="16" rx="1"/>
+                                <rect x="14" y="4" width="7" height="16" rx="1"/>
+                            </svg>
+                        </div>
+                        <p class="feature-tag">Team Comparison</p>
+                        <h3 class="feature-title">Side-by-side</h3>
+                        <p class="feature-desc">Compare any two teams across auto, teleop, and endgame averages. Pick decisions made on data, not vibes.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="9" y1="6" x2="20" y2="6"/>
+                                <line x1="9" y1="12" x2="20" y2="12"/>
+                                <line x1="9" y1="18" x2="20" y2="18"/>
+                                <circle cx="5" cy="6" r="1.4"/>
+                                <circle cx="5" cy="12" r="1.4"/>
+                                <circle cx="5" cy="18" r="1.4"/>
+                            </svg>
+                        </div>
+                        <p class="feature-tag">Pick List</p>
+                        <h3 class="feature-title">Drag & drop</h3>
+                        <p class="feature-desc">Admin-editable pick list backed by Firestore. Scouters get a live read-only view during alliance selection.</p>
+                    </article>
+                </div>
             </div>
-            <div class="section-card" style="margin-top: var(--space-5);">
-                <h2>Who it's for</h2>
-                <p class="text-left">Built for FRC teams that want real data, not spreadsheets. Scouters capture data on phones at the field; strategy leads pull up trends and comparisons on the pit laptop. No build step, no backend to manage — just Firebase and fast pages.</p>
+        </section>
+
+        <!-- WORKFLOW -->
+        <section id="workflow" class="section section-tinted">
+            <div class="section-inner">
+                <p class="eyebrow">Workflow</p>
+                <h2 class="section-title">From the field to the table in three steps</h2>
+
+                <div class="workflow-grid">
+                    <div class="workflow-step">
+                        <div class="workflow-step-num">01</div>
+                        <h3 class="workflow-step-title">Capture</h3>
+                        <p class="workflow-step-desc">Scouters open the match form on their phones at the field. Tap counters, flag defense and breakdowns, hit submit.</p>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="workflow-step-num">02</div>
+                        <h3 class="workflow-step-title">Sync</h3>
+                        <p class="workflow-step-desc">Every submission writes straight to Firestore. No exporting, no syncing, no spreadsheet wrangling between matches.</p>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="workflow-step-num">03</div>
+                        <h3 class="workflow-step-title">Decide</h3>
+                        <p class="workflow-step-desc">Strategy leads open the dashboard, compare teams, and finalize the pick list — live, with everything that just happened.</p>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
+
+        <!-- 2026 SEASON -->
+        <section id="season" class="section">
+            <div class="section-inner">
+                <p class="eyebrow">2026 Season</p>
+                <h2 class="section-title">Tracked for REBUILT</h2>
+                <p class="section-lead">Every field on the form maps to a real point value in the 2026 game.</p>
+
+                <div class="game-grid">
+                    <div class="game-card">
+                        <p class="game-card-label">Auto + Teleop</p>
+                        <h3 class="game-card-title">FUEL into HUB</h3>
+                        <p class="game-card-desc">Counter-based entry for both phases. Track every shot that scores, individually.</p>
+                    </div>
+                    <div class="game-card">
+                        <p class="game-card-label">Auto + Endgame</p>
+                        <h3 class="game-card-title">Tower Climbing</h3>
+                        <div class="game-levels">
+                            <span class="game-level"><strong>L1</strong><span>15 pts</span></span>
+                            <span class="game-level"><strong>L2</strong><span>20 pts</span></span>
+                            <span class="game-level"><strong>L3</strong><span>30 pts</span></span>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <p class="game-card-label">Per Match</p>
+                        <h3 class="game-card-title">Robot Flags</h3>
+                        <p class="game-card-desc">Defense played and breakdown status captured every match for honest, complete team profiles.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- CTA -->
-        <div class="content">
-            <div class="landing-cta">
-                <h2>Ready to start scouting?</h2>
-                <p>Contact your team admin for an account, then sign in to access the platform.</p>
-                <a href="/login" class="btn btn-lg">Sign In</a>
+        <section class="section">
+            <div class="section-inner">
+                <div class="cta-card">
+                    <p class="eyebrow">Ready to start</p>
+                    <h2 class="cta-title">Sign in to access the platform</h2>
+                    <p class="cta-lead">Contact your team admin for an account, then sign in to start scouting.</p>
+                    <a href="/login" class="btn btn-lg">Sign In</a>
+                </div>
             </div>
-        </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="site-footer">
+            <div class="site-footer-inner">
+                <div class="site-footer-brand">
+                    <h2 class="logo"><a href="/">Nebula Scouting</a></h2>
+                    <p class="site-footer-tagline">FRC scouting, reimagined for the 2026 season.</p>
+                </div>
+                <div class="site-footer-links">
+                    <div>
+                        <p class="site-footer-heading">Product</p>
+                        <a href="#features">Features</a>
+                        <a href="#workflow">Workflow</a>
+                        <a href="#season">2026 Season</a>
+                    </div>
+                    <div>
+                        <p class="site-footer-heading">Site</p>
+                        <a href="/about">About</a>
+                        <a href="/contact">Contact</a>
+                        <a href="/login">Sign In</a>
+                    </div>
+                </div>
+            </div>
+            <div class="site-footer-bottom">
+                <p>Built by Kevin Alleweireldt · Powered by Firebase + Vercel</p>
+            </div>
+        </footer>
 
     </div>
 </body>
