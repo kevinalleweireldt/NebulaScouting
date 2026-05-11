@@ -32,12 +32,17 @@
             <div class="section-card">
                 <h2>Autonomous</h2>
                 <div class="score-group">
-                    <button class="btn" id="subtractAutoFuel" aria-label="Subtract auto fuel">−</button>
                     <div class="match-info">
                         <h3>Auto FUEL</h3>
                         <span id="auto-fuel-score">0</span>
                     </div>
-                    <button class="btn" id="addAutoFuel" aria-label="Add auto fuel">+</button>
+                    <div class="counter-buttons">
+                        <button class="btn btn-counter btn-counter--subtract" data-counter="auto" data-delta="-1">−1</button>
+                        <button class="btn btn-counter" data-counter="auto" data-delta="1">+1</button>
+                        <button class="btn btn-counter btn-counter--med" data-counter="auto" data-delta="5">+5</button>
+                        <button class="btn btn-counter btn-counter--lg" data-counter="auto" data-delta="10">+10</button>
+                        <button class="btn btn-counter btn-counter--xl" data-counter="auto" data-delta="20">+20</button>
+                    </div>
                 </div>
                 <div class="field-label">Auto Tower Climb</div>
                 <div class="radio-group">
@@ -51,12 +56,17 @@
             <div class="section-card">
                 <h2>Teleop</h2>
                 <div class="score-group">
-                    <button class="btn" id="subtractTeleopFuel" aria-label="Subtract teleop fuel">−</button>
                     <div class="match-info">
                         <h3>Teleop FUEL</h3>
                         <span id="teleop-fuel-score">0</span>
                     </div>
-                    <button class="btn" id="addTeleopFuel" aria-label="Add teleop fuel">+</button>
+                    <div class="counter-buttons">
+                        <button class="btn btn-counter btn-counter--subtract" data-counter="teleop" data-delta="-1">−1</button>
+                        <button class="btn btn-counter" data-counter="teleop" data-delta="1">+1</button>
+                        <button class="btn btn-counter btn-counter--med" data-counter="teleop" data-delta="5">+5</button>
+                        <button class="btn btn-counter btn-counter--lg" data-counter="teleop" data-delta="10">+10</button>
+                        <button class="btn btn-counter btn-counter--xl" data-counter="teleop" data-delta="20">+20</button>
+                    </div>
                 </div>
             </div>
 
