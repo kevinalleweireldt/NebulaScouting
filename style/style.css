@@ -593,15 +593,25 @@ input, textarea, select {
     min-height: 80px;
 }
 .match-inputs input::placeholder,
-.match-inputs textarea::placeholder {
+.match-inputs textarea::placeholder,
+.input-field input::placeholder,
+.input-field textarea::placeholder {
     color: var(--text-dim);
 }
 .match-inputs input:focus,
-.match-inputs textarea:focus {
+.match-inputs textarea:focus,
+.input-field input:focus,
+.input-field textarea:focus {
     outline: none;
     border-color: var(--purple-300);
     background: rgba(157, 78, 255, 0.08);
     box-shadow: 0 0 0 3px rgba(157, 78, 255, 0.18);
+}
+
+.input-field textarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: var(--font-body);
 }
 
 /* ============================================================
