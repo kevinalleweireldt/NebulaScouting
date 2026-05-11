@@ -1622,6 +1622,9 @@ body.landing .main {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     box-shadow: var(--shadow-soft);
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 .chart-card h3 {
     font-family: var(--font-display);
@@ -1631,6 +1634,18 @@ body.landing .main {
     font-size: 16px;
     font-weight: 600;
     letter-spacing: -0.2px;
+}
+.chart-card canvas {
+    width: 100% !important;
+    height: 280px !important;
+    max-height: 280px;
+    display: block;
+}
+@media (max-width: 720px) {
+    .chart-card canvas {
+        height: 240px !important;
+        max-height: 240px;
+    }
 }
 
 /* ============================================================
