@@ -125,7 +125,7 @@ function renderAllMatchesTable() {
     rows = rows.slice().sort((a, b) => compareForSort(a, b, currentSort.field, currentSort.dir));
 
     if (rows.length === 0) {
-        container.innerHTML = '<p style="text-align:center; color:rgba(255,255,255,0.7); font-family:monospace; padding:20px;">No match data available.</p>';
+        container.innerHTML = '<p class="empty-state">No match data available.</p>';
         return;
     }
 
@@ -196,7 +196,7 @@ function renderTeamAveragesTable() {
     const teams = [...avgMap.values()].sort((a, b) => b.avgScore - a.avgScore);
 
     if (teams.length === 0) {
-        container.innerHTML = '<p style="text-align:center; color:rgba(255,255,255,0.7); font-family:monospace; padding:20px;">No team data yet.</p>';
+        container.innerHTML = '<p class="empty-state">No team data yet.</p>';
         return;
     }
 
