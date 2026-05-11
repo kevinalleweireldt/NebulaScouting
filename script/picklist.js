@@ -1,0 +1,281 @@
+// Pick list — manual ranked list of team numbers.
+// Storage: localStorage 'pickList' = array of team-number strings, index 0 = rank 1.
+// Plain script (not module).
+
+function loadPickList() {
+    return JSON.parse(localStorage.getItem('pickList')) || [];
+}
+
+function savePickList(list) {
+    localStorage.setItem('pickList', JSON.stringify(list));
+}
+
+function getHistory() {
+    return JSON.parse(localStorage.getItem('matchHistory')) || [];
+}
+
+function normalizeEntry(m) {
+    return {
+        teamNumber: m.teamNumber ?? 'Unknown',
+        autoFuel: m.autoFuel ?? 0,
+        autoClimb: m.autoClimb ?? 0,
+        teleopFuel: m.teleopFuel ?? 0,
+        endgameClimb: m.endgameClimb ?? 0,
+        defense: m.defense ?? false,
+        brokeDown: m.brokeDown ?? false,
+        score: m.score ?? 0
+    };
+}
+
+function computeTeamAverages(history) {
+    const byTeam = new Map();
+    history.forEach(raw => {
+        const m = normalizeEntry(raw);
+        if (!byTeam.has(m.teamNumber)) {
+            byTeam.set(m.teamNumber, {
+                teamNumber: m.teamNumber,
+                matchCount: 0,
+                totalScore: 0,
+                totalAutoFuel: 0,
+                totalTeleopFuel: 0,
+                climbCount: 0,
+                defenseCount: 0
+            });
+        }
+        const t = byTeam.get(m.teamNumber);
+        t.matchCount += 1;
+        t.totalScore += m.score;
+        t.totalAutoFuel += m.autoFuel;
+        t.totalTeleopFuel += m.teleopFuel;
+        if (m.endgameClimb > 0) t.climbCount += 1;
+        if (m.defense) t.defenseCount += 1;
+    });
+
+    const result = new Map();
+    byTeam.forEach((t, key) => {
+        result.set(key, {
+            teamNumber: t.teamNumber,
+            matchCount: t.matchCount,
+            avgScore: t.totalScore / t.matchCount,
+            avgAutoFuel: t.totalAutoFuel / t.matchCount,
+            avgTeleopFuel: t.totalTeleopFuel / t.matchCount,
+            climbRate: t.climbCount / t.matchCount,
+            defenseRate: t.defenseCount / t.matchCount
+        });
+    });
+    return result;
+}
+
+function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+}
+
+let dragSrcIdx = null;
+
+function onDragStart(e) {
+    dragSrcIdx = parseInt(e.currentTarget.dataset.idx, 10);
+    e.dataTransfer.effectAllowed = 'move';
+    e.currentTarget.style.opacity = '0.5';
+}
+
+function onDragEnd(e) {
+    e.currentTarget.style.opacity = '';
+    document.querySelectorAll('.picklist-row').forEach(r => r.classList.remove('drag-over'));
+}
+
+function onDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    e.currentTarget.classList.add('drag-over');
+}
+
+function onDragLeave(e) {
+    e.currentTarget.classList.remove('drag-over');
+}
+
+function onDrop(e) {
+    e.preventDefault();
+    e.currentTarget.classList.remove('drag-over');
+    const targetIdx = parseInt(e.currentTarget.dataset.idx, 10);
+    if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
+    const list = loadPickList();
+    const [moved] = list.splice(dragSrcIdx, 1);
+    list.splice(targetIdx, 0, moved);
+    savePickList(list);
+    dragSrcIdx = null;
+    renderPickList();
+}
+
+function moveItem(idx, delta) {
+    const list = loadPickList();
+    const newIdx = idx + delta;
+    if (newIdx < 0 || newIdx >= list.length) return;
+    const tmp = list[idx];
+    list[idx] = list[newIdx];
+    list[newIdx] = tmp;
+    savePickList(list);
+    renderPickList();
+}
+
+function removeTeam(team) {
+    const list = loadPickList().filter(t => t !== team);
+    savePickList(list);
+    renderPickList();
+}
+
+function renderPickList() {
+    const container = document.getElementById('pickListContainer');
+    if (!container) return;
+    const list = loadPickList();
+    const avgMap = computeTeamAverages(getHistory());
+
+    if (list.length === 0) {
+        container.innerHTML = '<div class="picklist-empty">No teams in pick list. Add a team number above, or auto-populate from your scouted data.</div>';
+        renderStatsTable(list, avgMap);
+        return;
+    }
+
+    container.innerHTML = '';
+    list.forEach((team, idx) => {
+        const stats = avgMap.get(team);
+        const statLine = stats
+            ? `Avg Score: ${stats.avgScore.toFixed(1)} • ${stats.matchCount} match${stats.matchCount === 1 ? '' : 'es'}`
+            : 'No scouted matches yet';
+
+        const row = document.createElement('div');
+        row.className = 'picklist-row';
+        row.draggable = true;
+        row.dataset.team = team;
+        row.dataset.idx = idx;
+        row.innerHTML = `
+            <span class="drag-handle" title="Drag to reorder">≡</span>
+            <span class="rank-number">${idx + 1}</span>
+            <span class="team-number-cell">${escapeHtml(team)}</span>
+            <span class="team-stat">${statLine}</span>
+            <span class="row-actions">
+                <button class="arrow-btn" data-action="up" data-idx="${idx}" title="Move up">▲</button>
+                <button class="arrow-btn" data-action="down" data-idx="${idx}" title="Move down">▼</button>
+                <button class="btn btn-sm btn-danger" data-action="remove" data-team="${escapeHtml(team)}">Remove</button>
+            </span>
+        `;
+        row.addEventListener('dragstart', onDragStart);
+        row.addEventListener('dragend', onDragEnd);
+        row.addEventListener('dragover', onDragOver);
+        row.addEventListener('dragleave', onDragLeave);
+        row.addEventListener('drop', onDrop);
+        container.appendChild(row);
+    });
+
+    renderStatsTable(list, avgMap);
+}
+
+function renderStatsTable(list, avgMap) {
+    const container = document.getElementById('picklistStatsTable');
+    if (!container) return;
+    if (list.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+
+    let html = '<table class="match-table"><thead><tr>';
+    html += '<th>Rank</th><th>Team #</th><th>Matches</th><th>Avg Score</th><th>Avg Auto FUEL</th><th>Avg Teleop FUEL</th><th>Climb Rate</th><th>Defense %</th>';
+    html += '</tr></thead><tbody>';
+
+    list.forEach((team, idx) => {
+        const s = avgMap.get(team);
+        html += '<tr>';
+        html += `<td><strong>${idx + 1}</strong></td>`;
+        html += `<td>${escapeHtml(team)}</td>`;
+        if (s) {
+            html += `<td>${s.matchCount}</td>`;
+            html += `<td><strong>${s.avgScore.toFixed(1)}</strong></td>`;
+            html += `<td>${s.avgAutoFuel.toFixed(2)}</td>`;
+            html += `<td>${s.avgTeleopFuel.toFixed(2)}</td>`;
+            html += `<td>${(s.climbRate * 100).toFixed(0)}%</td>`;
+            html += `<td>${(s.defenseRate * 100).toFixed(0)}%</td>`;
+        } else {
+            html += '<td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>';
+        }
+        html += '</tr>';
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+
+function addTeam() {
+    const input = document.getElementById('addTeamInput');
+    if (!input) return;
+    const team = input.value.trim();
+    if (!team) return;
+    const list = loadPickList();
+    if (list.includes(team)) {
+        alert(`Team ${team} is already in the pick list.`);
+        return;
+    }
+    list.push(team);
+    savePickList(list);
+    input.value = '';
+    renderPickList();
+}
+
+function autoPopulate() {
+    const existing = loadPickList();
+    if (existing.length > 0) {
+        if (!confirm('This will replace the current pick list with teams sorted by avg score. Continue?')) return;
+    }
+    const avgMap = computeTeamAverages(getHistory());
+    const ranked = [...avgMap.values()]
+        .sort((a, b) => b.avgScore - a.avgScore)
+        .map(t => t.teamNumber);
+    if (ranked.length === 0) {
+        alert('No scouted teams to populate from.');
+        return;
+    }
+    savePickList(ranked);
+    renderPickList();
+}
+
+function clearList() {
+    if (loadPickList().length === 0) return;
+    if (!confirm('Clear the entire pick list?')) return;
+    savePickList([]);
+    renderPickList();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderPickList();
+
+    const addBtn = document.getElementById('addTeamBtn');
+    if (addBtn) addBtn.addEventListener('click', addTeam);
+
+    const input = document.getElementById('addTeamInput');
+    if (input) {
+        input.addEventListener('keypress', e => {
+            if (e.key === 'Enter') addTeam();
+        });
+    }
+
+    const autoBtn = document.getElementById('autoPopulateBtn');
+    if (autoBtn) autoBtn.addEventListener('click', autoPopulate);
+
+    const clearBtn = document.getElementById('clearPicklist');
+    if (clearBtn) clearBtn.addEventListener('click', clearList);
+
+    const container = document.getElementById('pickListContainer');
+    if (container) {
+        container.addEventListener('click', e => {
+            const btn = e.target.closest('button[data-action]');
+            if (!btn) return;
+            const action = btn.dataset.action;
+            if (action === 'remove') {
+                removeTeam(btn.dataset.team);
+            } else if (action === 'up') {
+                moveItem(parseInt(btn.dataset.idx, 10), -1);
+            } else if (action === 'down') {
+                moveItem(parseInt(btn.dataset.idx, 10), 1);
+            }
+        });
+    }
+});
