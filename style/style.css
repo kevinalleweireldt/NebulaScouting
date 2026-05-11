@@ -1122,11 +1122,12 @@ select option:disabled {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-display);
+    font-family: var(--font-hero);
     background: linear-gradient(135deg, var(--purple-500), var(--purple-600));
     color: var(--text);
-    font-weight: 700;
-    font-size: 18px;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: 1px;
     border-radius: var(--radius-sm);
     box-shadow: 0 2px 8px rgba(124, 45, 217, 0.4);
 }
