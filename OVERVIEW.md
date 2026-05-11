@@ -99,6 +99,15 @@ Deployed on **Vercel**. `vercel.json` enables `cleanUrls` and maps short paths (
 
 ---
 
+## Git & GitHub
+
+- **Remote:** `git@github.com:kevinalleweireldt/NebulaScouting.git` (SSH)
+- **Branch:** `main`
+- **Auto-commit hook:** `.claude/settings.json` (gitignored, project-local) contains a `PostToolUse` hook that triggers after every `Write` or `Edit` tool call by Claude Code. It runs `git add -A`, commits with an `Auto-save: YYYY-MM-DD HH:MM:SS` message if there are changes, and pushes to `origin main`.
+- `.claude/` is excluded from git via `.gitignore` so the local Claude Code config is never committed.
+
+---
+
 ## Data Storage
 
 All match data is stored in **browser localStorage** (`matchHistory` key). There is no backend database. Data is local to the device and browser session.
