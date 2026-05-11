@@ -1001,19 +1001,24 @@ input, textarea, select {
     text-transform: uppercase;
 }
 .selector-slot select {
-    background: rgba(255, 255, 255, 0.04);
+    background-color: rgba(255, 255, 255, 0.04);
     color: var(--text);
     border: 1px solid var(--border-1);
     border-radius: var(--radius);
-    padding: 10px 14px;
+    padding: 12px 16px;
     font-family: var(--font-body);
-    font-size: 14px;
-    min-width: 180px;
+    font-size: 15px;
+    min-width: 200px;
     transition: all 0.2s ease;
+}
+.selector-slot select:hover {
+    border-color: var(--border-2);
+    background-color: rgba(157, 78, 255, 0.06);
 }
 .selector-slot select:focus {
     outline: none;
     border-color: var(--purple-300);
+    background-color: rgba(157, 78, 255, 0.1);
     box-shadow: 0 0 0 3px rgba(157, 78, 255, 0.18);
 }
 
