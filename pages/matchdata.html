@@ -11,7 +11,39 @@
     <div class="navbar"></div>
     <div class="main">
         <div class="content">
-            <h1>Match Data</h1>
+            <div class="page-head">
+                <h1>Match Data</h1>
+                <p class="subtitle" id="matchDataSubtitle">Live · 2026 Season</p>
+            </div>
+
+            <div class="kpi-strip" id="matchDataKpis">
+                <div class="kpi">
+                    <p class="kpi-label">Total Matches</p>
+                    <h2 class="kpi-value" id="kpiTotalMatches">—</h2>
+                    <div class="kpi-sub"><span class="kpi-hint" id="kpiTotalHint">across all teams</span></div>
+                    <canvas class="kpi-spark" id="kpiSparkMatches"></canvas>
+                </div>
+                <div class="kpi">
+                    <p class="kpi-label">Teams Scouted</p>
+                    <h2 class="kpi-value" id="kpiTeams">—</h2>
+                    <div class="kpi-sub"><span class="kpi-hint" id="kpiTeamsHint">unique</span></div>
+                </div>
+                <div class="kpi">
+                    <p class="kpi-label">Avg Score</p>
+                    <h2 class="kpi-value" id="kpiAvgScore">—</h2>
+                    <div class="kpi-sub"><span class="kpi-hint" id="kpiAvgHint">per match</span></div>
+                </div>
+                <div class="kpi">
+                    <p class="kpi-label">Top Team</p>
+                    <h2 class="kpi-value kpi-value--sm" id="kpiTopTeam">—</h2>
+                    <div class="kpi-sub"><span class="kpi-hint" id="kpiTopHint">by avg score</span></div>
+                </div>
+                <div class="kpi">
+                    <p class="kpi-label">Latest Match</p>
+                    <h2 class="kpi-value kpi-value--sm" id="kpiLatest">—</h2>
+                    <div class="kpi-sub"><span class="kpi-hint" id="kpiLatestHint">submitted</span></div>
+                </div>
+            </div>
 
             <div class="data-controls">
                 <input type="text" id="filterTeam" placeholder="Filter by team #..." />

@@ -37,10 +37,12 @@ A fast FRC scouting web app. Scouters fill in a match form; admins review aggreg
     login.js
     admin.js            ← secondary Firebase app pattern for creating accounts
     app.js              ← match form submit → Firestore addDoc
+    dashboard.js        ← KPI strip, recent activity, top-5 leaderboard (Firestore-backed)
     matchdata.js        ← Firestore-backed; admin sees all, scouter sees own
-    picklist.js         ← Firestore-backed; scouter gets read-only view
-    teamcomparison.js   ← Firestore-backed; role-filtered
+    picklist.js         ← Firestore-backed; scouter gets read-only view; sparkline per row
+    teamcomparison.js   ← Trend chart (per-match score + running avg) with multi-team chip rail
     matchScore.js       ← counter UI logic, imported by app.js
+    chart-theme.js      ← shared Chart.js defaults, brand palette, drawSparkline() helper
     tba.js              ← TBA API integration (stub/WIP)
 ```
 

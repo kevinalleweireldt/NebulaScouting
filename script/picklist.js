@@ -2,6 +2,7 @@ import { requireAuth }  from './auth.js';
 import { db }           from './firebase-config.js';
 import { collection, query, where, getDocs, doc, getDoc, setDoc }
     from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
+import { drawSparkline, PALETTE } from './chart-theme.js';
 
 let currentRole;
 const pickListRef = () => doc(db, 'pickList', 'current');
@@ -29,8 +30,38 @@ function normalizeEntry(m) {
         endgameClimb: m.endgameClimb ?? 0,
         defense:      m.defense      ?? false,
         brokeDown:    m.brokeDown    ?? false,
-        score:        m.score        ?? 0
+        score:        m.score        ?? 0,
+        timestamp:    m.timestamp?.toDate?.()?.toISOString() ?? m.timestamp ?? ''
     };
+}
+
+function teamScoreSeries(history, teamNum) {
+    return history
+        .map(normalizeEntry)
+        .filter(m => String(m.teamNumber) === String(teamNum))
+        .sort((a, b) => String(a.timestamp).localeCompare(String(b.timestamp)))
+        .map(m => m.score);
+}
+
+function renderKpiStrip(list, avgMap) {
+    const countEl    = document.getElementById('pkCount');
+    const top3El     = document.getElementById('pkTop3');
+    const bestEl     = document.getElementById('pkBest');
+    const unscoutedEl= document.getElementById('pkUnscouted');
+    if (!countEl) return;
+
+    countEl.textContent = list.length.toLocaleString();
+    const scouted = list.map(t => avgMap.get(t)).filter(Boolean);
+    const top3 = [...scouted].sort((a, b) => b.avgScore - a.avgScore).slice(0, 3);
+    top3El.textContent  = top3.length ? (top3.reduce((s, t) => s + t.avgScore, 0) / top3.length).toFixed(1) : '—';
+    const best = top3[0];
+    bestEl.textContent  = best ? best.teamNumber : '—';
+    const bestHint = document.getElementById('pkBestHint');
+    if (bestHint) bestHint.textContent = best ? `${best.avgScore.toFixed(1)} avg` : '—';
+    unscoutedEl.textContent = (list.length - scouted.length).toString();
+
+    const countHint = document.getElementById('pkCountHint');
+    if (countHint) countHint.textContent = list.length > 0 ? `${scouted.length} with data` : 'add teams below';
 }
 
 function computeTeamAverages(history) {
@@ -126,6 +157,7 @@ async function renderPickList() {
     if (list.length === 0) {
         container.innerHTML = '<div class="picklist-empty">No teams in pick list. Add a team number above, or auto-populate from your scouted data.</div>';
         renderStatsTable(list, avgMap);
+        renderKpiStrip(list, avgMap);
         return;
     }
 
@@ -135,6 +167,7 @@ async function renderPickList() {
         const statLine = stats
             ? `Avg Score: ${stats.avgScore.toFixed(1)} • ${stats.matchCount} match${stats.matchCount === 1 ? '' : 'es'}`
             : 'No scouted matches yet';
+        const sparkId = `pk-spark-${idx}`;
 
         const row = document.createElement('div');
         row.className    = 'picklist-row';
@@ -148,6 +181,7 @@ async function renderPickList() {
                 <span class="rank-number">${idx + 1}</span>
                 <span class="team-number-cell">${escapeHtml(team)}</span>
                 <span class="team-stat">${statLine}</span>
+                <canvas class="picklist-spark" id="${sparkId}"></canvas>
                 <span class="row-actions">
                     <button class="arrow-btn" data-action="up"     data-idx="${idx}" title="Move up">▲</button>
                     <button class="arrow-btn" data-action="down"   data-idx="${idx}" title="Move down">▼</button>
@@ -162,19 +196,46 @@ async function renderPickList() {
             row.innerHTML = `
                 <span class="rank-number">${idx + 1}</span>
                 <span class="team-number-cell">${escapeHtml(team)}</span>
-                <span class="team-stat">${statLine}</span>`;
+                <span class="team-stat">${statLine}</span>
+                <canvas class="picklist-spark" id="${sparkId}"></canvas>`;
         }
 
         container.appendChild(row);
     });
 
+    // Sparklines need to be drawn after canvases are in the DOM and laid out.
+    requestAnimationFrame(() => {
+        list.forEach((team, idx) => {
+            const series = teamScoreSeries(history, team);
+            if (series.length === 0) return;
+            const canvas = document.getElementById(`pk-spark-${idx}`);
+            const palette = PALETTE[idx % PALETTE.length];
+            drawSparkline(canvas, series, { color: palette.solid, fillSoft: palette.soft });
+        });
+    });
+
     renderStatsTable(list, avgMap);
+    renderKpiStrip(list, avgMap);
 }
 
 function renderStatsTable(list, avgMap) {
     const container = document.getElementById('picklistStatsTable');
     if (!container) return;
     if (list.length === 0) { container.innerHTML = ''; return; }
+
+    const scoutedStats = list.map(t => avgMap.get(t)).filter(Boolean);
+    const maxScore  = Math.max(...scoutedStats.map(s => s.avgScore || 0), 1);
+    const maxAuto   = Math.max(...scoutedStats.map(s => s.avgAutoFuel || 0), 1);
+    const maxTeleop = Math.max(...scoutedStats.map(s => s.avgTeleopFuel || 0), 1);
+
+    const bar = (val, max, fmt) => {
+        const pct = Math.min(100, ((val || 0) / max) * 100);
+        return `<td class="cell-bar"><span class="bar-fill" style="width:${pct.toFixed(1)}%"></span><span class="bar-value">${fmt(val)}</span></td>`;
+    };
+    const pct = (val) => {
+        const w = Math.min(100, (val || 0) * 100);
+        return `<td class="cell-bar"><span class="bar-fill" style="width:${w.toFixed(1)}%"></span><span class="bar-value">${((val || 0) * 100).toFixed(0)}%</span></td>`;
+    };
 
     let html = '<table class="match-table"><thead><tr>';
     html += '<th>Rank</th><th>Team #</th><th>Matches</th><th>Avg Score</th><th>Avg Auto FUEL</th><th>Avg Teleop FUEL</th><th>Climb Rate</th><th>Defense %</th>';
@@ -187,11 +248,11 @@ function renderStatsTable(list, avgMap) {
         html += `<td>${escapeHtml(team)}</td>`;
         if (s) {
             html += `<td>${s.matchCount}</td>`;
-            html += `<td><strong>${s.avgScore.toFixed(1)}</strong></td>`;
-            html += `<td>${s.avgAutoFuel.toFixed(2)}</td>`;
-            html += `<td>${s.avgTeleopFuel.toFixed(2)}</td>`;
-            html += `<td>${(s.climbRate * 100).toFixed(0)}%</td>`;
-            html += `<td>${(s.defenseRate * 100).toFixed(0)}%</td>`;
+            html += bar(s.avgScore, maxScore, v => `<strong>${v.toFixed(1)}</strong>`);
+            html += bar(s.avgAutoFuel, maxAuto, v => v.toFixed(2));
+            html += bar(s.avgTeleopFuel, maxTeleop, v => v.toFixed(2));
+            html += pct(s.climbRate);
+            html += pct(s.defenseRate);
         } else {
             html += '<td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>';
         }

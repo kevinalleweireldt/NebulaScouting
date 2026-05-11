@@ -11,43 +11,45 @@
     <div class="navbar"></div>
     <div class="main">
         <div class="content">
-            <h1>Team Comparison</h1>
-            <p class="subtitle">Pick 2 or 3 teams · Side-by-side</p>
+            <div class="page-head">
+                <h1>Team Comparison</h1>
+                <p class="subtitle">Up to 5 teams · trend overlay</p>
+            </div>
 
-            <div class="comparison-selectors">
-                <div class="selector-slot">
-                    <label for="selectTeamA">Team A:</label>
-                    <select id="selectTeamA"><option value="">-- Select Team --</option></select>
+            <div class="chip-rail-wrap">
+                <p class="chip-rail-label">Select teams to overlay</p>
+                <div class="chip-rail" id="teamChipRail"></div>
+                <div class="chip-rail-controls">
+                    <input type="text" id="teamFilter" placeholder="Filter teams..." />
+                    <button class="btn btn-ghost btn-sm" id="clearTeamsBtn" type="button">Clear</button>
                 </div>
-                <div class="selector-slot">
-                    <label for="selectTeamB">Team B:</label>
-                    <select id="selectTeamB"><option value="">-- Select Team --</option></select>
+            </div>
+
+            <div class="trend-chart-card">
+                <h3>Score Trend</h3>
+                <p class="trend-sub">Per-match score &amp; running average — toggle series in the legend</p>
+                <div class="trend-chart-canvas-wrap">
+                    <canvas id="chartTrend"></canvas>
                 </div>
-                <div class="selector-slot">
-                    <label for="selectTeamC">Team C (optional):</label>
-                    <select id="selectTeamC"><option value="">-- None --</option></select>
+                <div class="trend-toggles">
+                    <label class="trend-toggle"><input type="checkbox" id="toggleRaw" checked> Per-match scores</label>
+                    <label class="trend-toggle"><input type="checkbox" id="toggleAvg" checked> Running average</label>
+                    <label class="trend-toggle"><input type="checkbox" id="toggleFuel"> Total FUEL (auto + teleop)</label>
                 </div>
-                <button class="btn" id="compareBtn">Compare</button>
             </div>
 
             <div id="comparisonResult" hidden>
                 <h2>Stat Comparison</h2>
-                <table class="match-table" id="comparisonTable"></table>
+                <div style="overflow-x:auto;">
+                    <table class="match-table" id="comparisonTable"></table>
+                </div>
 
                 <h2>Per-Team Match Detail</h2>
                 <div id="comparisonDetails"></div>
+            </div>
 
-                <h2>Charts</h2>
-                <div class="chart-grid">
-                    <div class="chart-card">
-                        <h3>Score per Match</h3>
-                        <canvas id="chartCompareScore"></canvas>
-                    </div>
-                    <div class="chart-card">
-                        <h3>Total FUEL per Match (Auto + Teleop)</h3>
-                        <canvas id="chartCompareFuel"></canvas>
-                    </div>
-                </div>
+            <div id="comparisonEmpty" class="empty-state">
+                Pick at least one team above to see its trend. Add more teams to overlay them.
             </div>
         </div>
     </div>

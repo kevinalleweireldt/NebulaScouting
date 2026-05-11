@@ -10,8 +10,33 @@
     <div class="navbar"></div>
     <div class="main">
         <div class="content">
-            <h1>Pick List</h1>
-            <p class="subtitle">Drag rows or use ▲ ▼ to reorder</p>
+            <div class="page-head">
+                <h1>Pick List</h1>
+                <p class="subtitle">Drag rows or use ▲ ▼ to reorder</p>
+            </div>
+
+            <div class="kpi-strip">
+                <div class="kpi">
+                    <p class="kpi-label">Teams On List</p>
+                    <h2 class="kpi-value" id="pkCount">—</h2>
+                    <div class="kpi-sub"><span class="kpi-hint" id="pkCountHint">ranked</span></div>
+                </div>
+                <div class="kpi">
+                    <p class="kpi-label">Avg of Top 3</p>
+                    <h2 class="kpi-value" id="pkTop3">—</h2>
+                    <div class="kpi-sub"><span class="kpi-hint">avg score</span></div>
+                </div>
+                <div class="kpi">
+                    <p class="kpi-label">Best Avg Score</p>
+                    <h2 class="kpi-value kpi-value--sm" id="pkBest">—</h2>
+                    <div class="kpi-sub"><span class="kpi-hint" id="pkBestHint">—</span></div>
+                </div>
+                <div class="kpi">
+                    <p class="kpi-label">Without Data</p>
+                    <h2 class="kpi-value kpi-value--sm" id="pkUnscouted">—</h2>
+                    <div class="kpi-sub"><span class="kpi-hint">no matches yet</span></div>
+                </div>
+            </div>
 
             <div class="data-controls">
                 <input type="text" id="addTeamInput" placeholder="Team number..." />

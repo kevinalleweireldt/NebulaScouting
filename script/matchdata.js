@@ -2,6 +2,8 @@ import { requireAuth }    from './auth.js';
 import { db }             from './firebase-config.js';
 import { collection, query, where, orderBy, getDocs, deleteDoc, doc, writeBatch }
     from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
+import { applyChartDefaults, commonOptions, PALETTE, CLIMB_COLORS, seriesColor, drawSparkline }
+    from './chart-theme.js';
 
 const CLIMB_LABELS = ['None', 'L1', 'L2', 'L3'];
 
@@ -210,6 +212,7 @@ function renderAllMatchesTable() {
                 try {
                     await deleteDoc(doc(db, 'matchHistory', id));
                     allData = allData.filter(r => r.id !== id);
+                    renderKpis();
                     renderAllMatchesTable();
                     renderTeamAveragesTable();
                     if (chartsRendered) renderCharts();
@@ -234,49 +237,120 @@ function renderTeamAveragesTable() {
         return;
     }
 
+    const maxScore   = Math.max(...teams.map(t => t.avgScore), 1);
+    const maxAuto    = Math.max(...teams.map(t => t.avgAutoFuel), 1);
+    const maxTeleop  = Math.max(...teams.map(t => t.avgTeleopFuel), 1);
+
     let html = '<table class="match-table"><thead><tr>';
     html += '<th>Rank</th><th>Team #</th><th>Matches</th><th>Avg Score</th>';
     html += '<th>Avg Auto FUEL</th><th>Avg Teleop FUEL</th>';
     html += '<th>Climb Rate</th><th>Best Climb</th><th>Defense %</th><th>Breakdown %</th>';
     html += '</tr></thead><tbody>';
 
+    const bar = (val, max) => `<td class="cell-bar"><span class="bar-fill" style="width:${Math.min(100, (val/max)*100).toFixed(1)}%"></span><span class="bar-value">${val.toFixed(2)}</span></td>`;
+    const pct = (val) => `<td class="cell-bar"><span class="bar-fill" style="width:${Math.min(100, val*100).toFixed(1)}%"></span><span class="bar-value">${(val*100).toFixed(0)}%</span></td>`;
+
     teams.forEach((t, i) => {
         html += '<tr>';
         html += `<td><strong>${i + 1}</strong></td>`;
         html += `<td>${escapeHtml(t.teamNumber)}</td>`;
         html += `<td>${t.matchCount}</td>`;
-        html += `<td><strong>${t.avgScore.toFixed(1)}</strong></td>`;
-        html += `<td>${t.avgAutoFuel.toFixed(2)}</td>`;
-        html += `<td>${t.avgTeleopFuel.toFixed(2)}</td>`;
-        html += `<td>${(t.climbRate * 100).toFixed(0)}%</td>`;
+        html += `<td class="cell-bar"><span class="bar-fill" style="width:${Math.min(100, (t.avgScore/maxScore)*100).toFixed(1)}%"></span><span class="bar-value"><strong>${t.avgScore.toFixed(1)}</strong></span></td>`;
+        html += bar(t.avgAutoFuel, maxAuto);
+        html += bar(t.avgTeleopFuel, maxTeleop);
+        html += pct(t.climbRate);
         html += `<td>${CLIMB_LABELS[t.bestClimb] || 'None'}</td>`;
-        html += `<td>${(t.defenseRate * 100).toFixed(0)}%</td>`;
-        html += `<td>${(t.brokeDownRate * 100).toFixed(0)}%</td>`;
+        html += pct(t.defenseRate);
+        html += pct(t.brokeDownRate);
         html += '</tr>';
     });
     html += '</tbody></table>';
     container.innerHTML = html;
 }
 
-function destroyChart(c) { if (c) c.destroy(); }
+function renderKpis() {
+    const totalEl  = document.getElementById('kpiTotalMatches');
+    const teamsEl  = document.getElementById('kpiTeams');
+    const avgEl    = document.getElementById('kpiAvgScore');
+    const topEl    = document.getElementById('kpiTopTeam');
+    const latestEl = document.getElementById('kpiLatest');
+    if (!totalEl) return;
 
-function chartOptions() {
-    return {
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: { legend: { labels: { color: '#fff', font: { family: 'monospace' } } } },
-        scales: {
-            x: { ticks: { color: '#fff', font: { family: 'monospace' } }, grid: { color: 'rgba(255,255,255,0.1)' } },
-            y: { beginAtZero: true, ticks: { color: '#fff', font: { family: 'monospace' } }, grid: { color: 'rgba(255,255,255,0.1)' } }
-        }
-    };
+    const rows = allData.map(normalizeEntry);
+    const total = rows.length;
+    const uniqueTeams = new Set(rows.map(r => r.teamNumber));
+    const avgScore = total ? (rows.reduce((s, r) => s + (r.score || 0), 0) / total) : 0;
+
+    const avgMap = computeTeamAverages(allData);
+    const ranked = [...avgMap.values()].sort((a, b) => b.avgScore - a.avgScore);
+    const top = ranked[0];
+
+    const sortedByTime = rows.filter(r => r.timestamp).sort((a, b) => String(b.timestamp).localeCompare(String(a.timestamp)));
+    const latest = sortedByTime[0];
+
+    totalEl.textContent  = total.toLocaleString();
+    teamsEl.textContent  = uniqueTeams.size.toLocaleString();
+    avgEl.textContent    = total ? avgScore.toFixed(1) : '—';
+    topEl.textContent    = top ? top.teamNumber : '—';
+    latestEl.textContent = latest ? `M${latest.matchNumber}` : '—';
+
+    const topHint    = document.getElementById('kpiTopHint');
+    if (topHint && top) topHint.textContent = `${top.avgScore.toFixed(1)} avg · ${top.matchCount} matches`;
+    const latestHint = document.getElementById('kpiLatestHint');
+    if (latestHint && latest) {
+        const when = latest.timestamp ? relativeTime(latest.timestamp) : 'submitted';
+        latestHint.textContent = `Team ${latest.teamNumber} · ${when}`;
+    }
+    const avgHint = document.getElementById('kpiAvgHint');
+    if (avgHint && total) {
+        const max = rows.reduce((m, r) => Math.max(m, r.score || 0), 0);
+        avgHint.textContent = `max ${max}`;
+    }
+    const teamsHint = document.getElementById('kpiTeamsHint');
+    if (teamsHint && uniqueTeams.size) {
+        teamsHint.textContent = `${(total / Math.max(uniqueTeams.size, 1)).toFixed(1)} matches/team`;
+    }
+
+    const spark = document.getElementById('kpiSparkMatches');
+    if (spark && total > 0) {
+        // Build a cumulative-matches sparkline by chronological order
+        const buckets = bucketMatchesOverTime(rows);
+        drawSparkline(spark, buckets, { color: PALETTE[0].solid, fillSoft: PALETTE[0].soft });
+    }
 }
+
+function bucketMatchesOverTime(rows) {
+    const stamped = rows.filter(r => r.timestamp).sort((a, b) => String(a.timestamp).localeCompare(String(b.timestamp)));
+    if (stamped.length === 0) return [0];
+    const n = Math.min(20, stamped.length);
+    const step = stamped.length / n;
+    const out = [];
+    for (let i = 1; i <= n; i++) out.push(Math.round(i * step));
+    return out;
+}
+
+function relativeTime(iso) {
+    const t = new Date(iso).getTime();
+    if (!isFinite(t)) return '—';
+    const diff = Date.now() - t;
+    const m = Math.floor(diff / 60000);
+    if (m < 1)    return 'just now';
+    if (m < 60)   return `${m}m ago`;
+    const h = Math.floor(m / 60);
+    if (h < 24)   return `${h}h ago`;
+    const d = Math.floor(h / 24);
+    return `${d}d ago`;
+}
+
+function destroyChart(c) { if (c) c.destroy(); }
 
 function renderCharts() {
     if (typeof Chart === 'undefined') return;
+    applyChartDefaults();
+
     const avgMap = computeTeamAverages(allData);
     const teams  = [...avgMap.values()].sort((a, b) => b.avgScore - a.avgScore);
-    const labels = teams.map(t => t.teamNumber);
+    const labels = teams.map(t => `Team ${t.teamNumber}`);
 
     destroyChart(chartAvgScore);
     destroyChart(chartAutoFuel);
@@ -285,26 +359,53 @@ function renderCharts() {
 
     const scoreCtx = document.getElementById('chartAvgScore');
     if (scoreCtx) {
+        const c = seriesColor(0);
         chartAvgScore = new Chart(scoreCtx, {
             type: 'bar',
-            data: { labels, datasets: [{ label: 'Avg Total Score', data: teams.map(t => t.avgScore.toFixed(2)), backgroundColor: 'rgba(128,0,128,0.7)', borderColor: 'rgba(200,100,200,1)', borderWidth: 1 }] },
-            options: chartOptions()
+            data: { labels, datasets: [{
+                label: 'Avg Total Score',
+                data: teams.map(t => +t.avgScore.toFixed(2)),
+                backgroundColor: c.dim,
+                borderColor: c.solid,
+                borderWidth: 1,
+                borderRadius: 6,
+                maxBarThickness: 36
+            }] },
+            options: commonOptions({ plugins: { legend: { display: false } } })
         });
     }
     const autoCtx = document.getElementById('chartAutoFuel');
     if (autoCtx) {
+        const c = seriesColor(2);
         chartAutoFuel = new Chart(autoCtx, {
             type: 'bar',
-            data: { labels, datasets: [{ label: 'Avg Auto FUEL', data: teams.map(t => t.avgAutoFuel.toFixed(2)), backgroundColor: 'rgba(0,170,255,0.6)', borderColor: 'rgba(0,170,255,1)', borderWidth: 1 }] },
-            options: chartOptions()
+            data: { labels, datasets: [{
+                label: 'Avg Auto FUEL',
+                data: teams.map(t => +t.avgAutoFuel.toFixed(2)),
+                backgroundColor: c.dim,
+                borderColor: c.solid,
+                borderWidth: 1,
+                borderRadius: 6,
+                maxBarThickness: 36
+            }] },
+            options: commonOptions({ plugins: { legend: { display: false } } })
         });
     }
     const teleCtx = document.getElementById('chartTeleopFuel');
     if (teleCtx) {
+        const c = seriesColor(3);
         chartTeleopFuel = new Chart(teleCtx, {
             type: 'bar',
-            data: { labels, datasets: [{ label: 'Avg Teleop FUEL', data: teams.map(t => t.avgTeleopFuel.toFixed(2)), backgroundColor: 'rgba(0,204,136,0.6)', borderColor: 'rgba(0,204,136,1)', borderWidth: 1 }] },
-            options: chartOptions()
+            data: { labels, datasets: [{
+                label: 'Avg Teleop FUEL',
+                data: teams.map(t => +t.avgTeleopFuel.toFixed(2)),
+                backgroundColor: c.dim,
+                borderColor: c.solid,
+                borderWidth: 1,
+                borderRadius: 6,
+                maxBarThickness: 36
+            }] },
+            options: commonOptions({ plugins: { legend: { display: false } } })
         });
     }
     const climbCtx = document.getElementById('chartClimb');
@@ -314,16 +415,15 @@ function renderCharts() {
             data: {
                 labels,
                 datasets: [
-                    { label: 'None', data: teams.map(t => t.climbHistogram[0]), backgroundColor: 'rgba(120,120,120,0.7)' },
-                    { label: 'L1',   data: teams.map(t => t.climbHistogram[1]), backgroundColor: 'rgba(255,200,0,0.7)' },
-                    { label: 'L2',   data: teams.map(t => t.climbHistogram[2]), backgroundColor: 'rgba(255,120,40,0.7)' },
-                    { label: 'L3',   data: teams.map(t => t.climbHistogram[3]), backgroundColor: 'rgba(180,40,200,0.85)' }
+                    { label: 'None', data: teams.map(t => t.climbHistogram[0]), backgroundColor: CLIMB_COLORS[0], borderRadius: 4, stack: 'c' },
+                    { label: 'L1',   data: teams.map(t => t.climbHistogram[1]), backgroundColor: CLIMB_COLORS[1], borderRadius: 4, stack: 'c' },
+                    { label: 'L2',   data: teams.map(t => t.climbHistogram[2]), backgroundColor: CLIMB_COLORS[2], borderRadius: 4, stack: 'c' },
+                    { label: 'L3',   data: teams.map(t => t.climbHistogram[3]), backgroundColor: CLIMB_COLORS[3], borderRadius: 4, stack: 'c' }
                 ]
             },
-            options: { ...chartOptions(), scales: {
-                x: { stacked: true, ticks: { color: '#fff', font: { family: 'monospace' } }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                y: { stacked: true, beginAtZero: true, ticks: { color: '#fff', font: { family: 'monospace' } }, grid: { color: 'rgba(255,255,255,0.1)' } }
-            }}
+            options: commonOptions({
+                scales: { x: { stacked: true }, y: { stacked: true } }
+            })
         });
     }
     chartsRendered = true;
@@ -361,6 +461,7 @@ async function clearAllData() {
         snap.docs.forEach(d => batch.delete(d.ref));
         await batch.commit();
         allData = [];
+        renderKpis();
         renderAllMatchesTable();
         renderTeamAveragesTable();
         if (chartsRendered) renderCharts();
@@ -383,6 +484,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     ({ user: currentUser, role: currentRole } = await requireAuth());
 
     allData = await fetchHistory();
+    renderKpis();
     renderAllMatchesTable();
     renderTeamAveragesTable();
 

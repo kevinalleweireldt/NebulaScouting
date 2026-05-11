@@ -12,38 +12,84 @@
         <div class="navbar"></div>
 
         <div class="content">
-            <h1>Scouting Dashboard</h1>
-            <p class="subtitle">2026 FRC REBUILT</p>
+            <div class="page-head">
+                <h1>Dashboard</h1>
+                <p class="subtitle" id="dashSubtitle">2026 FRC · Rebuilt</p>
+            </div>
 
-            <div class="dashboard-grid">
-                <a class="dashboard-card" href="/matchform">
-                    <div class="dashboard-card__icon">+</div>
-                    <h3>Match Form</h3>
-                    <p>Record a single match — auto, teleop, endgame.</p>
+            <div class="kpi-strip">
+                <div class="kpi">
+                    <p class="kpi-label">Total Matches</p>
+                    <h2 class="kpi-value" id="dashTotal">—</h2>
+                    <div class="kpi-sub"><span class="kpi-hint" id="dashTotalHint">scouted</span></div>
+                    <canvas class="kpi-spark" id="dashSparkTotal"></canvas>
+                </div>
+                <div class="kpi">
+                    <p class="kpi-label">Teams Tracked</p>
+                    <h2 class="kpi-value" id="dashTeams">—</h2>
+                    <div class="kpi-sub"><span class="kpi-hint" id="dashTeamsHint">unique</span></div>
+                </div>
+                <div class="kpi">
+                    <p class="kpi-label">Avg Score</p>
+                    <h2 class="kpi-value" id="dashAvgScore">—</h2>
+                    <div class="kpi-sub"><span class="kpi-hint" id="dashAvgHint">all matches</span></div>
+                    <canvas class="kpi-spark" id="dashSparkAvg"></canvas>
+                </div>
+                <div class="kpi">
+                    <p class="kpi-label">Top Team</p>
+                    <h2 class="kpi-value kpi-value--sm" id="dashTopTeam">—</h2>
+                    <div class="kpi-sub"><span class="kpi-hint" id="dashTopHint">by avg score</span></div>
+                </div>
+                <div class="kpi">
+                    <p class="kpi-label">Last Submission</p>
+                    <h2 class="kpi-value kpi-value--sm" id="dashLatest">—</h2>
+                    <div class="kpi-sub"><span class="kpi-hint" id="dashLatestHint">—</span></div>
+                </div>
+            </div>
+
+            <div class="dashboard-split">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Recent Activity</h3>
+                        <span class="panel-meta">last 8 submissions</span>
+                    </div>
+                    <ul class="activity-list" id="activityList">
+                        <li class="empty-state">No scouted matches yet.</li>
+                    </ul>
+                </div>
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Top 5 · Avg Score</h3>
+                        <span class="panel-meta"><a href="/matchdata">view all →</a></span>
+                    </div>
+                    <ol class="leaderboard" id="leaderboard">
+                        <li class="empty-state">Awaiting data.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <a class="quick-tile" href="/matchform">
+                    <span class="quick-tile__icon">+</span>
+                    <span class="quick-tile__label">Match Form</span>
                 </a>
-                <a class="dashboard-card" href="/matchdata">
-                    <div class="dashboard-card__icon">≡</div>
-                    <h3>Match Data</h3>
-                    <p>Browse, sort, filter, and chart everything scouted.</p>
+                <a class="quick-tile" href="/matchdata">
+                    <span class="quick-tile__icon">≡</span>
+                    <span class="quick-tile__label">Match Data</span>
                 </a>
-                <a class="dashboard-card" href="/compare">
-                    <div class="dashboard-card__icon">⇄</div>
-                    <h3>Compare Teams</h3>
-                    <p>Stack two or three teams side-by-side.</p>
+                <a class="quick-tile" href="/compare">
+                    <span class="quick-tile__icon">⇄</span>
+                    <span class="quick-tile__label">Compare Teams</span>
                 </a>
-                <a class="dashboard-card" href="/picklist">
-                    <div class="dashboard-card__icon">★</div>
-                    <h3>Pick List</h3>
-                    <p>Drag teams into your alliance-selection order.</p>
+                <a class="quick-tile" href="/picklist">
+                    <span class="quick-tile__icon">★</span>
+                    <span class="quick-tile__label">Pick List</span>
                 </a>
             </div>
         </div>
     </div>
 
-    <script type="module">
-        import { requireAuth } from '../script/auth.js';
-        await requireAuth();
-    </script>
+    <script type="module" src="../script/dashboard.js"></script>
     <script type="module" src="../script/navbar.js"></script>
 </body>
 </html>
