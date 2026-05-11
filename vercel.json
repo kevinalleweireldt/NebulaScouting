@@ -6,6 +6,8 @@
     { "source": "/contact", "destination": "/pages/contact.html" },
     { "source": "/dashboard", "destination": "/pages/dashboard.html" },
     { "source": "/matchdata", "destination": "/pages/matchdata.html" },
-    { "source": "/matchform", "destination": "/pages/matchform.html" }
+    { "source": "/matchform", "destination": "/pages/matchform.html" },
+    { "source": "/compare", "destination": "/pages/teamcomparison.html" },
+    { "source": "/picklist", "destination": "/pages/picklist.html" }
   ]
 }
