@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pick List</title>
+    <link rel="stylesheet" href="../style/style.css">
+</head>
+<body>
+    <div class="navbar"></div>
+    <div class="main">
+        <div class="content">
+            <h1>Pick List</h1>
+            <p style="text-align:center; font-family:monospace; color:rgba(255,255,255,0.7);">Drag rows to reorder, or use ▲ ▼ buttons.</p>
+
+            <div class="data-controls">
+                <input type="text" id="addTeamInput" placeholder="Team number..." />
+                <button class="btn" id="addTeamBtn">Add Team</button>
+                <button class="btn" id="autoPopulateBtn">Auto-Populate by Avg Score</button>
+                <button class="btn btn-danger" id="clearPicklist">Clear List</button>
+            </div>
+
+            <div id="pickListContainer"></div>
+
+            <h2>Team Stats Summary</h2>
+            <div id="picklistStatsTable"></div>
+        </div>
+    </div>
+
+    <script src="../script/picklist.js"></script>
+    <script src="../script/navbar.js"></script>
+</body>
+</html>
