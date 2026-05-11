@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Comparison</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="navbar"></div>
+    <div class="main">
+        <div class="content">
+            <h1>Team Comparison</h1>
+            <p style="text-align:center; font-family:monospace; color:rgba(255,255,255,0.7);">Pick 2 or 3 teams to compare side-by-side.</p>
+
+            <div class="comparison-selectors">
+                <div class="selector-slot">
+                    <label for="selectTeamA">Team A:</label>
+                    <select id="selectTeamA"><option value="">-- Select Team --</option></select>
+                </div>
+                <div class="selector-slot">
+                    <label for="selectTeamB">Team B:</label>
+                    <select id="selectTeamB"><option value="">-- Select Team --</option></select>
+                </div>
+                <div class="selector-slot">
+                    <label for="selectTeamC">Team C (optional):</label>
+                    <select id="selectTeamC"><option value="">-- None --</option></select>
+                </div>
+                <button class="btn" id="compareBtn">Compare</button>
+            </div>
+
+            <div id="comparisonResult" hidden>
+                <h2>Stat Comparison</h2>
+                <table class="match-table" id="comparisonTable"></table>
+
+                <h2>Per-Team Match Detail</h2>
+                <div id="comparisonDetails"></div>
+
+                <h2>Charts</h2>
+                <div class="chart-grid">
+                    <div class="chart-card">
+                        <h3>Score per Match</h3>
+                        <canvas id="chartCompareScore"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Total FUEL per Match (Auto + Teleop)</h3>
+                        <canvas id="chartCompareFuel"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../script/teamcomparison.js"></script>
+    <script src="../script/navbar.js"></script>
+</body>
+</html>
