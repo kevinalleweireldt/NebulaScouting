@@ -1242,9 +1242,9 @@ select option:disabled {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-display);
-    font-size: 24px;
-    font-weight: 700;
+    font-family: var(--font-hero);
+    font-size: 22px;
+    font-weight: 800;
     color: var(--text);
     box-shadow: 0 4px 16px rgba(124, 45, 217, 0.4);
     margin-bottom: var(--space-3);
