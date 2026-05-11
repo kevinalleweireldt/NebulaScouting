@@ -53,6 +53,7 @@
     --radius-xl: 24px;
 
     /* Fonts */
+    --font-hero:    'Orbitron', 'Space Grotesk', system-ui, sans-serif;
     --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
     --font-body:    'Inter', system-ui, -apple-system, sans-serif;
     --font-mono:    'JetBrains Mono', 'SF Mono', Menlo, monospace;
