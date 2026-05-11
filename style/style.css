@@ -381,6 +381,33 @@ input, textarea, select {
     display: inline-flex !important;
 }
 
+.btn-lg {
+    padding: 16px 40px;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    border-radius: var(--radius);
+}
+
+.content--hero {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.content--hero h1 {
+    font-size: clamp(48px, 8vw, 96px);
+    margin-bottom: var(--space-3);
+}
+.hero-tagline {
+    font-size: 18px;
+    max-width: 560px;
+    margin: 0 auto var(--space-5) !important;
+    color: var(--text-muted);
+}
+
 /* ============================================================
    Sections / Cards
    ============================================================ */
