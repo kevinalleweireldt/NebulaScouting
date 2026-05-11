@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Nebula Scouting Match Form</title>
+    <title>Match Form — Nebula Scouting</title>
     <link rel="stylesheet" href="../style/style.css" />
 </head>
 <body>
@@ -13,26 +13,33 @@
 
         <div class="content">
             <h1>Match Form</h1>
-            <p style="text-align:center; font-family:monospace; color:rgba(255,255,255,0.7); margin-top:10px;">2026 FRC REBUILT</p>
+            <p class="subtitle">2026 FRC REBUILT</p>
 
-            <div class="match-inputs">
-                <label for="matchNumber">Match Number:</label>
-                <input type="text" id="matchNumber" placeholder="Enter match number" />
-
-                <label for="teamNumber">Team Number:</label>
-                <input type="text" id="teamNumber" placeholder="Enter team number" />
+            <div class="section-card">
+                <h2>Match Info</h2>
+                <div class="match-inputs match-inputs--row">
+                    <div class="input-field">
+                        <label for="matchNumber">Match Number</label>
+                        <input type="text" id="matchNumber" placeholder="e.g. 12" inputmode="numeric" />
+                    </div>
+                    <div class="input-field">
+                        <label for="teamNumber">Team Number</label>
+                        <input type="text" id="teamNumber" placeholder="e.g. 1234" inputmode="numeric" />
+                    </div>
+                </div>
             </div>
 
             <div class="section-card">
                 <h2>Autonomous</h2>
-                <div class="buttons-container">
-                    <div class="score-group">
-                        <button class="btn" id="subtractAutoFuel">-</button>
-                        <div class="match-info"><h3>FUEL: <span id="auto-fuel-score">0</span></h3></div>
-                        <button class="btn" id="addAutoFuel">+</button>
+                <div class="score-group">
+                    <button class="btn" id="subtractAutoFuel" aria-label="Subtract auto fuel">−</button>
+                    <div class="match-info">
+                        <h3>Auto FUEL</h3>
+                        <span id="auto-fuel-score">0</span>
                     </div>
+                    <button class="btn" id="addAutoFuel" aria-label="Add auto fuel">+</button>
                 </div>
-                <label style="display:block; text-align:center; margin-top:10px; color:#fff; font-family:monospace;">Auto Climb (Tower):</label>
+                <div class="field-label">Auto Tower Climb</div>
                 <div class="radio-group">
                     <label><input type="radio" name="autoClimb" value="0" checked> None</label>
                     <label><input type="radio" name="autoClimb" value="1"> Level 1 (15 pts)</label>
@@ -43,18 +50,19 @@
 
             <div class="section-card">
                 <h2>Teleop</h2>
-                <div class="buttons-container">
-                    <div class="score-group">
-                        <button class="btn" id="subtractTeleopFuel">-</button>
-                        <div class="match-info"><h3>FUEL: <span id="teleop-fuel-score">0</span></h3></div>
-                        <button class="btn" id="addTeleopFuel">+</button>
+                <div class="score-group">
+                    <button class="btn" id="subtractTeleopFuel" aria-label="Subtract teleop fuel">−</button>
+                    <div class="match-info">
+                        <h3>Teleop FUEL</h3>
+                        <span id="teleop-fuel-score">0</span>
                     </div>
+                    <button class="btn" id="addTeleopFuel" aria-label="Add teleop fuel">+</button>
                 </div>
             </div>
 
             <div class="section-card">
                 <h2>Endgame</h2>
-                <label style="display:block; text-align:center; margin-top:10px; color:#fff; font-family:monospace;">Tower Climb:</label>
+                <div class="field-label">Tower Climb</div>
                 <div class="radio-group">
                     <label><input type="radio" name="endgameClimb" value="0" checked> None</label>
                     <label><input type="radio" name="endgameClimb" value="1"> Level 1 (15 pts)</label>
@@ -63,18 +71,22 @@
                 </div>
             </div>
 
-            <div class="checkbox-row">
-                <label><input type="checkbox" id="defense"> Played Defense</label>
-                <label><input type="checkbox" id="brokeDown"> Broke Down</label>
-            </div>
-
-            <div class="match-inputs">
-                <label for="extraComments">Extra Comments:</label>
-                <textarea id="extraComments" placeholder="Add any extra comments here" rows="3" style="width:100%; border-radius:8px; font-size:16px; padding:8px; margin-top:4px; background-color:rgba(255,255,255,0.1); color:#fff; border:0; font-family:monospace;"></textarea>
+            <div class="section-card">
+                <h2>Notes</h2>
+                <div class="checkbox-row">
+                    <label><input type="checkbox" id="defense"> Played Defense</label>
+                    <label><input type="checkbox" id="brokeDown"> Broke Down</label>
+                </div>
+                <div class="match-inputs">
+                    <div class="input-field">
+                        <label for="extraComments">Extra Comments</label>
+                        <textarea id="extraComments" placeholder="Anything else worth noting…" rows="3"></textarea>
+                    </div>
+                </div>
             </div>
 
             <div class="buttons-container">
-                <button id="submitScores" class="btn">Submit</button>
+                <button id="submitScores" class="btn">Submit Match</button>
             </div>
         </div>
     </div>
