@@ -12,14 +12,30 @@
         <div class="navbar"></div>
 
         <div class="content">
-            <h1>Welcome to the Scouting Dashboard</h1>
-            <p style="text-align:center; font-family:monospace; color:rgba(255,255,255,0.7); margin-top:10px;">2026 FRC REBUILT</p>
+            <h1>Scouting Dashboard</h1>
+            <p class="subtitle">2026 FRC REBUILT</p>
 
-            <div class="buttons-container" style="flex-wrap:wrap; gap:24px;">
-                <a href="matchform.html"><button class="btn">Match Form</button></a>
-                <a href="matchdata.html"><button class="btn">Match Data</button></a>
-                <a href="teamcomparison.html"><button class="btn">Compare Teams</button></a>
-                <a href="picklist.html"><button class="btn">Pick List</button></a>
+            <div class="dashboard-grid">
+                <a class="dashboard-card" href="matchform.html">
+                    <div class="dashboard-card__icon">+</div>
+                    <h3>Match Form</h3>
+                    <p>Record a single match — auto, teleop, endgame.</p>
+                </a>
+                <a class="dashboard-card" href="matchdata.html">
+                    <div class="dashboard-card__icon">≡</div>
+                    <h3>Match Data</h3>
+                    <p>Browse, sort, filter, and chart everything scouted.</p>
+                </a>
+                <a class="dashboard-card" href="teamcomparison.html">
+                    <div class="dashboard-card__icon">⇄</div>
+                    <h3>Compare Teams</h3>
+                    <p>Stack two or three teams side-by-side.</p>
+                </a>
+                <a class="dashboard-card" href="picklist.html">
+                    <div class="dashboard-card__icon">★</div>
+                    <h3>Pick List</h3>
+                    <p>Drag teams into your alliance-selection order.</p>
+                </a>
             </div>
         </div>
     </div>
