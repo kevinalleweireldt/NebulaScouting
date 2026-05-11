@@ -1,10 +1,39 @@
-document.addEventListener("DOMContentLoaded", function() {
-    fetch("../pages/navbar.html")
-        .then(response => response.text())
-        .then(data => {
-            document.querySelector('.navbar').innerHTML = data;
-        })
-        .catch(error => {
-            console.error('Error loading navbar:', error);
-        });
+import { auth, db } from './firebase-config.js';
+import { signOut, onAuthStateChanged }
+    from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js';
+import { doc, getDoc }
+    from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const navEl = document.querySelector('.navbar');
+    if (!navEl) return;
+
+    // Absolute path works from both root (index.html) and /pages/ pages
+    const res  = await fetch('/pages/navbar.html');
+    const html = await res.text();
+    navEl.innerHTML = html;
+
+    onAuthStateChanged(auth, async user => {
+        if (!user) return;
+
+        const emailEl   = document.getElementById('nav-user-email');
+        const logoutBtn = document.getElementById('nav-logout-btn');
+        const adminLink = document.getElementById('nav-admin-link');
+
+        if (emailEl) emailEl.textContent = user.email;
+
+        try {
+            const snap = await getDoc(doc(db, 'users', user.uid));
+            if (snap.exists() && snap.data().role === 'admin' && adminLink) {
+                adminLink.hidden = false;
+            }
+        } catch { /* silently fail — navbar chrome shouldn't break the page */ }
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async () => {
+                await signOut(auth);
+                window.location.href = '/login';
+            });
+        }
     });
+});

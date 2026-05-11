@@ -1,35 +1,54 @@
-// Match data viewer — sortable table, team averages, charts
-// Plain script (not module). Depends on Chart.js loaded via CDN.
+import { requireAuth }    from './auth.js';
+import { db }             from './firebase-config.js';
+import { collection, query, where, orderBy, getDocs, deleteDoc, doc, writeBatch }
+    from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
 
-const CLIMB_POINTS = [0, 15, 20, 30];
 const CLIMB_LABELS = ['None', 'L1', 'L2', 'L3'];
 
 const currentSort = { field: 'matchNumber', dir: 'asc' };
 let currentFilter = '';
 
-let chartAvgScore = null;
-let chartAutoFuel = null;
+let chartAvgScore  = null;
+let chartAutoFuel  = null;
 let chartTeleopFuel = null;
-let chartClimb = null;
+let chartClimb     = null;
 let chartsRendered = false;
 
-function getHistory() {
-    return JSON.parse(localStorage.getItem('matchHistory')) || [];
+let allData = [];
+let currentUser, currentRole;
+
+async function fetchHistory() {
+    let q;
+    if (currentRole === 'admin') {
+        q = query(collection(db, 'matchHistory'), orderBy('timestamp', 'asc'));
+    } else {
+        q = query(
+            collection(db, 'matchHistory'),
+            where('submittedBy', '==', currentUser.uid),
+            orderBy('timestamp', 'asc')
+        );
+    }
+    const snap = await getDocs(q);
+    return snap.docs.map(d => ({
+        id: d.id,
+        ...d.data(),
+        timestamp: d.data().timestamp?.toDate?.()?.toISOString() ?? d.data().timestamp ?? ''
+    }));
 }
 
 function normalizeEntry(m) {
-    // Provide defaults for old (Reefscape-era) entries too.
     return {
-        matchNumber: m.matchNumber ?? 'Unknown',
-        teamNumber: m.teamNumber ?? 'Unknown',
-        autoFuel: m.autoFuel ?? 0,
-        autoClimb: m.autoClimb ?? 0,
-        teleopFuel: m.teleopFuel ?? 0,
+        ...m,
+        matchNumber:  m.matchNumber  ?? 'Unknown',
+        teamNumber:   m.teamNumber   ?? 'Unknown',
+        autoFuel:     m.autoFuel     ?? 0,
+        autoClimb:    m.autoClimb    ?? 0,
+        teleopFuel:   m.teleopFuel   ?? 0,
         endgameClimb: m.endgameClimb ?? 0,
-        defense: m.defense ?? false,
-        brokeDown: m.brokeDown ?? false,
-        score: m.score ?? 0,
-        timestamp: m.timestamp ?? '',
+        defense:      m.defense      ?? false,
+        brokeDown:    m.brokeDown    ?? false,
+        score:        m.score        ?? 0,
+        timestamp:    m.timestamp    ?? '',
         extraComments: m.extraComments ?? ''
     };
 }
@@ -53,28 +72,28 @@ function computeTeamAverages(history) {
             });
         }
         const t = byTeam.get(m.teamNumber);
-        t.matchCount += 1;
-        t.totalScore += m.score;
+        t.matchCount    += 1;
+        t.totalScore    += m.score;
         t.totalAutoFuel += m.autoFuel;
         t.totalTeleopFuel += m.teleopFuel;
         if (m.endgameClimb > 0) t.climbCount += 1;
         if (m.endgameClimb > t.bestClimb) t.bestClimb = m.endgameClimb;
-        if (m.defense) t.defenseCount += 1;
-        if (m.brokeDown) t.brokeDownCount += 1;
+        if (m.defense)    t.defenseCount += 1;
+        if (m.brokeDown)  t.brokeDownCount += 1;
         t.climbHistogram[m.endgameClimb] += 1;
     });
 
     const result = new Map();
     byTeam.forEach((t, key) => {
         result.set(key, {
-            teamNumber: t.teamNumber,
-            matchCount: t.matchCount,
-            avgScore: t.totalScore / t.matchCount,
-            avgAutoFuel: t.totalAutoFuel / t.matchCount,
+            teamNumber:    t.teamNumber,
+            matchCount:    t.matchCount,
+            avgScore:      t.totalScore / t.matchCount,
+            avgAutoFuel:   t.totalAutoFuel / t.matchCount,
             avgTeleopFuel: t.totalTeleopFuel / t.matchCount,
-            climbRate: t.climbCount / t.matchCount,
-            bestClimb: t.bestClimb,
-            defenseRate: t.defenseCount / t.matchCount,
+            climbRate:     t.climbCount / t.matchCount,
+            bestClimb:     t.bestClimb,
+            defenseRate:   t.defenseCount / t.matchCount,
             brokeDownRate: t.brokeDownCount / t.matchCount,
             climbHistogram: t.climbHistogram
         });
@@ -87,8 +106,7 @@ function compareForSort(a, b, field, dir) {
     let av = a[field];
     let bv = b[field];
     if (field === 'matchNumber' || field === 'teamNumber') {
-        const an = Number(av);
-        const bn = Number(bv);
+        const an = Number(av), bn = Number(bv);
         if (!isNaN(an) && !isNaN(bn)) return (an - bn) * mult;
         return String(av).localeCompare(String(bv)) * mult;
     }
@@ -97,31 +115,25 @@ function compareForSort(a, b, field, dir) {
     av = av ?? 0;
     bv = bv ?? 0;
     if (av < bv) return -1 * mult;
-    if (av > bv) return 1 * mult;
+    if (av > bv) return  1 * mult;
     return 0;
 }
 
 function escapeHtml(s) {
     return String(s)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 function renderAllMatchesTable() {
     const container = document.getElementById('matchTableContainer');
     if (!container) return;
 
-    const history = getHistory().map(normalizeEntry);
-
-    let rows = history;
+    let rows = allData.map(normalizeEntry);
     if (currentFilter) {
         const f = currentFilter.toLowerCase();
         rows = rows.filter(r => String(r.teamNumber).toLowerCase().includes(f));
     }
-
     rows = rows.slice().sort((a, b) => compareForSort(a, b, currentSort.field, currentSort.dir));
 
     if (rows.length === 0) {
@@ -130,26 +142,26 @@ function renderAllMatchesTable() {
     }
 
     const cols = [
-        { f: 'matchNumber', label: 'Match #' },
-        { f: 'teamNumber', label: 'Team #' },
-        { f: 'autoFuel', label: 'Auto FUEL' },
-        { f: 'autoClimb', label: 'Auto Climb' },
-        { f: 'teleopFuel', label: 'Teleop FUEL' },
+        { f: 'matchNumber',  label: 'Match #' },
+        { f: 'teamNumber',   label: 'Team #' },
+        { f: 'autoFuel',     label: 'Auto FUEL' },
+        { f: 'autoClimb',   label: 'Auto Climb' },
+        { f: 'teleopFuel',   label: 'Teleop FUEL' },
         { f: 'endgameClimb', label: 'Endgame Climb' },
-        { f: 'defense', label: 'Defense' },
-        { f: 'brokeDown', label: 'Broke Down' },
-        { f: 'score', label: 'Score' },
+        { f: 'defense',      label: 'Defense' },
+        { f: 'brokeDown',    label: 'Broke Down' },
+        { f: 'score',        label: 'Score' },
         { f: 'extraComments', label: 'Comments' }
     ];
 
     let html = '<table class="match-table"><thead><tr>';
     cols.forEach(c => {
         const active = c.f === currentSort.field ? 'sort-active' : '';
-        const arrow = c.f === currentSort.field
-            ? `<span class="sort-arrow">${currentSort.dir === 'asc' ? '▲' : '▼'}</span>`
-            : '';
+        const arrow  = c.f === currentSort.field
+            ? `<span class="sort-arrow">${currentSort.dir === 'asc' ? '▲' : '▼'}</span>` : '';
         html += `<th class="${active}" data-field="${c.f}">${c.label}${arrow}</th>`;
     });
+    if (currentRole === 'admin') html += '<th></th>';
     html += '</tr></thead><tbody>';
 
     rows.forEach(r => {
@@ -164,10 +176,12 @@ function renderAllMatchesTable() {
         html += `<td>${r.brokeDown ? 'Yes' : 'No'}</td>`;
         html += `<td><strong>${r.score}</strong></td>`;
         html += `<td>${escapeHtml(r.extraComments)}</td>`;
+        if (currentRole === 'admin') {
+            html += `<td><button class="btn btn-sm btn-danger" data-delete-id="${escapeHtml(r.id)}">Delete</button></td>`;
+        }
         html += '</tr>';
     });
     html += '</tbody></table>';
-
     container.innerHTML = html;
 
     container.querySelectorAll('th[data-field]').forEach(th => {
@@ -177,23 +191,43 @@ function renderAllMatchesTable() {
                 currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
             } else {
                 currentSort.field = f;
-                currentSort.dir = 'asc';
+                currentSort.dir   = 'asc';
             }
             const sortFieldSel = document.getElementById('sortField');
-            const sortDirSel = document.getElementById('sortDir');
+            const sortDirSel   = document.getElementById('sortDir');
             if (sortFieldSel) sortFieldSel.value = f;
-            if (sortDirSel) sortDirSel.value = currentSort.dir;
+            if (sortDirSel)   sortDirSel.value   = currentSort.dir;
             renderAllMatchesTable();
         });
     });
+
+    if (currentRole === 'admin') {
+        container.querySelectorAll('[data-delete-id]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                if (!confirm('Delete this match entry? This cannot be undone.')) return;
+                const id = btn.dataset.deleteId;
+                btn.disabled = true;
+                try {
+                    await deleteDoc(doc(db, 'matchHistory', id));
+                    allData = allData.filter(r => r.id !== id);
+                    renderAllMatchesTable();
+                    renderTeamAveragesTable();
+                    if (chartsRendered) renderCharts();
+                } catch (err) {
+                    alert('Failed to delete entry.');
+                    btn.disabled = false;
+                }
+            });
+        });
+    }
 }
 
 function renderTeamAveragesTable() {
     const container = document.getElementById('avgTableContainer');
     if (!container) return;
 
-    const avgMap = computeTeamAverages(getHistory());
-    const teams = [...avgMap.values()].sort((a, b) => b.avgScore - a.avgScore);
+    const avgMap = computeTeamAverages(allData);
+    const teams  = [...avgMap.values()].sort((a, b) => b.avgScore - a.avgScore);
 
     if (teams.length === 0) {
         container.innerHTML = '<p class="empty-state">No team data yet.</p>';
@@ -221,39 +255,27 @@ function renderTeamAveragesTable() {
         html += '</tr>';
     });
     html += '</tbody></table>';
-
     container.innerHTML = html;
 }
 
-function destroyChart(c) {
-    if (c) c.destroy();
-}
+function destroyChart(c) { if (c) c.destroy(); }
 
-function chartOptions(titleHidden = true) {
+function chartOptions() {
     return {
         responsive: true,
         maintainAspectRatio: true,
-        plugins: {
-            legend: { labels: { color: '#fff', font: { family: 'monospace' } } }
-        },
+        plugins: { legend: { labels: { color: '#fff', font: { family: 'monospace' } } } },
         scales: {
-            x: {
-                ticks: { color: '#fff', font: { family: 'monospace' } },
-                grid: { color: 'rgba(255,255,255,0.1)' }
-            },
-            y: {
-                beginAtZero: true,
-                ticks: { color: '#fff', font: { family: 'monospace' } },
-                grid: { color: 'rgba(255,255,255,0.1)' }
-            }
+            x: { ticks: { color: '#fff', font: { family: 'monospace' } }, grid: { color: 'rgba(255,255,255,0.1)' } },
+            y: { beginAtZero: true, ticks: { color: '#fff', font: { family: 'monospace' } }, grid: { color: 'rgba(255,255,255,0.1)' } }
         }
     };
 }
 
 function renderCharts() {
     if (typeof Chart === 'undefined') return;
-    const avgMap = computeTeamAverages(getHistory());
-    const teams = [...avgMap.values()].sort((a, b) => b.avgScore - a.avgScore);
+    const avgMap = computeTeamAverages(allData);
+    const teams  = [...avgMap.values()].sort((a, b) => b.avgScore - a.avgScore);
     const labels = teams.map(t => t.teamNumber);
 
     destroyChart(chartAvgScore);
@@ -261,63 +283,30 @@ function renderCharts() {
     destroyChart(chartTeleopFuel);
     destroyChart(chartClimb);
 
-    const purpleBg = 'rgba(128,0,128,0.7)';
-    const purpleBorder = 'rgba(200,100,200,1)';
-
     const scoreCtx = document.getElementById('chartAvgScore');
     if (scoreCtx) {
         chartAvgScore = new Chart(scoreCtx, {
             type: 'bar',
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Avg Total Score',
-                    data: teams.map(t => t.avgScore.toFixed(2)),
-                    backgroundColor: purpleBg,
-                    borderColor: purpleBorder,
-                    borderWidth: 1
-                }]
-            },
+            data: { labels, datasets: [{ label: 'Avg Total Score', data: teams.map(t => t.avgScore.toFixed(2)), backgroundColor: 'rgba(128,0,128,0.7)', borderColor: 'rgba(200,100,200,1)', borderWidth: 1 }] },
             options: chartOptions()
         });
     }
-
     const autoCtx = document.getElementById('chartAutoFuel');
     if (autoCtx) {
         chartAutoFuel = new Chart(autoCtx, {
             type: 'bar',
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Avg Auto FUEL',
-                    data: teams.map(t => t.avgAutoFuel.toFixed(2)),
-                    backgroundColor: 'rgba(0,170,255,0.6)',
-                    borderColor: 'rgba(0,170,255,1)',
-                    borderWidth: 1
-                }]
-            },
+            data: { labels, datasets: [{ label: 'Avg Auto FUEL', data: teams.map(t => t.avgAutoFuel.toFixed(2)), backgroundColor: 'rgba(0,170,255,0.6)', borderColor: 'rgba(0,170,255,1)', borderWidth: 1 }] },
             options: chartOptions()
         });
     }
-
     const teleCtx = document.getElementById('chartTeleopFuel');
     if (teleCtx) {
         chartTeleopFuel = new Chart(teleCtx, {
             type: 'bar',
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Avg Teleop FUEL',
-                    data: teams.map(t => t.avgTeleopFuel.toFixed(2)),
-                    backgroundColor: 'rgba(0,204,136,0.6)',
-                    borderColor: 'rgba(0,204,136,1)',
-                    borderWidth: 1
-                }]
-            },
+            data: { labels, datasets: [{ label: 'Avg Teleop FUEL', data: teams.map(t => t.avgTeleopFuel.toFixed(2)), backgroundColor: 'rgba(0,204,136,0.6)', borderColor: 'rgba(0,204,136,1)', borderWidth: 1 }] },
             options: chartOptions()
         });
     }
-
     const climbCtx = document.getElementById('chartClimb');
     if (climbCtx) {
         chartClimb = new Chart(climbCtx, {
@@ -331,37 +320,21 @@ function renderCharts() {
                     { label: 'L3',   data: teams.map(t => t.climbHistogram[3]), backgroundColor: 'rgba(180,40,200,0.85)' }
                 ]
             },
-            options: {
-                ...chartOptions(),
-                scales: {
-                    x: {
-                        stacked: true,
-                        ticks: { color: '#fff', font: { family: 'monospace' } },
-                        grid: { color: 'rgba(255,255,255,0.1)' }
-                    },
-                    y: {
-                        stacked: true,
-                        beginAtZero: true,
-                        ticks: { color: '#fff', font: { family: 'monospace' } },
-                        grid: { color: 'rgba(255,255,255,0.1)' }
-                    }
-                }
-            }
+            options: { ...chartOptions(), scales: {
+                x: { stacked: true, ticks: { color: '#fff', font: { family: 'monospace' } }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                y: { stacked: true, beginAtZero: true, ticks: { color: '#fff', font: { family: 'monospace' } }, grid: { color: 'rgba(255,255,255,0.1)' } }
+            }}
         });
     }
-
     chartsRendered = true;
 }
 
 function exportToCsv() {
-    const history = getHistory().map(normalizeEntry);
-    if (history.length === 0) {
-        alert('No data to export.');
-        return;
-    }
-    const headers = ['matchNumber', 'teamNumber', 'autoFuel', 'autoClimb', 'teleopFuel', 'endgameClimb', 'defense', 'brokeDown', 'score', 'timestamp', 'extraComments'];
+    if (allData.length === 0) { alert('No data to export.'); return; }
+    const normalized = allData.map(normalizeEntry);
+    const headers = ['matchNumber','teamNumber','autoFuel','autoClimb','teleopFuel','endgameClimb','defense','brokeDown','score','timestamp','extraComments'];
     const lines = [headers.join(',')];
-    history.forEach(m => {
+    normalized.forEach(m => {
         const row = headers.map(h => {
             const v = m[h];
             const s = String(v ?? '').replace(/"/g, '""');
@@ -369,11 +342,10 @@ function exportToCsv() {
         });
         lines.push(row.join(','));
     });
-    const csv = lines.join('\n');
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
     a.download = `match-history-${new Date().toISOString().slice(0, 10)}.csv`;
     document.body.appendChild(a);
     a.click();
@@ -381,12 +353,20 @@ function exportToCsv() {
     URL.revokeObjectURL(url);
 }
 
-function clearAllData() {
-    if (!confirm('Delete ALL scouted match data? This cannot be undone.')) return;
-    localStorage.removeItem('matchHistory');
-    renderAllMatchesTable();
-    renderTeamAveragesTable();
-    if (chartsRendered) renderCharts();
+async function clearAllData() {
+    if (!confirm('Delete ALL match data? This cannot be undone.')) return;
+    try {
+        const snap  = await getDocs(collection(db, 'matchHistory'));
+        const batch = writeBatch(db);
+        snap.docs.forEach(d => batch.delete(d.ref));
+        await batch.commit();
+        allData = [];
+        renderAllMatchesTable();
+        renderTeamAveragesTable();
+        if (chartsRendered) renderCharts();
+    } catch (err) {
+        alert('Failed to clear data. Check your connection.');
+    }
 }
 
 function switchTab(name) {
@@ -396,14 +376,25 @@ function switchTab(name) {
     document.querySelectorAll('.tab-panel').forEach(panel => {
         panel.hidden = panel.id !== `tab-${name}`;
     });
-    if (name === 'charts') {
-        renderCharts();
-    }
+    if (name === 'charts') renderCharts();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    ({ user: currentUser, role: currentRole } = await requireAuth());
+
+    allData = await fetchHistory();
     renderAllMatchesTable();
     renderTeamAveragesTable();
+
+    // Hide "Clear All Data" for scouters
+    const clearBtn = document.getElementById('clearData');
+    if (clearBtn) {
+        if (currentRole !== 'admin') {
+            clearBtn.hidden = true;
+        } else {
+            clearBtn.addEventListener('click', clearAllData);
+        }
+    }
 
     const filterInput = document.getElementById('filterTeam');
     if (filterInput) {
@@ -414,19 +405,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const sortFieldSel = document.getElementById('sortField');
-    const sortDirSel = document.getElementById('sortDir');
-    if (sortFieldSel) {
-        sortFieldSel.addEventListener('change', e => {
-            currentSort.field = e.target.value;
-            renderAllMatchesTable();
-        });
-    }
-    if (sortDirSel) {
-        sortDirSel.addEventListener('change', e => {
-            currentSort.dir = e.target.value;
-            renderAllMatchesTable();
-        });
-    }
+    const sortDirSel   = document.getElementById('sortDir');
+    if (sortFieldSel) sortFieldSel.addEventListener('change', e => { currentSort.field = e.target.value; renderAllMatchesTable(); });
+    if (sortDirSel)   sortDirSel.addEventListener('change',   e => { currentSort.dir   = e.target.value; renderAllMatchesTable(); });
 
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', () => switchTab(btn.dataset.tab));
@@ -434,7 +415,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const exportBtn = document.getElementById('exportCsv');
     if (exportBtn) exportBtn.addEventListener('click', exportToCsv);
-
-    const clearBtn = document.getElementById('clearData');
-    if (clearBtn) clearBtn.addEventListener('click', clearAllData);
 });

@@ -7,7 +7,7 @@
     <title>Nebula Scouting Dashboard</title>
     <link rel="stylesheet" href="../style/style.css">
 </head>
-<body>
+<body class="auth-loading">
     <div class="main">
         <div class="navbar"></div>
 
@@ -16,22 +16,22 @@
             <p class="subtitle">2026 FRC REBUILT</p>
 
             <div class="dashboard-grid">
-                <a class="dashboard-card" href="matchform.html">
+                <a class="dashboard-card" href="/matchform">
                     <div class="dashboard-card__icon">+</div>
                     <h3>Match Form</h3>
                     <p>Record a single match — auto, teleop, endgame.</p>
                 </a>
-                <a class="dashboard-card" href="matchdata.html">
+                <a class="dashboard-card" href="/matchdata">
                     <div class="dashboard-card__icon">≡</div>
                     <h3>Match Data</h3>
                     <p>Browse, sort, filter, and chart everything scouted.</p>
                 </a>
-                <a class="dashboard-card" href="teamcomparison.html">
+                <a class="dashboard-card" href="/compare">
                     <div class="dashboard-card__icon">⇄</div>
                     <h3>Compare Teams</h3>
                     <p>Stack two or three teams side-by-side.</p>
                 </a>
-                <a class="dashboard-card" href="picklist.html">
+                <a class="dashboard-card" href="/picklist">
                     <div class="dashboard-card__icon">★</div>
                     <h3>Pick List</h3>
                     <p>Drag teams into your alliance-selection order.</p>
@@ -39,7 +39,11 @@
             </div>
         </div>
     </div>
-</body>
 
-<script src="../script/navbar.js"></script>
+    <script type="module">
+        import { requireAuth } from '../script/auth.js';
+        await requireAuth();
+    </script>
+    <script type="module" src="../script/navbar.js"></script>
+</body>
 </html>

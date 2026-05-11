@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sign In — Nebula Scouting</title>
+    <link rel="stylesheet" href="../style/style.css" />
+</head>
+<body>
+    <div class="main">
+        <div class="content content--hero">
+            <p class="subtitle">2026 FRC REBUILT</p>
+            <h1>Nebula Scouting</h1>
+
+            <div class="section-card login-card">
+                <h2>Sign In</h2>
+                <div class="match-inputs">
+                    <div class="input-field">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" />
+                    </div>
+                    <div class="input-field">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" />
+                    </div>
+                </div>
+                <p id="loginError" class="form-error" hidden></p>
+                <div class="buttons-container">
+                    <button id="loginBtn" class="btn btn-lg">Sign In</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../script/login.js"></script>
+</body>
+</html>

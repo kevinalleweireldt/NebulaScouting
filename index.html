@@ -7,7 +7,7 @@
     <title>Nebula Scouting</title>
     <link rel="stylesheet" href="style/style.css">
 </head>
-<body>
+<body class="auth-loading">
     <div class="main">
         <div class="navbar"></div>
 
@@ -16,12 +16,16 @@
             <h1>Nebula Scouting</h1>
             <p class="par hero-tagline">A scouting platform built for speed in the pits and clarity at the strategy table.</p>
             <div class="buttons-container">
-                <a href="pages/dashboard.html"><button class="btn btn-lg">Open Dashboard</button></a>
-                <a href="pages/matchform.html"><button class="btn btn-ghost btn-lg">Quick Scout</button></a>
+                <a href="/dashboard"><button class="btn btn-lg">Open Dashboard</button></a>
+                <a href="/matchform"><button class="btn btn-ghost btn-lg">Quick Scout</button></a>
             </div>
         </div>
     </div>
 
-    <script src="script/navbar.js"></script>
+    <script type="module">
+        import { requireAuth } from './script/auth.js';
+        await requireAuth();
+    </script>
+    <script type="module" src="script/navbar.js"></script>
 </body>
 </html>

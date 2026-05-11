@@ -1,4 +1,8 @@
 import { initScoreControls } from './matchScore.js';
+import { requireAuth }       from './auth.js';
+import { db }                from './firebase-config.js';
+import { collection, addDoc, serverTimestamp }
+    from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
 
 const CLIMB_POINTS = [0, 15, 20, 30];
 
@@ -9,14 +13,16 @@ export function computeScore({ autoFuel, teleopFuel, autoClimb, endgameClimb }) 
         + CLIMB_POINTS[endgameClimb ?? 0];
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    const { user } = await requireAuth();
+
     initScoreControls();
 
-    const submitButton = document.getElementById('submitScores');
+    const submitButton    = document.getElementById('submitScores');
     if (!submitButton) return;
 
     const matchNumberInput = document.getElementById('matchNumber');
-    const teamNumberInput = document.getElementById('teamNumber');
+    const teamNumberInput  = document.getElementById('teamNumber');
 
     [matchNumberInput, teamNumberInput].forEach(input => {
         input?.addEventListener('input', () => {
@@ -26,9 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    submitButton.addEventListener('click', () => {
+    submitButton.addEventListener('click', async () => {
         const matchNumber = matchNumberInput?.value.trim() || '';
-        const teamNumber = teamNumberInput?.value.trim() || '';
+        const teamNumber  = teamNumberInput?.value.trim() || '';
 
         matchNumberInput?.classList.remove('is-invalid');
         teamNumberInput?.classList.remove('is-invalid');
@@ -57,41 +63,42 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const autoFuel = parseInt(document.getElementById('auto-fuel-score')?.textContent, 10) || 0;
-        const teleopFuel = parseInt(document.getElementById('teleop-fuel-score')?.textContent, 10) || 0;
-
-        const autoClimbEl = document.querySelector('input[name="autoClimb"]:checked');
-        const autoClimb = autoClimbEl ? parseInt(autoClimbEl.value, 10) : 0;
-
-        const endgameClimbEl = document.querySelector('input[name="endgameClimb"]:checked');
-        const endgameClimb = endgameClimbEl ? parseInt(endgameClimbEl.value, 10) : 0;
-
-        const defense = document.getElementById('defense')?.checked || false;
-        const brokeDown = document.getElementById('brokeDown')?.checked || false;
-
+        const autoFuel     = parseInt(document.getElementById('auto-fuel-score')?.textContent, 10) || 0;
+        const teleopFuel   = parseInt(document.getElementById('teleop-fuel-score')?.textContent, 10) || 0;
+        const autoClimbEl  = document.querySelector('input[name="autoClimb"]:checked');
+        const autoClimb    = autoClimbEl ? parseInt(autoClimbEl.value, 10) : 0;
+        const endgameEl    = document.querySelector('input[name="endgameClimb"]:checked');
+        const endgameClimb = endgameEl ? parseInt(endgameEl.value, 10) : 0;
+        const defense      = document.getElementById('defense')?.checked || false;
+        const brokeDown    = document.getElementById('brokeDown')?.checked || false;
         const extraComments = document.getElementById('extraComments')?.value.trim() || '';
+        const score        = computeScore({ autoFuel, teleopFuel, autoClimb, endgameClimb });
 
-        const score = computeScore({ autoFuel, teleopFuel, autoClimb, endgameClimb });
+        submitButton.disabled    = true;
+        submitButton.textContent = 'Saving…';
 
-        const matchData = {
-            matchNumber,
-            teamNumber,
-            autoFuel,
-            autoClimb,
-            teleopFuel,
-            endgameClimb,
-            defense,
-            brokeDown,
-            score,
-            timestamp: new Date().toISOString(),
-            extraComments
-        };
-
-        const matchHistory = JSON.parse(localStorage.getItem('matchHistory')) || [];
-        matchHistory.push(matchData);
-        localStorage.setItem('matchHistory', JSON.stringify(matchHistory));
-
-        alert('Match data saved successfully!');
-        window.location.href = './dashboard.html';
+        try {
+            await addDoc(collection(db, 'matchHistory'), {
+                matchNumber,
+                teamNumber,
+                autoFuel,
+                autoClimb,
+                teleopFuel,
+                endgameClimb,
+                defense,
+                brokeDown,
+                score,
+                extraComments,
+                submittedBy:      user.uid,
+                submittedByEmail: user.email,
+                timestamp:        serverTimestamp()
+            });
+            window.location.href = '/dashboard';
+        } catch (err) {
+            console.error('Failed to save match:', err);
+            alert('Failed to save match data. Check your connection and try again.');
+            submitButton.disabled    = false;
+            submitButton.textContent = 'Submit Match';
+        }
     });
 });
