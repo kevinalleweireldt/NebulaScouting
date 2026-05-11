@@ -10,7 +10,7 @@ const firebaseConfig = {
     projectId: "nebulascouting",
     storageBucket: "nebulascouting.firebasestorage.app",
     messagingSenderId: "62781326097",
-    ppId: "1:62781326097:web:77959eb4cea66bc754c2b0"
+    appId: "1:62781326097:web:77959eb4cea66bc754c2b0"
 };
 
 const app = initializeApp(firebaseConfig);
