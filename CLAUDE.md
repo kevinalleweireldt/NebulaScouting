@@ -1,5 +1,9 @@
 # Nebula Scouting — Project Context
 
+Live: https://nebulascouting.vercel.app · Repo: git@github.com:kevinalleweireldt/NebulaScouting.git · Branch: `main`
+
+Auto-commit hook in `.claude/settings.json` (Stop event) commits + pushes once per Claude turn. `.claude/` is gitignored.
+
 ## What It Is
 A fast FRC scouting web app. Scouters fill in a match form; admins review aggregate data, manage pick lists, and administer accounts. Deployed on Vercel; backend is Firebase (Auth + Firestore).
 
