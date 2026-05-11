@@ -528,19 +528,55 @@ input, textarea, select {
     gap: var(--space-3);
 }
 
-.match-inputs label {
+.match-inputs--row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+}
+.match-inputs--row .input-field {
+    flex: 1;
+    min-width: 200px;
+}
+
+.input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.match-inputs label,
+.input-field label,
+.field-label {
     display: block;
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--text-muted);
     letter-spacing: 1px;
     text-transform: uppercase;
-    margin-bottom: 4px;
+    margin: 0;
+}
+
+.field-label {
+    margin: var(--space-4) 0 0;
+    text-align: center;
+}
+
+.subtitle {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--purple-200);
+    margin-bottom: var(--space-5) !important;
+    opacity: 0.85;
 }
 
 .match-inputs input,
-.match-inputs textarea {
+.match-inputs textarea,
+.input-field input,
+.input-field textarea {
     width: 100%;
     padding: 12px 16px;
     background: rgba(255, 255, 255, 0.04);
