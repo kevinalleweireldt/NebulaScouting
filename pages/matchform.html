@@ -13,6 +13,7 @@
 
         <div class="content">
             <h1>Match Form</h1>
+            <p style="text-align:center; font-family:monospace; color:rgba(255,255,255,0.7); margin-top:10px;">2026 FRC REBUILT</p>
 
             <div class="match-inputs">
                 <label for="matchNumber">Match Number:</label>
@@ -22,48 +23,54 @@
                 <input type="text" id="teamNumber" placeholder="Enter team number" />
             </div>
 
-            <h2>Coral</h2>
-            <div class="buttons-container">
-                <div class="level-one-buttons">
-                    <button class="btn" id="addLevelOne">+</button>
-                    <div class="match-info"><h3>Level 1: <span id="level-one-score">0</span></h3></div>
-                    <button class="btn" id="subtractLevelOne">-</button>
+            <div class="section-card">
+                <h2>Autonomous</h2>
+                <div class="buttons-container">
+                    <div class="score-group">
+                        <button class="btn" id="subtractAutoFuel">-</button>
+                        <div class="match-info"><h3>FUEL: <span id="auto-fuel-score">0</span></h3></div>
+                        <button class="btn" id="addAutoFuel">+</button>
+                    </div>
                 </div>
-                <div class="level-two-buttons">
-                    <button class="btn" id="addLevelTwo">+</button>
-                    <div class="match-info"><h3>Level 2: <span id="level-two-score">0</span></h3></div>
-                    <button class="btn" id="subtractLevelTwo">-</button>
-                </div>
-                <div class="level-three-buttons">
-                    <button class="btn" id="addLevelThree">+</button>
-                    <div class="match-info"><h3>Level 3: <span id="level-three-score">0</span></h3></div>
-                    <button class="btn" id="subtractLevelThree">-</button>
-                </div>
-                <div class="level-four-buttons">
-                    <button class="btn" id="addLevelFour">+</button>
-                    <div class="match-info"><h3>Level 4: <span id="level-four-score">0</span></h3></div>
-                    <button class="btn" id="subtractLevelFour">-</button>
+                <label style="display:block; text-align:center; margin-top:10px; color:#fff; font-family:monospace;">Auto Climb (Tower):</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="autoClimb" value="0" checked> None</label>
+                    <label><input type="radio" name="autoClimb" value="1"> Level 1 (15 pts)</label>
+                    <label><input type="radio" name="autoClimb" value="2"> Level 2 (20 pts)</label>
+                    <label><input type="radio" name="autoClimb" value="3"> Level 3 (30 pts)</label>
                 </div>
             </div>
 
-            <h2>Algae</h2>
-            <div class="buttons-container">
-                <div class="algae-processor-buttons">
-                    <button class="btn" id="addProcessorAlgae">+</button>
-                    <div class="match-info"><h3>Processor: <span id="processor-algae-score">0</span></h3></div>
-                    <button class="btn" id="subtractProcessorAlgae">-</button>
-                </div>
-                <div class="algae-barge-buttons">
-                    <button class="btn" id="addBargeAlgae">+</button>
-                    <div class="match-info"><h3>Barge: <span id="barge-algae-score">0</span></h3></div>
-                    <button class="btn" id="subtractBargeAlgae">-</button>
+            <div class="section-card">
+                <h2>Teleop</h2>
+                <div class="buttons-container">
+                    <div class="score-group">
+                        <button class="btn" id="subtractTeleopFuel">-</button>
+                        <div class="match-info"><h3>FUEL: <span id="teleop-fuel-score">0</span></h3></div>
+                        <button class="btn" id="addTeleopFuel">+</button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Extra Comments Box -->
+            <div class="section-card">
+                <h2>Endgame</h2>
+                <label style="display:block; text-align:center; margin-top:10px; color:#fff; font-family:monospace;">Tower Climb:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="endgameClimb" value="0" checked> None</label>
+                    <label><input type="radio" name="endgameClimb" value="1"> Level 1 (15 pts)</label>
+                    <label><input type="radio" name="endgameClimb" value="2"> Level 2 (20 pts)</label>
+                    <label><input type="radio" name="endgameClimb" value="3"> Level 3 (30 pts)</label>
+                </div>
+            </div>
+
+            <div class="checkbox-row">
+                <label><input type="checkbox" id="defense"> Played Defense</label>
+                <label><input type="checkbox" id="brokeDown"> Broke Down</label>
+            </div>
+
             <div class="match-inputs">
                 <label for="extraComments">Extra Comments:</label>
-                <textarea id="extraComments" placeholder="Add any extra comments here" rows="3" style="width:100%; border-radius:8px; font-size:16px; padding:8px; margin-top:4px; background-color:rgba(255,255,255,0.1); color:#fff; border:0;"></textarea>
+                <textarea id="extraComments" placeholder="Add any extra comments here" rows="3" style="width:100%; border-radius:8px; font-size:16px; padding:8px; margin-top:4px; background-color:rgba(255,255,255,0.1); color:#fff; border:0; font-family:monospace;"></textarea>
             </div>
 
             <div class="buttons-container">
@@ -73,7 +80,6 @@
     </div>
 
     <script type="module" src="../script/app.js"></script>
-    <script type="module" src="../script/matchScore.js"></script>
-    <script type="module" src="../script/navbar.js"></script>
+    <script src="../script/navbar.js"></script>
 </body>
 </html>
