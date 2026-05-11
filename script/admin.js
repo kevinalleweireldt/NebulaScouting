@@ -3,7 +3,7 @@ import { auth, db }      from './firebase-config.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
 import { getAuth, createUserWithEmailAndPassword }
     from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js';
-import { collection, getDocs, doc, setDoc, updateDoc, serverTimestamp }
+import { collection, getDocs, doc, setDoc, serverTimestamp }
     from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
 
 let secondaryAuth = null;
@@ -32,7 +32,7 @@ async function renderUserList() {
         }
 
         let html = '<table class="match-table"><thead><tr>'
-            + '<th>Email</th><th>Display Name</th><th>Role</th><th>Actions</th>'
+            + '<th>Email</th><th>Display Name</th><th>Role</th>'
             + '</tr></thead><tbody>';
 
         snap.forEach(d => {
@@ -41,24 +41,10 @@ async function renderUserList() {
                 <td>${escapeHtml(u.email ?? '—')}</td>
                 <td>${escapeHtml(u.displayName ?? '—')}</td>
                 <td><span class="role-badge role-${escapeHtml(u.role ?? '')}">${escapeHtml(u.role ?? '—')}</span></td>
-                <td>${u.role === 'scouter'
-                    ? `<button class="btn btn-sm" data-promote="${d.id}">Make Admin</button>`
-                    : `<button class="btn btn-sm btn-ghost" data-demote="${d.id}">Make Scouter</button>`
-                }</td>
             </tr>`;
         });
         html += '</tbody></table>';
         container.innerHTML = html;
-
-        container.querySelectorAll('[data-promote],[data-demote]').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const uid     = btn.dataset.promote || btn.dataset.demote;
-                const newRole = btn.dataset.promote ? 'admin' : 'scouter';
-                btn.disabled = true;
-                await updateDoc(doc(db, 'users', uid), { role: newRole });
-                await renderUserList();
-            });
-        });
     } catch (err) {
         container.innerHTML = `<p class="form-error">Failed to load users: ${escapeHtml(err.message)}</p>`;
     }
