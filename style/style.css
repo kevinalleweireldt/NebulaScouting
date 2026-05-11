@@ -210,10 +210,11 @@ select option:disabled {
 }
 
 .logo {
-    font-family: var(--font-display);
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
+    font-family: var(--font-hero);
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
     margin: 0;
 }
 .logo a {
