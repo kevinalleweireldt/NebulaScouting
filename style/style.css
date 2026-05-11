@@ -1068,15 +1068,17 @@ input, textarea, select {
     border-color: var(--purple-400);
 }
 
-.picklist-empty {
+.picklist-empty,
+.empty-state {
     color: var(--text-dim);
     text-align: center;
-    padding: var(--space-7);
+    padding: var(--space-7) var(--space-5);
     font-family: var(--font-body);
     font-size: 14px;
     border: 1px dashed var(--border-2);
     border-radius: var(--radius-lg);
     background: var(--bg-1);
+    margin: var(--space-4) 0;
 }
 
 /* ============================================================
