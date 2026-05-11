@@ -137,3 +137,6 @@ dist
 
 
 ._*
+
+# Claude Code local config
+.claude/
