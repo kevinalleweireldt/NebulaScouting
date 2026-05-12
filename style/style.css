@@ -1083,25 +1083,25 @@ body.landing .main {
 /* Scroll-triggered reveal */
 [data-reveal] {
     opacity: 0;
-    transform: translateY(28px);
+    transform: translateY(48px) scale(0.97);
     transition:
-        opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: opacity, transform;
 }
 
 [data-reveal].is-visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
 }
 
 /* Stagger children inside grids that opt in */
 .reveal-stagger > [data-reveal]:nth-child(1) { transition-delay: 0.00s; }
-.reveal-stagger > [data-reveal]:nth-child(2) { transition-delay: 0.10s; }
-.reveal-stagger > [data-reveal]:nth-child(3) { transition-delay: 0.20s; }
-.reveal-stagger > [data-reveal]:nth-child(4) { transition-delay: 0.30s; }
-.reveal-stagger > [data-reveal]:nth-child(5) { transition-delay: 0.40s; }
-.reveal-stagger > [data-reveal]:nth-child(6) { transition-delay: 0.50s; }
+.reveal-stagger > [data-reveal]:nth-child(2) { transition-delay: 0.12s; }
+.reveal-stagger > [data-reveal]:nth-child(3) { transition-delay: 0.24s; }
+.reveal-stagger > [data-reveal]:nth-child(4) { transition-delay: 0.36s; }
+.reveal-stagger > [data-reveal]:nth-child(5) { transition-delay: 0.48s; }
+.reveal-stagger > [data-reveal]:nth-child(6) { transition-delay: 0.60s; }
 
 @media (prefers-reduced-motion: reduce) {
     [data-reveal] {
