@@ -1,0 +1,39 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - heading "Nebula Scouting" [level=2] [ref=e3]:
+      - link "Nebula Scouting" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e5]: Nebula Scouting
+    - list [ref=e7]:
+      - listitem [ref=e8]:
+        - link "Dashboard" [ref=e9] [cursor=pointer]:
+          - /url: /dashboard
+      - listitem [ref=e10]:
+        - link "Form" [ref=e11] [cursor=pointer]:
+          - /url: /matchform
+      - listitem [ref=e12]:
+        - link "Data" [ref=e13] [cursor=pointer]:
+          - /url: /matchdata
+      - listitem [ref=e14]:
+        - link "Compare" [ref=e15] [cursor=pointer]:
+          - /url: /compare
+      - listitem [ref=e16]:
+        - link "Pick List" [ref=e17] [cursor=pointer]:
+          - /url: /picklist
+      - listitem [ref=e18]:
+        - link "About" [ref=e19] [cursor=pointer]:
+          - /url: /about
+      - listitem [ref=e20]:
+        - link "Contact" [ref=e21] [cursor=pointer]:
+          - /url: /contact
+    - button "Sign Out" [ref=e23] [cursor=pointer]
+  - generic [ref=e24]:
+    - 'option "Sort: Match #" [selected]'
+    - 'option "Sort: Team #"'
+    - 'option "Sort: Score"'
+    - 'option "Sort: Auto FUEL"'
+    - 'option "Sort: Teleop FUEL"'
+    - 'option "Sort: Endgame Climb"'
+    - 'option "Sort: Time"'
+    - option "Ascending" [selected]
+    - option "Descending"

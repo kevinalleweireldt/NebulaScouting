@@ -1,0 +1,108 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - heading "Nebula Scouting" [level=2] [ref=e4]:
+      - link "Nebula Scouting" [ref=e5] [cursor=pointer]:
+        - /url: /dashboard
+        - generic [ref=e6]: Nebula Scouting
+    - list [ref=e8]:
+      - listitem [ref=e9]:
+        - link "Dashboard" [ref=e10] [cursor=pointer]:
+          - /url: /dashboard
+      - listitem [ref=e11]:
+        - link "Form" [ref=e12] [cursor=pointer]:
+          - /url: /matchform
+      - listitem [ref=e13]:
+        - link "Data" [ref=e14] [cursor=pointer]:
+          - /url: /matchdata
+      - listitem [ref=e15]:
+        - link "Compare" [ref=e16] [cursor=pointer]:
+          - /url: /compare
+      - listitem [ref=e17]:
+        - link "Pick List" [ref=e18] [cursor=pointer]:
+          - /url: /picklist
+    - generic [ref=e23]:
+      - generic [ref=e25]: test@gmail.com
+      - button "Sign Out" [ref=e24] [cursor=pointer]
+  - generic [ref=e26]:
+    - generic [ref=e27]:
+      - heading "Match Form" [level=1] [ref=e28]
+      - paragraph [ref=e29]: 2026 FRC · Live entry
+    - generic [ref=e30]:
+      - heading "Match Info" [level=2] [ref=e31]
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - generic [ref=e34]: Match Number *
+          - textbox "Match Number *" [ref=e35]:
+            - /placeholder: e.g. 12
+        - generic [ref=e36]:
+          - generic [ref=e37]: Team Number *
+          - textbox "Team Number *" [ref=e38]:
+            - /placeholder: e.g. 1234
+    - generic [ref=e39]:
+      - heading "Autonomous" [level=2] [ref=e40]
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - heading "Auto FUEL" [level=3] [ref=e43]
+          - generic [ref=e44]: "0"
+        - generic [ref=e45]:
+          - button "−1" [ref=e46] [cursor=pointer]
+          - button "+1" [ref=e47] [cursor=pointer]
+          - button "+5" [ref=e48] [cursor=pointer]
+          - button "+10" [ref=e49] [cursor=pointer]
+          - button "+20" [ref=e50] [cursor=pointer]
+      - generic [ref=e51]: Auto Tower Climb
+      - generic [ref=e52]:
+        - generic [ref=e53] [cursor=pointer]:
+          - radio "None" [checked] [ref=e54]
+          - text: None
+        - generic [ref=e55] [cursor=pointer]:
+          - radio "Level 1 (15 pts)" [ref=e56]
+          - text: Level 1 (15 pts)
+        - generic [ref=e57] [cursor=pointer]:
+          - radio "Level 2 (20 pts)" [ref=e58]
+          - text: Level 2 (20 pts)
+        - generic [ref=e59] [cursor=pointer]:
+          - radio "Level 3 (30 pts)" [ref=e60]
+          - text: Level 3 (30 pts)
+    - generic [ref=e61]:
+      - heading "Teleop" [level=2] [ref=e62]
+      - generic [ref=e63]:
+        - generic [ref=e64]:
+          - heading "Teleop FUEL" [level=3] [ref=e65]
+          - generic [ref=e66]: "0"
+        - generic [ref=e67]:
+          - button "−1" [ref=e68] [cursor=pointer]
+          - button "+1" [ref=e69] [cursor=pointer]
+          - button "+5" [ref=e70] [cursor=pointer]
+          - button "+10" [ref=e71] [cursor=pointer]
+          - button "+20" [ref=e72] [cursor=pointer]
+    - generic [ref=e73]:
+      - heading "Endgame" [level=2] [ref=e74]
+      - generic [ref=e75]: Tower Climb
+      - generic [ref=e76]:
+        - generic [ref=e77] [cursor=pointer]:
+          - radio "None" [checked] [ref=e78]
+          - text: None
+        - generic [ref=e79] [cursor=pointer]:
+          - radio "Level 1 (15 pts)" [ref=e80]
+          - text: Level 1 (15 pts)
+        - generic [ref=e81] [cursor=pointer]:
+          - radio "Level 2 (20 pts)" [ref=e82]
+          - text: Level 2 (20 pts)
+        - generic [ref=e83] [cursor=pointer]:
+          - radio "Level 3 (30 pts)" [ref=e84]
+          - text: Level 3 (30 pts)
+    - generic [ref=e85]:
+      - heading "Notes" [level=2] [ref=e86]
+      - generic [ref=e87]:
+        - generic [ref=e88] [cursor=pointer]:
+          - checkbox "Played Defense" [ref=e89]
+          - text: Played Defense
+        - generic [ref=e90] [cursor=pointer]:
+          - checkbox "Broke Down" [ref=e91]
+          - text: Broke Down
+      - generic [ref=e93]:
+        - generic [ref=e94]: Extra Comments
+        - textbox "Extra Comments" [ref=e95]:
+          - /placeholder: Anything else worth noting…
+    - button "Submit Match" [ref=e97] [cursor=pointer]

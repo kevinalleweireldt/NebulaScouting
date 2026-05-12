@@ -1,0 +1,94 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - heading "Nebula Scouting" [level=2] [ref=e4]:
+      - link "Nebula Scouting" [ref=e5] [cursor=pointer]:
+        - /url: /dashboard
+        - generic [ref=e6]: Nebula Scouting
+    - list [ref=e8]:
+      - listitem [ref=e9]:
+        - link "Dashboard" [ref=e10] [cursor=pointer]:
+          - /url: /dashboard
+      - listitem [ref=e11]:
+        - link "Form" [ref=e12] [cursor=pointer]:
+          - /url: /matchform
+      - listitem [ref=e13]:
+        - link "Data" [ref=e14] [cursor=pointer]:
+          - /url: /matchdata
+      - listitem [ref=e15]:
+        - link "Compare" [ref=e16] [cursor=pointer]:
+          - /url: /compare
+      - listitem [ref=e17]:
+        - link "Pick List" [ref=e18] [cursor=pointer]:
+          - /url: /picklist
+    - generic [ref=e19]:
+      - generic [ref=e20]: test@gmail.com
+      - button "Sign Out" [ref=e21] [cursor=pointer]
+  - generic [ref=e22]:
+    - generic [ref=e23]:
+      - heading "Pick List" [level=1] [ref=e24]
+      - paragraph [ref=e25]: View-only
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: Teams On List
+        - heading "2" [level=2] [ref=e29]
+        - generic [ref=e31]: 2 with data
+      - generic [ref=e32]:
+        - paragraph [ref=e33]: Avg of Top 3
+        - heading "207.5" [level=2] [ref=e34]
+        - generic [ref=e36]: avg score
+      - generic [ref=e37]:
+        - paragraph [ref=e38]: Best Avg Score
+        - heading "118" [level=2] [ref=e39]
+        - generic [ref=e41]: 325.0 avg
+      - generic [ref=e42]:
+        - paragraph [ref=e43]: Without Data
+        - heading "0" [level=2] [ref=e44]
+        - generic [ref=e46]: no matches yet
+    - generic [ref=e47]:
+      - button "Add Team" [ref=e48] [cursor=pointer]
+      - button "Auto-Populate by Avg Score" [ref=e49] [cursor=pointer]
+      - button "Clear List" [ref=e50] [cursor=pointer]
+    - generic [ref=e51]:
+      - generic [ref=e52]:
+        - generic [ref=e53]: "1"
+        - generic [ref=e54]: "118"
+        - generic [ref=e55]: "Avg Score: 325.0 • 1 match"
+      - generic [ref=e57]:
+        - generic [ref=e58]: "2"
+        - generic [ref=e59]: "7312"
+        - generic [ref=e60]: "Avg Score: 90.0 • 1 match"
+    - heading "Team Stats Summary" [level=2] [ref=e62]
+    - table [ref=e64]:
+      - rowgroup [ref=e65]:
+        - 'row "Rank Team # Matches Avg Score Avg Auto FUEL Avg Teleop FUEL Climb Rate Defense %" [ref=e66]':
+          - columnheader "Rank" [ref=e67] [cursor=pointer]
+          - 'columnheader "Team #" [ref=e68] [cursor=pointer]'
+          - columnheader "Matches" [ref=e69] [cursor=pointer]
+          - columnheader "Avg Score" [ref=e70] [cursor=pointer]
+          - columnheader "Avg Auto FUEL" [ref=e71] [cursor=pointer]
+          - columnheader "Avg Teleop FUEL" [ref=e72] [cursor=pointer]
+          - columnheader "Climb Rate" [ref=e73] [cursor=pointer]
+          - columnheader "Defense %" [ref=e74] [cursor=pointer]
+      - rowgroup [ref=e75]:
+        - row "1 118 1 325.0 160.00 120.00 100% 0%" [ref=e76]:
+          - cell "1" [ref=e77]:
+            - strong [ref=e78]: "1"
+          - cell "118" [ref=e79]
+          - cell "1" [ref=e80]
+          - cell "325.0" [ref=e81]:
+            - strong [ref=e84]: "325.0"
+          - cell "160.00" [ref=e85]: "160.00"
+          - cell "120.00" [ref=e87]: "120.00"
+          - cell "100%" [ref=e89]: 100%
+          - cell "0%" [ref=e91]: 0%
+        - row "2 7312 1 90.0 40.00 20.00 100% 0%" [ref=e93]:
+          - cell "2" [ref=e94]:
+            - strong [ref=e95]: "2"
+          - cell "7312" [ref=e96]
+          - cell "1" [ref=e97]
+          - cell "90.0" [ref=e98]:
+            - strong [ref=e101]: "90.0"
+          - cell "40.00" [ref=e102]: "40.00"
+          - cell "20.00" [ref=e104]: "20.00"
+          - cell "100%" [ref=e106]: 100%
+          - cell "0%" [ref=e108]: 0%

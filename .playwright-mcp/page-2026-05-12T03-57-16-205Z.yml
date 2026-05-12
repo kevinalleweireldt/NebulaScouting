@@ -1,0 +1,49 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - heading "Nebula Scouting" [level=2] [ref=e3]:
+      - link "Nebula Scouting" [ref=e4] [cursor=pointer]:
+        - /url: /dashboard
+        - generic [ref=e5]: Nebula Scouting
+    - list [ref=e7]:
+      - listitem [ref=e8]:
+        - link "Dashboard" [ref=e9] [cursor=pointer]:
+          - /url: /dashboard
+      - listitem [ref=e10]:
+        - link "Form" [ref=e11] [cursor=pointer]:
+          - /url: /matchform
+      - listitem [ref=e12]:
+        - link "Data" [ref=e13] [cursor=pointer]:
+          - /url: /matchdata
+      - listitem [ref=e14]:
+        - link "Compare" [ref=e15] [cursor=pointer]:
+          - /url: /compare
+      - listitem [ref=e16]:
+        - link "Pick List" [ref=e17] [cursor=pointer]:
+          - /url: /picklist
+    - generic [ref=e22]:
+      - generic [ref=e25]: test@gmail.com
+      - button "Sign Out" [ref=e23] [cursor=pointer]
+  - generic [ref=e26]:
+    - generic [ref=e27]:
+      - heading "Team Comparison" [level=1] [ref=e28]
+      - paragraph [ref=e29]: Up to 5 teams · trend overlay
+    - generic [ref=e30]:
+      - paragraph [ref=e31]: Select teams to overlay
+      - button "9128" [ref=e33] [cursor=pointer]: "9128"
+      - generic [ref=e35]:
+        - textbox "Filter teams..." [ref=e36]
+        - button "Clear" [ref=e37] [cursor=pointer]
+    - generic [ref=e38]:
+      - heading "Score Trend" [level=3] [ref=e39]
+      - paragraph [ref=e40]: Per-match score & running average — toggle series in the legend
+      - generic [ref=e43]:
+        - generic [ref=e44] [cursor=pointer]:
+          - checkbox "Per-match scores" [checked] [ref=e45]
+          - text: Per-match scores
+        - generic [ref=e46] [cursor=pointer]:
+          - checkbox "Running average" [checked] [ref=e47]
+          - text: Running average
+        - generic [ref=e48] [cursor=pointer]:
+          - checkbox "Total FUEL (auto + teleop)" [ref=e49]
+          - text: Total FUEL (auto + teleop)
+    - generic [ref=e50]: Pick at least one team above to see its trend. Add more teams to overlay them.

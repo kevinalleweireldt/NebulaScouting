@@ -1,0 +1,81 @@
+- generic [ref=e2]:
+  - generic [ref=e48]:
+    - heading "Nebula Scouting" [level=2] [ref=e49]:
+      - link "Nebula Scouting" [ref=e50] [cursor=pointer]:
+        - /url: /dashboard
+        - generic [ref=e51]: Nebula Scouting
+    - list [ref=e53]:
+      - listitem [ref=e54]:
+        - link "Dashboard" [ref=e55] [cursor=pointer]:
+          - /url: /dashboard
+      - listitem [ref=e56]:
+        - link "Form" [ref=e57] [cursor=pointer]:
+          - /url: /matchform
+      - listitem [ref=e58]:
+        - link "Data" [ref=e59] [cursor=pointer]:
+          - /url: /matchdata
+      - listitem [ref=e60]:
+        - link "Compare" [ref=e61] [cursor=pointer]:
+          - /url: /compare
+      - listitem [ref=e62]:
+        - link "Pick List" [ref=e63] [cursor=pointer]:
+          - /url: /picklist
+    - generic [ref=e64]:
+      - generic [ref=e65]: test@gmail.com
+      - button "Sign Out" [ref=e66] [cursor=pointer]
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - heading "Dashboard" [level=1] [ref=e5]
+      - paragraph [ref=e6]: Your submissions · 2026 FRC
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - paragraph [ref=e9]: Total Matches
+        - heading "—" [level=2] [ref=e10]
+        - generic [ref=e67]: scouted
+      - generic [ref=e13]:
+        - paragraph [ref=e14]: Teams Tracked
+        - heading "—" [level=2] [ref=e15]
+        - generic [ref=e68]: unique
+      - generic [ref=e17]:
+        - paragraph [ref=e18]: Avg Score
+        - heading "—" [level=2] [ref=e19]
+        - generic [ref=e69]: all matches
+      - generic [ref=e22]:
+        - paragraph [ref=e23]: Top Team
+        - heading "—" [level=2] [ref=e24]
+        - generic [ref=e70]: by avg score
+      - generic [ref=e26]:
+        - paragraph [ref=e27]: Last Submission
+        - heading "—" [level=2] [ref=e28]
+        - generic [ref=e71]: —
+    - generic [ref=e30]:
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - heading "Recent Activity" [level=3] [ref=e33]
+          - generic [ref=e72]: last 8 submissions
+        - list [ref=e34]:
+          - listitem [ref=e35]: No scouted matches yet.
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - heading "Top 5 · Avg Score" [level=3] [ref=e38]
+          - link "view all →" [ref=e40] [cursor=pointer]:
+            - /url: /matchdata
+        - list [ref=e41]:
+          - listitem [ref=e42]: Awaiting data.
+    - generic [ref=e43]:
+      - link "+ Match Form" [ref=e44] [cursor=pointer]:
+        - /url: /matchform
+        - generic [ref=e73]: +
+        - generic [ref=e74]: Match Form
+      - link "≡ Match Data" [ref=e45] [cursor=pointer]:
+        - /url: /matchdata
+        - generic [ref=e75]: ≡
+        - generic [ref=e76]: Match Data
+      - link "⇄ Compare Teams" [ref=e46] [cursor=pointer]:
+        - /url: /compare
+        - generic [ref=e77]: ⇄
+        - generic [ref=e78]: Compare Teams
+      - link "★ Pick List" [ref=e47] [cursor=pointer]:
+        - /url: /picklist
+        - generic [ref=e79]: ★
+        - generic [ref=e80]: Pick List
