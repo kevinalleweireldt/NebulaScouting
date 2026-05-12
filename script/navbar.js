@@ -18,10 +18,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const contactLink = document.getElementById('nav-contact-link');
 
     onAuthStateChanged(auth, async user => {
+        const authLinks = document.querySelectorAll('.nav-auth-link');
         if (!user) {
             if (logoLink) logoLink.setAttribute('href', '/');
             if (aboutLink) aboutLink.hidden = false;
             if (contactLink) contactLink.hidden = false;
+            authLinks.forEach(el => el.hidden = true);
             const navUser = document.querySelector('.nav-user');
             if (navUser) navUser.innerHTML = '<a href="/login" class="btn btn-sm">Sign In</a>';
             return;
