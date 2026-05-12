@@ -222,18 +222,8 @@ select option:disabled {
     -webkit-text-fill-color: transparent;
     transition: filter 0.25s ease, transform 0.25s ease;
 }
-.login-home-link::before {
-    content: '←';
-    display: inline-block;
-    margin-right: 10px;
-    -webkit-text-fill-color: var(--purple-200);
-    transition: transform 0.25s ease;
-}
 .login-home-link:hover {
     filter: brightness(1.25);
-}
-.login-home-link:hover::before {
-    transform: translateX(-3px);
 }
 @media (max-width: 540px) {
     .login-home-link {
