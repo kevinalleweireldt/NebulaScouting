@@ -1080,6 +1080,82 @@ body.landing .main {
     -webkit-text-fill-color: transparent;
 }
 
+/* Big polished hero logo */
+.hero-logo {
+    position: relative;
+    width: clamp(220px, 36vw, 400px);
+    height: clamp(220px, 36vw, 400px);
+    margin: 0 auto var(--space-5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: hero-logo-float 6s ease-in-out infinite;
+}
+
+.hero-logo-mark {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter:
+        drop-shadow(0 0 22px rgba(157, 78, 255, 0.55))
+        drop-shadow(0 0 60px rgba(217, 70, 239, 0.35));
+}
+
+.hero-logo-aura {
+    position: absolute;
+    inset: -18%;
+    z-index: 1;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 35% 35%, rgba(217, 70, 239, 0.45) 0%, transparent 55%),
+        radial-gradient(circle at 65% 65%, rgba(157, 78, 255, 0.55) 0%, transparent 60%);
+    filter: blur(40px);
+    opacity: 0.85;
+    animation: hero-logo-aura-pulse 4.5s ease-in-out infinite;
+}
+
+.hero-logo-aura::after {
+    content: "";
+    position: absolute;
+    inset: 14%;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(212, 168, 255, 0.35) 90deg,
+        transparent 180deg,
+        rgba(217, 70, 239, 0.35) 270deg,
+        transparent 360deg
+    );
+    filter: blur(20px);
+    animation: hero-logo-aura-spin 16s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes hero-logo-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+}
+
+@keyframes hero-logo-aura-pulse {
+    0%, 100% { opacity: 0.75; transform: scale(1); }
+    50%      { opacity: 1;    transform: scale(1.06); }
+}
+
+@keyframes hero-logo-aura-spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-logo,
+    .hero-logo-aura,
+    .hero-logo-aura::after {
+        animation: none;
+    }
+}
+
 .hero-lead {
     font-family: var(--font-body);
     font-size: clamp(16px, 1.5vw, 19px);
