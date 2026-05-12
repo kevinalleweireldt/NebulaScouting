@@ -4,6 +4,20 @@ Live: https://nebulascouting.vercel.app · Repo: git@github.com:kevinalleweireld
 
 Auto-commit hook in `.claude/settings.json` (Stop event) commits + pushes once per Claude turn. `.claude/` is gitignored.
 
+## Verification — use Playwright after every deploy-affecting change
+
+Because the Stop hook auto-pushes, **every turn ships to production**. Treat each turn like a live deploy.
+
+After making changes that affect served output — `vercel.json`, any HTML/CSS/JS, anything in `script/` or `pages/` — verify on the live site with the Playwright MCP before ending the turn:
+
+1. Wait ~30s after auto-push for Vercel to rebuild (or poll `curl -sI https://nebulascouting.vercel.app/login` until HTTP 200).
+2. Use `mcp__playwright__browser_navigate` to hit at minimum: `/`, `/login`, `/dashboard` (or whichever pages your change touched).
+3. Check `mcp__playwright__browser_console_messages` for errors and confirm the page renders.
+4. For auth-gated changes, sign in (test creds may be provided in conversation) and re-verify.
+5. If anything 404s, regresses, or throws — **roll back the offending change in the same turn** rather than ending the turn with prod broken.
+
+Special caution for `vercel.json`: rewrites, redirects, and `cleanUrls` interact in subtle ways. `cleanUrls: true` plus explicit `.html` destinations broke all rewrites and 404'd every clean URL once — verify with `curl` immediately after touching this file.
+
 ## What It Is
 A fast FRC scouting web app. Scouters fill in a match form; admins review aggregate data, manage pick lists, and administer accounts. Deployed on Vercel; backend is Firebase (Auth + Firestore).
 
