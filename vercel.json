@@ -1,5 +1,4 @@
 {
-  "cleanUrls": true,
   "rewrites": [
     { "source": "/login",       "destination": "/pages/login.html" },
     { "source": "/admin",       "destination": "/pages/admin.html" },
@@ -11,16 +10,5 @@
     { "source": "/compare",     "destination": "/pages/teamcomparison.html" },
     { "source": "/picklist",    "destination": "/pages/picklist.html" },
     { "source": "/favicon.ico", "destination": "/images/favicon.svg" }
-  ],
-  "redirects": [
-    { "source": "/pages/login.html",          "destination": "/login",     "permanent": true },
-    { "source": "/pages/admin.html",          "destination": "/admin",     "permanent": true },
-    { "source": "/pages/about.html",          "destination": "/about",     "permanent": true },
-    { "source": "/pages/contact.html",        "destination": "/contact",   "permanent": true },
-    { "source": "/pages/dashboard.html",      "destination": "/dashboard", "permanent": true },
-    { "source": "/pages/matchdata.html",      "destination": "/matchdata", "permanent": true },
-    { "source": "/pages/matchform.html",      "destination": "/matchform", "permanent": true },
-    { "source": "/pages/teamcomparison.html", "destination": "/compare",   "permanent": true },
-    { "source": "/pages/picklist.html",       "destination": "/picklist",  "permanent": true }
   ]
 }
