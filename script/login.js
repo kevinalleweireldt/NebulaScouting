@@ -8,12 +8,14 @@ onAuthStateChanged(auth, user => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+    const formEl   = document.getElementById('loginForm');
     const loginBtn = document.getElementById('loginBtn');
     const emailEl  = document.getElementById('loginEmail');
     const passEl   = document.getElementById('loginPassword');
     const errorEl  = document.getElementById('loginError');
 
-    async function attemptLogin() {
+    formEl.addEventListener('submit', async e => {
+        e.preventDefault();
         errorEl.hidden = true;
         loginBtn.disabled = true;
         loginBtn.textContent = 'Signing in…';
@@ -27,10 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
             loginBtn.disabled = false;
             loginBtn.textContent = 'Sign In';
         }
-    }
-
-    loginBtn.addEventListener('click', attemptLogin);
-    passEl.addEventListener('keypress', e => { if (e.key === 'Enter') attemptLogin(); });
+    });
 });
 
 function friendlyError(code) {

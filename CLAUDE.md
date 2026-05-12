@@ -16,7 +16,8 @@ A fast FRC scouting web app. Scouters fill in a match form; admins review aggreg
 ## File Layout
 ```
 /                       ← repo root
-  index.html            ← redirects to /dashboard (or /login if unauthenticated)
+  index.html            ← marketing landing page (hero, features, workflow, 2026 sections)
+  404.html              ← branded not-found page
   vercel.json           ← clean URL rewrites
   style/style.css       ← single stylesheet
   pages/
@@ -73,7 +74,6 @@ pickList/current:      { teams: [string] }
 - Defense and breakdown flags per match
 
 ## Known Gaps / Roadmap
-- `firebase-config.js` still has placeholder values — needs real Firebase project config
 - `tba.js` is a stub — TBA API integration not yet implemented
 - Pit scouting not yet built
 - Scouter schedule generation not yet built

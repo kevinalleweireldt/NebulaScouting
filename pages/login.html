@@ -17,23 +17,23 @@
             <p class="subtitle">2026 FRC REBUILT</p>
             <h1>Nebula Scouting</h1>
 
-            <div class="section-card login-card">
+            <form id="loginForm" class="section-card login-card" novalidate>
                 <h2>Sign In</h2>
                 <div class="match-inputs">
                     <div class="input-field">
                         <label for="loginEmail">Email</label>
-                        <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" />
+                        <input type="email" id="loginEmail" name="email" placeholder="you@example.com" autocomplete="email" required />
                     </div>
                     <div class="input-field">
                         <label for="loginPassword">Password</label>
-                        <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" />
+                        <input type="password" id="loginPassword" name="password" placeholder="Password" autocomplete="current-password" required />
                     </div>
                 </div>
                 <p id="loginError" class="form-error" hidden></p>
                 <div class="buttons-container">
-                    <button id="loginBtn" class="btn btn-lg">Sign In</button>
+                    <button type="submit" id="loginBtn" class="btn btn-lg">Sign In</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 

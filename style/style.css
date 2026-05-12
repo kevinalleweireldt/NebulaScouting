@@ -1031,6 +1031,7 @@ body.landing .main {
     align-items: center;
     gap: 8px;
     padding: 7px 16px;
+    max-width: 100%;
     background: rgba(157, 78, 255, 0.1);
     border: 1px solid var(--border-2);
     border-radius: 999px;
@@ -1042,6 +1043,14 @@ body.landing .main {
     margin-bottom: var(--space-5);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+}
+
+@media (max-width: 480px) {
+    .badge {
+        font-size: 10px;
+        letter-spacing: 1px;
+        padding: 6px 12px;
+    }
 }
 
 .badge-dot {
