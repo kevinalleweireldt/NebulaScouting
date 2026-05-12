@@ -1,0 +1,42 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - heading "Nebula Scouting" [level=2] [ref=e4]:
+      - link "Nebula Scouting" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6]: Nebula Scouting
+    - list [ref=e8]:
+      - listitem [ref=e9]:
+        - link "Dashboard" [ref=e10] [cursor=pointer]:
+          - /url: /dashboard
+      - listitem [ref=e11]:
+        - link "Form" [ref=e12] [cursor=pointer]:
+          - /url: /matchform
+      - listitem [ref=e13]:
+        - link "Data" [ref=e14] [cursor=pointer]:
+          - /url: /matchdata
+      - listitem [ref=e15]:
+        - link "Compare" [ref=e16] [cursor=pointer]:
+          - /url: /compare
+      - listitem [ref=e17]:
+        - link "Pick List" [ref=e18] [cursor=pointer]:
+          - /url: /picklist
+      - listitem [ref=e19]:
+        - link "About" [ref=e20] [cursor=pointer]:
+          - /url: /about
+      - listitem [ref=e21]:
+        - link "Contact" [ref=e22] [cursor=pointer]:
+          - /url: /contact
+    - button "Sign Out" [ref=e24] [cursor=pointer]
+  - generic [ref=e25]:
+    - generic [ref=e26]:
+      - heading "About" [level=1] [ref=e27]
+      - paragraph [ref=e28]: Built by Kevin Alleweireldt
+    - generic [ref=e29]:
+      - heading "What It Does" [level=2] [ref=e30]
+      - paragraph [ref=e31]: Nebula Scouting is a fast, opinionated scouting tool for FRC. Capture match data in seconds, surface team trends with sortable tables and charts, compare candidates side-by-side, and build your pick list by dragging teams into order.
+    - generic [ref=e32]:
+      - heading "2026 — REBUILT" [level=2] [ref=e33]
+      - paragraph [ref=e34]: This season tracks FUEL into the HUB during auto and teleop, plus Tower climbing (L1 / L2 / L3) in auto and endgame. Defense and breakdown flags are captured per match.
+    - generic [ref=e35]:
+      - heading "Roadmap" [level=2] [ref=e36]
+      - paragraph [ref=e37]: Pit scouting, scouter schedule generation, and TBA-API integration are on the way.

@@ -1,0 +1,18 @@
+- generic [ref=e2]:
+  - link "Back to home" [ref=e3] [cursor=pointer]:
+    - /url: /
+    - generic [ref=e4]: Nebula Scouting
+  - generic [ref=e5]:
+    - paragraph [ref=e6]: 2026 FRC REBUILT
+    - heading "Nebula Scouting" [level=1] [ref=e7]
+    - generic [ref=e8]:
+      - heading "Sign In" [level=2] [ref=e9]
+      - generic [ref=e10]:
+        - generic [ref=e11]:
+          - generic [ref=e12]: Email
+          - textbox "Email" [ref=e13]:
+            - /placeholder: you@example.com
+        - generic [ref=e14]:
+          - generic [ref=e15]: Password
+          - textbox "Password" [ref=e16]
+      - button "Sign In" [ref=e18] [cursor=pointer]

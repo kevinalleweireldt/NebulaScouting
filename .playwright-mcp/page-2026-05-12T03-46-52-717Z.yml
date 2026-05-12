@@ -1,0 +1,134 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - heading "Nebula Scouting" [level=2] [ref=e4]:
+      - link "Nebula Scouting" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6]: Nebula Scouting
+    - list [ref=e8]:
+      - listitem [ref=e9]:
+        - link "Features" [ref=e10] [cursor=pointer]:
+          - /url: "#features"
+      - listitem [ref=e11]:
+        - link "Workflow" [ref=e12] [cursor=pointer]:
+          - /url: "#workflow"
+      - listitem [ref=e13]:
+        - link "2026" [ref=e14] [cursor=pointer]:
+          - /url: "#season"
+      - listitem [ref=e15]:
+        - link "About" [ref=e16] [cursor=pointer]:
+          - /url: /about
+    - link "Sign In" [ref=e17] [cursor=pointer]:
+      - /url: /login
+  - generic [ref=e19]:
+    - generic [ref=e20]: BUILT FOR 2026 · FRC REBUILT
+    - generic "Nebula Scouting" [ref=e22]:
+      - img "Nebula Scouting" [ref=e24]
+    - paragraph [ref=e25]: A purpose-built scouting platform for FRC teams. Capture match data in seconds, surface trends instantly, and walk into alliance selection with real numbers — not gut feeling.
+    - generic [ref=e26]:
+      - link "Sign In to Scout" [ref=e27] [cursor=pointer]:
+        - /url: /login
+      - link "Explore Features" [ref=e28] [cursor=pointer]:
+        - /url: "#features"
+    - generic [ref=e29]:
+      - generic [ref=e30]: No spreadsheets
+      - generic [ref=e32]: Phone-first scouting
+      - generic [ref=e34]: Live Firestore sync
+  - generic [ref=e37]:
+    - paragraph [ref=e38]: Features
+    - heading "Everything you need to scout an event" [level=2] [ref=e39]
+    - paragraph [ref=e40]: Four tools, one workflow. Built for speed in the pits and clarity at the strategy table.
+    - generic [ref=e41]:
+      - article [ref=e42]:
+        - img [ref=e44]
+        - paragraph [ref=e48]: Match Scouting
+        - heading "Fast data entry" [level=3] [ref=e49]
+        - paragraph [ref=e50]: A streamlined match form built for the field. Track FUEL into the HUB, Tower climbing (L1 / L2 / L3), defense, and breakdowns — per match.
+      - article [ref=e51]:
+        - img [ref=e53]
+        - paragraph [ref=e54]: Data Review
+        - heading "Sortable history" [level=3] [ref=e55]
+        - paragraph [ref=e56]: Admins see every match scouted across the event; scouters see their own submissions. Sort any column instantly.
+      - article [ref=e57]:
+        - img [ref=e59]
+        - paragraph [ref=e62]: Team Comparison
+        - heading "Side-by-side" [level=3] [ref=e63]
+        - paragraph [ref=e64]: Compare any two teams across auto, teleop, and endgame averages. Pick decisions made on data, not vibes.
+      - article [ref=e65]:
+        - img [ref=e67]
+        - paragraph [ref=e71]: Pick List
+        - heading "Drag & drop" [level=3] [ref=e72]
+        - paragraph [ref=e73]: Admin-editable pick list backed by Firestore. Scouters get a live read-only view during alliance selection.
+  - generic [ref=e75]:
+    - paragraph [ref=e76]: Workflow
+    - heading "From the field to the table in three steps" [level=2] [ref=e77]
+    - generic [ref=e78]:
+      - generic [ref=e79]:
+        - generic [ref=e80]: "01"
+        - heading "Capture" [level=3] [ref=e81]
+        - paragraph [ref=e82]: Scouters open the match form on their phones at the field. Tap counters, flag defense and breakdowns, hit submit.
+      - generic [ref=e83]:
+        - generic [ref=e84]: "02"
+        - heading "Sync" [level=3] [ref=e85]
+        - paragraph [ref=e86]: Every submission writes straight to Firestore. No exporting, no syncing, no spreadsheet wrangling between matches.
+      - generic [ref=e87]:
+        - generic [ref=e88]: "03"
+        - heading "Decide" [level=3] [ref=e89]
+        - paragraph [ref=e90]: Strategy leads open the dashboard, compare teams, and finalize the pick list — live, with everything that just happened.
+  - generic [ref=e92]:
+    - paragraph [ref=e93]: 2026 Season
+    - heading "Tracked for REBUILT" [level=2] [ref=e94]
+    - paragraph [ref=e95]: Every field on the form maps to a real point value in the 2026 game.
+    - generic [ref=e96]:
+      - generic [ref=e97]:
+        - paragraph [ref=e98]: Auto + Teleop
+        - heading "FUEL into HUB" [level=3] [ref=e99]
+        - paragraph [ref=e100]: Counter-based entry for both phases. Track every shot that scores, individually.
+      - generic [ref=e101]:
+        - paragraph [ref=e102]: Auto + Endgame
+        - heading "Tower Climbing" [level=3] [ref=e103]
+        - generic [ref=e104]:
+          - generic [ref=e105]:
+            - strong [ref=e106]: L1
+            - generic [ref=e107]: 15 pts
+          - generic [ref=e108]:
+            - strong [ref=e109]: L2
+            - generic [ref=e110]: 20 pts
+          - generic [ref=e111]:
+            - strong [ref=e112]: L3
+            - generic [ref=e113]: 30 pts
+      - generic [ref=e114]:
+        - paragraph [ref=e115]: Per Match
+        - heading "Robot Flags" [level=3] [ref=e116]
+        - paragraph [ref=e117]: Defense played and breakdown status captured every match for honest, complete team profiles.
+  - generic [ref=e120]:
+    - paragraph [ref=e121]: Ready to start
+    - heading "Sign in to access the platform" [level=2] [ref=e122]
+    - paragraph [ref=e123]: Contact your team admin for an account, then sign in to start scouting.
+    - link "Sign In" [ref=e124] [cursor=pointer]:
+      - /url: /login
+  - contentinfo [ref=e125]:
+    - generic [ref=e126]:
+      - generic [ref=e127]:
+        - heading "Nebula Scouting" [level=2] [ref=e128]:
+          - link "Nebula Scouting" [ref=e129] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e130]: Nebula Scouting
+        - paragraph [ref=e131]: FRC scouting, reimagined for the 2026 season.
+      - generic [ref=e132]:
+        - generic [ref=e133]:
+          - paragraph [ref=e134]: Product
+          - link "Features" [ref=e135] [cursor=pointer]:
+            - /url: "#features"
+          - link "Workflow" [ref=e136] [cursor=pointer]:
+            - /url: "#workflow"
+          - link "2026 Season" [ref=e137] [cursor=pointer]:
+            - /url: "#season"
+        - generic [ref=e138]:
+          - paragraph [ref=e139]: Site
+          - link "About" [ref=e140] [cursor=pointer]:
+            - /url: /about
+          - link "Contact" [ref=e141] [cursor=pointer]:
+            - /url: /contact
+          - link "Sign In" [ref=e142] [cursor=pointer]:
+            - /url: /login
+    - paragraph [ref=e144]: Built by Kevin Alleweireldt · Powered by Firebase + Vercel
