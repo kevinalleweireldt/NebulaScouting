@@ -1080,6 +1080,37 @@ body.landing .main {
     -webkit-text-fill-color: transparent;
 }
 
+/* Scroll-triggered reveal */
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+        opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+[data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger children inside grids that opt in */
+.reveal-stagger > [data-reveal]:nth-child(1) { transition-delay: 0.00s; }
+.reveal-stagger > [data-reveal]:nth-child(2) { transition-delay: 0.10s; }
+.reveal-stagger > [data-reveal]:nth-child(3) { transition-delay: 0.20s; }
+.reveal-stagger > [data-reveal]:nth-child(4) { transition-delay: 0.30s; }
+.reveal-stagger > [data-reveal]:nth-child(5) { transition-delay: 0.40s; }
+.reveal-stagger > [data-reveal]:nth-child(6) { transition-delay: 0.50s; }
+
+@media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
 /* Big polished hero logo */
 .hero-logo {
     position: relative;

@@ -7,6 +7,7 @@
     <title>Nebula Scouting — FRC Scouting, Reimagined</title>
     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
     <link rel="stylesheet" href="style/style.css">
+    <script type="module" src="/script/landing.js" defer></script>
 </head>
 <body class="landing">
     <div class="main">
@@ -56,12 +57,12 @@
         <!-- FEATURES -->
         <section id="features" class="section">
             <div class="section-inner">
-                <p class="eyebrow">Features</p>
-                <h2 class="section-title">Everything you need to scout an event</h2>
-                <p class="section-lead">Four tools, one workflow. Built for speed in the pits and clarity at the strategy table.</p>
+                <p class="eyebrow" data-reveal>Features</p>
+                <h2 class="section-title" data-reveal>Everything you need to scout an event</h2>
+                <p class="section-lead" data-reveal>Four tools, one workflow. Built for speed in the pits and clarity at the strategy table.</p>
 
-                <div class="features-grid">
-                    <article class="feature-card">
+                <div class="features-grid reveal-stagger">
+                    <article class="feature-card" data-reveal>
                         <div class="feature-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="8" y="2" width="8" height="4" rx="1"/>
@@ -74,7 +75,7 @@
                         <p class="feature-desc">A streamlined match form built for the field. Track FUEL into the HUB, Tower climbing (L1 / L2 / L3), defense, and breakdowns — per match.</p>
                     </article>
 
-                    <article class="feature-card">
+                    <article class="feature-card" data-reveal>
                         <div class="feature-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="3" y1="20" x2="21" y2="20"/>
@@ -88,7 +89,7 @@
                         <p class="feature-desc">Admins see every match scouted across the event; scouters see their own submissions. Sort any column instantly.</p>
                     </article>
 
-                    <article class="feature-card">
+                    <article class="feature-card" data-reveal>
                         <div class="feature-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="4" width="7" height="16" rx="1"/>
@@ -100,7 +101,7 @@
                         <p class="feature-desc">Compare any two teams across auto, teleop, and endgame averages. Pick decisions made on data, not vibes.</p>
                     </article>
 
-                    <article class="feature-card">
+                    <article class="feature-card" data-reveal>
                         <div class="feature-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="9" y1="6" x2="20" y2="6"/>
@@ -122,21 +123,21 @@
         <!-- WORKFLOW -->
         <section id="workflow" class="section section-tinted">
             <div class="section-inner">
-                <p class="eyebrow">Workflow</p>
-                <h2 class="section-title">From the field to the table in three steps</h2>
+                <p class="eyebrow" data-reveal>Workflow</p>
+                <h2 class="section-title" data-reveal>From the field to the table in three steps</h2>
 
-                <div class="workflow-grid">
-                    <div class="workflow-step">
+                <div class="workflow-grid reveal-stagger">
+                    <div class="workflow-step" data-reveal>
                         <div class="workflow-step-num">01</div>
                         <h3 class="workflow-step-title">Capture</h3>
                         <p class="workflow-step-desc">Scouters open the match form on their phones at the field. Tap counters, flag defense and breakdowns, hit submit.</p>
                     </div>
-                    <div class="workflow-step">
+                    <div class="workflow-step" data-reveal>
                         <div class="workflow-step-num">02</div>
                         <h3 class="workflow-step-title">Sync</h3>
                         <p class="workflow-step-desc">Every submission writes straight to Firestore. No exporting, no syncing, no spreadsheet wrangling between matches.</p>
                     </div>
-                    <div class="workflow-step">
+                    <div class="workflow-step" data-reveal>
                         <div class="workflow-step-num">03</div>
                         <h3 class="workflow-step-title">Decide</h3>
                         <p class="workflow-step-desc">Strategy leads open the dashboard, compare teams, and finalize the pick list — live, with everything that just happened.</p>
@@ -148,17 +149,17 @@
         <!-- 2026 SEASON -->
         <section id="season" class="section">
             <div class="section-inner">
-                <p class="eyebrow">2026 Season</p>
-                <h2 class="section-title">Tracked for REBUILT</h2>
-                <p class="section-lead">Every field on the form maps to a real point value in the 2026 game.</p>
+                <p class="eyebrow" data-reveal>2026 Season</p>
+                <h2 class="section-title" data-reveal>Tracked for REBUILT</h2>
+                <p class="section-lead" data-reveal>Every field on the form maps to a real point value in the 2026 game.</p>
 
-                <div class="game-grid">
-                    <div class="game-card">
+                <div class="game-grid reveal-stagger">
+                    <div class="game-card" data-reveal>
                         <p class="game-card-label">Auto + Teleop</p>
                         <h3 class="game-card-title">FUEL into HUB</h3>
                         <p class="game-card-desc">Counter-based entry for both phases. Track every shot that scores, individually.</p>
                     </div>
-                    <div class="game-card">
+                    <div class="game-card" data-reveal>
                         <p class="game-card-label">Auto + Endgame</p>
                         <h3 class="game-card-title">Tower Climbing</h3>
                         <div class="game-levels">
@@ -167,7 +168,7 @@
                             <span class="game-level"><strong>L3</strong><span>30 pts</span></span>
                         </div>
                     </div>
-                    <div class="game-card">
+                    <div class="game-card" data-reveal>
                         <p class="game-card-label">Per Match</p>
                         <h3 class="game-card-title">Robot Flags</h3>
                         <p class="game-card-desc">Defense played and breakdown status captured every match for honest, complete team profiles.</p>
@@ -179,7 +180,7 @@
         <!-- CTA -->
         <section class="section">
             <div class="section-inner">
-                <div class="cta-card">
+                <div class="cta-card" data-reveal>
                     <p class="eyebrow">Ready to start</p>
                     <h2 class="cta-title">Sign in to access the platform</h2>
                     <p class="cta-lead">Contact your team admin for an account, then sign in to start scouting.</p>
