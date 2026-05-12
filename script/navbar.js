@@ -13,12 +13,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     const html = await res.text();
     navEl.innerHTML = html;
 
+    const logoLink    = document.getElementById('nav-logo-link');
+    const aboutLink   = document.getElementById('nav-about-link');
+    const contactLink = document.getElementById('nav-contact-link');
+
     onAuthStateChanged(auth, async user => {
         if (!user) {
+            if (logoLink) logoLink.setAttribute('href', '/');
+            if (aboutLink) aboutLink.hidden = false;
+            if (contactLink) contactLink.hidden = false;
             const navUser = document.querySelector('.nav-user');
             if (navUser) navUser.innerHTML = '<a href="/login" class="btn btn-sm">Sign In</a>';
             return;
         }
+
+        if (logoLink) logoLink.setAttribute('href', '/dashboard');
+        if (aboutLink) aboutLink.hidden = true;
+        if (contactLink) contactLink.hidden = true;
 
         const emailEl   = document.getElementById('nav-user-email');
         const logoutBtn = document.getElementById('nav-logout-btn');
