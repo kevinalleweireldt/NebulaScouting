@@ -1,0 +1,52 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - heading "Dashboard" [level=1] [ref=e5]
+    - paragraph [ref=e6]: 2026 FRC · Rebuilt
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - paragraph [ref=e9]: Total Matches
+      - heading "—" [level=2] [ref=e10]
+      - generic [ref=e11]: scouted
+    - generic [ref=e13]:
+      - paragraph [ref=e14]: Teams Tracked
+      - heading "—" [level=2] [ref=e15]
+      - generic [ref=e16]: unique
+    - generic [ref=e17]:
+      - paragraph [ref=e18]: Avg Score
+      - heading "—" [level=2] [ref=e19]
+      - generic [ref=e20]: all matches
+    - generic [ref=e22]:
+      - paragraph [ref=e23]: Top Team
+      - heading "—" [level=2] [ref=e24]
+      - generic [ref=e25]: by avg score
+    - generic [ref=e26]:
+      - paragraph [ref=e27]: Last Submission
+      - heading "—" [level=2] [ref=e28]
+      - generic [ref=e29]: —
+    - generic [ref=e30]:
+      - paragraph [ref=e31]: Next Match
+      - heading "—" [level=2] [ref=e32]
+      - generic [ref=e33]: via TBA
+  - generic [ref=e34]:
+    - generic [ref=e35]:
+      - generic [ref=e36]:
+        - heading "Recent Activity" [level=3] [ref=e37]
+        - text: last 8 submissions
+      - list [ref=e38]:
+        - listitem [ref=e39]: No scouted matches yet.
+    - generic [ref=e40]:
+      - generic [ref=e41]:
+        - heading "Top 5 · Avg Score" [level=3] [ref=e42]
+        - link "view all →" [ref=e44] [cursor=pointer]:
+          - /url: /matchdata
+      - list [ref=e45]:
+        - listitem [ref=e46]: Awaiting data.
+  - generic [ref=e47]:
+    - link "+ Match Form" [ref=e48] [cursor=pointer]:
+      - /url: /matchform
+    - link "≡ Match Data" [ref=e49] [cursor=pointer]:
+      - /url: /matchdata
+    - link "⇄ Compare Teams" [ref=e50] [cursor=pointer]:
+      - /url: /compare
+    - link "★ Pick List" [ref=e51] [cursor=pointer]:
+      - /url: /picklist
