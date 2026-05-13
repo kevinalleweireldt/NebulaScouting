@@ -67,7 +67,7 @@ Every protected page body has `class="auth-loading"` (hides content). The page's
 ## Role Rules
 | Feature | Admin | Scouter |
 |---|---|---|
-| See all match data | ✓ | Own submissions only |
+| See all match data | ✓ | ✓ |
 | Delete matches | ✓ | ✗ |
 | Clear all data | ✓ | ✗ |
 | Edit pick list | ✓ | Read-only |
@@ -91,4 +91,3 @@ pickList/current:      { teams: [string] }
 - `tba.js` is a stub — TBA API integration not yet implemented
 - Pit scouting not yet built
 - Scouter schedule generation not yet built
-- Composite Firestore index needed for scouter query (`submittedBy` + `timestamp`) — link appears in console on first run

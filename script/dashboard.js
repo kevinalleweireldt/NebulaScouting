@@ -1,22 +1,13 @@
 import { requireAuth }   from './auth.js';
 import { db }            from './firebase-config.js';
-import { collection, query, where, orderBy, getDocs }
+import { collection, query, orderBy, getDocs }
     from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
 import { drawSparkline, PALETTE } from './chart-theme.js';
 
 let currentUser, currentRole;
 
 async function fetchHistory() {
-    let q;
-    if (currentRole === 'admin') {
-        q = query(collection(db, 'matchHistory'), orderBy('timestamp', 'asc'));
-    } else {
-        q = query(
-            collection(db, 'matchHistory'),
-            where('submittedBy', '==', currentUser.uid),
-            orderBy('timestamp', 'asc')
-        );
-    }
+    const q = query(collection(db, 'matchHistory'), orderBy('timestamp', 'asc'));
     const snap = await getDocs(q);
     return snap.docs.map(d => ({
         id: d.id,
