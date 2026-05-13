@@ -24,7 +24,8 @@ A fast FRC scouting web app. Scouters fill in a match form; admins review aggreg
 ## Stack
 - **Frontend:** Vanilla HTML/CSS/JS (ES modules, no build step)
 - **Auth:** Firebase Email/Password — two roles: `admin`, `scouter`
-- **Database:** Firestore — collections: `matchHistory`, `pickList/current`, `users`
+- **Database:** Firestore — collections: `matchHistory`, `pickList/current`, `users`, `config/app`
+- **External data:** The Blue Alliance API, proxied through `/api/tba` (Vercel Serverless) so the read key stays server-side
 - **Deployment:** Vercel — clean URLs defined in `vercel.json`
 
 ## File Layout
@@ -34,6 +35,8 @@ A fast FRC scouting web app. Scouters fill in a match form; admins review aggreg
   404.html              ← branded not-found page
   vercel.json           ← clean URL rewrites
   style/style.css       ← single stylesheet
+  api/
+    tba.js              ← Vercel Serverless proxy → The Blue Alliance; injects X-TBA-Auth-Key
   pages/
     login.html          ← standalone sign-in page (no navbar)
     dashboard.html
@@ -41,24 +44,25 @@ A fast FRC scouting web app. Scouters fill in a match form; admins review aggreg
     matchdata.html
     teamcomparison.html
     picklist.html
-    admin.html          ← admin-only
+    admin.html          ← admin-only; also sets/edits config/app.eventKey
     about.html
     contact.html
     navbar.html         ← fetched & injected by navbar.js
   script/
     firebase-config.js  ← Firebase init; paste real config here before deploying
     auth.js             ← requireAuth() — called at top of every protected page
-    navbar.js           ← injects navbar.html, wires auth state + logout
+    navbar.js           ← injects navbar.html, wires auth state + logout; hides on scroll-down, shows on scroll-up
     login.js
-    admin.js            ← secondary Firebase app pattern for creating accounts
-    app.js              ← match form submit → Firestore addDoc
+    landing.js          ← landing-page interactions (index.html)
+    admin.js            ← secondary Firebase app pattern for creating accounts; manages active event key
+    app.js              ← match form: typed match # validated against TBA quals; team # is a select populated from that qual's alliances; submit → Firestore addDoc
     dashboard.js        ← KPI strip, recent activity, top-5 leaderboard (Firestore-backed)
-    matchdata.js        ← Firestore-backed; admin sees all, scouter sees own
+    matchdata.js        ← Firestore-backed; admin sees all, scouter sees own; cells heat-map green→red by tier
     picklist.js         ← Firestore-backed; scouter gets read-only view; sparkline per row
     teamcomparison.js   ← Trend chart (per-match score + running avg) with multi-team chip rail
     matchScore.js       ← counter UI logic, imported by app.js
     chart-theme.js      ← shared Chart.js defaults, brand palette, drawSparkline() helper
-    tba.js              ← TBA API integration (stub/WIP)
+    tba.js              ← TBA client: reads config/app.eventKey, fetches event/teams/matches via /api/tba, caches 15min
 ```
 
 ## Auth Flow
@@ -80,6 +84,7 @@ matchHistory/{docId}:  { matchNumber, teamNumber, autoFuel, autoClimb, teleopFue
                          endgameClimb, defense, brokeDown, score, extraComments,
                          submittedBy, submittedByEmail, timestamp }
 pickList/current:      { teams: [string] }
+config/app:            { eventKey }   ← active TBA event (e.g. "2026txcmp2"); set via /admin
 ```
 
 ## 2026 Game Tracking
@@ -88,6 +93,5 @@ pickList/current:      { teams: [string] }
 - Defense and breakdown flags per match
 
 ## Known Gaps / Roadmap
-- `tba.js` is a stub — TBA API integration not yet implemented
 - Pit scouting not yet built
 - Scouter schedule generation not yet built
