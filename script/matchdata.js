@@ -135,6 +135,22 @@ function escapeHtml(s) {
         .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
+function tierClass(val, min, max, invert = false) {
+    if (!Number.isFinite(val) || !Number.isFinite(min) || !Number.isFinite(max) || max === min) return '';
+    let p = (val - min) / (max - min);
+    if (invert) p = 1 - p;
+    if (p <= 0.20) return 'tier-1';
+    if (p <= 0.40) return 'tier-2';
+    if (p <= 0.60) return 'tier-3';
+    if (p <= 0.80) return 'tier-4';
+    return 'tier-5';
+}
+
+function climbClass(level) {
+    const n = Math.max(0, Math.min(3, Number(level) || 0));
+    return `climb-${n}`;
+}
+
 function renderAllMatchesTable() {
     const container = document.getElementById('matchTableContainer');
     if (!container) return;
@@ -164,6 +180,13 @@ function renderAllMatchesTable() {
         { f: 'extraComments', label: 'Comments' }
     ];
 
+    const autoVals   = rows.map(r => r.autoFuel);
+    const teleVals   = rows.map(r => r.teleopFuel);
+    const scoreVals  = rows.map(r => r.score);
+    const minAuto    = Math.min(...autoVals),  maxAuto  = Math.max(...autoVals);
+    const minTele    = Math.min(...teleVals),  maxTele  = Math.max(...teleVals);
+    const minScore   = Math.min(...scoreVals), maxScore = Math.max(...scoreVals);
+
     let html = '<table class="match-table"><thead><tr>';
     cols.forEach(c => {
         const active = c.f === currentSort.field ? 'sort-active' : '';
@@ -178,13 +201,13 @@ function renderAllMatchesTable() {
         html += '<tr>';
         html += `<td>${escapeHtml(r.matchNumber)}</td>`;
         html += `<td>${teamLabel(r.teamNumber)}</td>`;
-        html += `<td>${r.autoFuel}</td>`;
-        html += `<td>${CLIMB_LABELS[r.autoClimb] || 'None'}</td>`;
-        html += `<td>${r.teleopFuel}</td>`;
-        html += `<td>${CLIMB_LABELS[r.endgameClimb] || 'None'}</td>`;
+        html += `<td class="${tierClass(r.autoFuel, minAuto, maxAuto)}">${r.autoFuel}</td>`;
+        html += `<td class="${climbClass(r.autoClimb)}">${CLIMB_LABELS[r.autoClimb] || 'None'}</td>`;
+        html += `<td class="${tierClass(r.teleopFuel, minTele, maxTele)}">${r.teleopFuel}</td>`;
+        html += `<td class="${climbClass(r.endgameClimb)}">${CLIMB_LABELS[r.endgameClimb] || 'None'}</td>`;
         html += `<td>${r.defense ? 'Yes' : 'No'}</td>`;
-        html += `<td>${r.brokeDown ? 'Yes' : 'No'}</td>`;
-        html += `<td><strong>${r.score}</strong></td>`;
+        html += `<td class="${r.brokeDown ? 'cell-bad' : ''}">${r.brokeDown ? 'Yes' : 'No'}</td>`;
+        html += `<td class="${tierClass(r.score, minScore, maxScore)}"><strong>${r.score}</strong></td>`;
         html += `<td>${escapeHtml(r.extraComments)}</td>`;
         if (currentRole === 'admin') {
             html += `<td><button class="btn btn-sm btn-danger" data-delete-id="${escapeHtml(r.id)}">Delete</button></td>`;
@@ -245,9 +268,23 @@ function renderTeamAveragesTable() {
         return;
     }
 
-    const maxScore   = Math.max(...teams.map(t => t.avgScore), 1);
-    const maxAuto    = Math.max(...teams.map(t => t.avgAutoFuel), 1);
-    const maxTeleop  = Math.max(...teams.map(t => t.avgTeleopFuel), 1);
+    const scoreVals = teams.map(t => t.avgScore);
+    const autoVals  = teams.map(t => t.avgAutoFuel);
+    const teleVals  = teams.map(t => t.avgTeleopFuel);
+    const climbVals = teams.map(t => t.climbRate);
+    const defVals   = teams.map(t => t.defenseRate);
+    const bdVals    = teams.map(t => t.brokeDownRate);
+
+    const minScoreV = Math.min(...scoreVals), maxScoreV = Math.max(...scoreVals);
+    const minAutoV  = Math.min(...autoVals),  maxAutoV  = Math.max(...autoVals);
+    const minTeleV  = Math.min(...teleVals),  maxTeleV  = Math.max(...teleVals);
+    const minClimbV = Math.min(...climbVals), maxClimbV = Math.max(...climbVals);
+    const minDefV   = Math.min(...defVals),   maxDefV   = Math.max(...defVals);
+    const minBdV    = Math.min(...bdVals),    maxBdV    = Math.max(...bdVals);
+
+    const maxScore   = Math.max(maxScoreV, 1);
+    const maxAuto    = Math.max(maxAutoV, 1);
+    const maxTeleop  = Math.max(maxTeleV, 1);
 
     let html = '<table class="match-table"><thead><tr>';
     html += '<th>Rank</th><th>Team #</th><th>Matches</th><th>Avg Score</th>';
@@ -255,21 +292,28 @@ function renderTeamAveragesTable() {
     html += '<th>Climb Rate</th><th>Best Climb</th><th>Defense %</th><th>Breakdown %</th>';
     html += '</tr></thead><tbody>';
 
-    const bar = (val, max) => `<td class="cell-bar"><span class="bar-fill" style="width:${Math.min(100, (val/max)*100).toFixed(1)}%"></span><span class="bar-value">${val.toFixed(2)}</span></td>`;
-    const pct = (val) => `<td class="cell-bar"><span class="bar-fill" style="width:${Math.min(100, val*100).toFixed(1)}%"></span><span class="bar-value">${(val*100).toFixed(0)}%</span></td>`;
+    const bar = (val, max, tier) => `<td class="cell-bar ${tier}"><span class="bar-fill" style="width:${Math.min(100, (val/max)*100).toFixed(1)}%"></span><span class="bar-value">${val.toFixed(2)}</span></td>`;
+    const pct = (val, tier) => `<td class="cell-bar ${tier}"><span class="bar-fill" style="width:${Math.min(100, val*100).toFixed(1)}%"></span><span class="bar-value">${(val*100).toFixed(0)}%</span></td>`;
 
     teams.forEach((t, i) => {
+        const tScore = tierClass(t.avgScore,      minScoreV, maxScoreV);
+        const tAuto  = tierClass(t.avgAutoFuel,   minAutoV,  maxAutoV);
+        const tTele  = tierClass(t.avgTeleopFuel, minTeleV,  maxTeleV);
+        const tClimb = tierClass(t.climbRate,     minClimbV, maxClimbV);
+        const tDef   = tierClass(t.defenseRate,   minDefV,   maxDefV);
+        const tBd    = tierClass(t.brokeDownRate, minBdV,    maxBdV, /* invert */ true);
+
         html += '<tr>';
         html += `<td><strong>${i + 1}</strong></td>`;
         html += `<td>${teamLabel(t.teamNumber)}</td>`;
         html += `<td>${t.matchCount}</td>`;
-        html += `<td class="cell-bar"><span class="bar-fill" style="width:${Math.min(100, (t.avgScore/maxScore)*100).toFixed(1)}%"></span><span class="bar-value"><strong>${t.avgScore.toFixed(1)}</strong></span></td>`;
-        html += bar(t.avgAutoFuel, maxAuto);
-        html += bar(t.avgTeleopFuel, maxTeleop);
-        html += pct(t.climbRate);
-        html += `<td>${CLIMB_LABELS[t.bestClimb] || 'None'}</td>`;
-        html += pct(t.defenseRate);
-        html += pct(t.brokeDownRate);
+        html += `<td class="cell-bar ${tScore}"><span class="bar-fill" style="width:${Math.min(100, (t.avgScore/maxScore)*100).toFixed(1)}%"></span><span class="bar-value"><strong>${t.avgScore.toFixed(1)}</strong></span></td>`;
+        html += bar(t.avgAutoFuel, maxAuto, tAuto);
+        html += bar(t.avgTeleopFuel, maxTeleop, tTele);
+        html += pct(t.climbRate, tClimb);
+        html += `<td class="${climbClass(t.bestClimb)}">${CLIMB_LABELS[t.bestClimb] || 'None'}</td>`;
+        html += pct(t.defenseRate, tDef);
+        html += pct(t.brokeDownRate, tBd);
         html += '</tr>';
     });
     html += '</tbody></table>';

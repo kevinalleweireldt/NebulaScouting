@@ -2336,6 +2336,57 @@ body.landing .main {
 }
 
 /* ============================================================
+   Tier coloring — green = better, red = worse
+   Applied to <td> cells; values get the tier color, and
+   .cell-bar fill gradients are tinted to match.
+   ============================================================ */
+
+.match-table td.tier-1 { color: #f87171; }
+.match-table td.tier-2 { color: #fb923c; }
+.match-table td.tier-3 { color: #facc15; }
+.match-table td.tier-4 { color: #a3e635; }
+.match-table td.tier-5 { color: #4ade80; }
+
+.match-table td.tier-1 > .bar-value,
+.match-table td.tier-1 > .bar-value strong { color: #f87171; }
+.match-table td.tier-2 > .bar-value,
+.match-table td.tier-2 > .bar-value strong { color: #fb923c; }
+.match-table td.tier-3 > .bar-value,
+.match-table td.tier-3 > .bar-value strong { color: #facc15; }
+.match-table td.tier-4 > .bar-value,
+.match-table td.tier-4 > .bar-value strong { color: #a3e635; }
+.match-table td.tier-5 > .bar-value,
+.match-table td.tier-5 > .bar-value strong { color: #4ade80; }
+
+.match-table td.tier-1.cell-bar > .bar-fill {
+    background: linear-gradient(90deg, rgba(248,113,113,0.28), rgba(248,113,113,0.10));
+    border-right-color: rgba(248,113,113,0.5);
+}
+.match-table td.tier-2.cell-bar > .bar-fill {
+    background: linear-gradient(90deg, rgba(251,146,60,0.26), rgba(251,146,60,0.10));
+    border-right-color: rgba(251,146,60,0.5);
+}
+.match-table td.tier-3.cell-bar > .bar-fill {
+    background: linear-gradient(90deg, rgba(250,204,21,0.24), rgba(250,204,21,0.10));
+    border-right-color: rgba(250,204,21,0.5);
+}
+.match-table td.tier-4.cell-bar > .bar-fill {
+    background: linear-gradient(90deg, rgba(163,230,53,0.26), rgba(163,230,53,0.10));
+    border-right-color: rgba(163,230,53,0.5);
+}
+.match-table td.tier-5.cell-bar > .bar-fill {
+    background: linear-gradient(90deg, rgba(74,222,128,0.30), rgba(74,222,128,0.12));
+    border-right-color: rgba(74,222,128,0.5);
+}
+
+.match-table td.climb-0 { color: #f87171; }
+.match-table td.climb-1 { color: #facc15; }
+.match-table td.climb-2 { color: #a3e635; }
+.match-table td.climb-3 { color: #4ade80; font-weight: 600; }
+
+.match-table td.cell-bad { color: #f87171; font-weight: 600; }
+
+/* ============================================================
    Chip rail — multi-select team picker
    ============================================================ */
 
