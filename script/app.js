@@ -3,7 +3,7 @@ import { requireAuth }       from './auth.js';
 import { db }                from './firebase-config.js';
 import { collection, addDoc, serverTimestamp }
     from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
-import { getActiveEventKey, getEventMatches, teamNumberFromKey, formatMatchLabel }
+import { getActiveEventKey, getEventMatches, teamNumberFromKey }
     from './tba.js';
 
 const CLIMB_POINTS = [0, 15, 20, 30];
@@ -15,100 +15,76 @@ export function computeScore({ autoFuel, teleopFuel, autoClimb, endgameClimb }) 
         + CLIMB_POINTS[endgameClimb ?? 0];
 }
 
-function replaceWithSelect(oldEl, options) {
-    const sel = document.createElement('select');
-    sel.id = oldEl.id;
-    sel.className = oldEl.className;
-    sel.required = oldEl.required;
-    options.forEach(o => {
-        if (o.group) {
-            const og = document.createElement('optgroup');
-            og.label = o.group;
-            o.options.forEach(child => {
-                const op = document.createElement('option');
-                op.value = child.value;
-                op.textContent = child.label;
-                og.appendChild(op);
-            });
-            sel.appendChild(og);
-        } else {
-            const op = document.createElement('option');
-            op.value = o.value;
-            op.textContent = o.label;
-            sel.appendChild(op);
-        }
-    });
-    oldEl.parentNode.replaceChild(sel, oldEl);
-    return sel;
-}
+let qualByNumber = null;
 
-async function tryWireTbaDropdowns() {
+async function tryWireQualLookup() {
     const eventKey = await getActiveEventKey();
     if (!eventKey) return;
 
     const matches = await getEventMatches(eventKey);
     if (!matches || matches.length === 0) return;
 
-    matches.sort((a, b) => {
-        const order = { qm: 0, ef: 1, qf: 2, sf: 3, f: 4 };
-        const lvl = (order[a.comp_level] ?? 9) - (order[b.comp_level] ?? 9);
-        if (lvl !== 0) return lvl;
-        if (a.set_number !== b.set_number) return (a.set_number || 0) - (b.set_number || 0);
-        return (a.match_number || 0) - (b.match_number || 0);
+    const quals = matches.filter(m => m.comp_level === 'qm');
+    if (quals.length === 0) return;
+
+    qualByNumber = new Map();
+    quals.forEach(m => qualByNumber.set(Number(m.match_number), m));
+
+    const matchInput = document.getElementById('matchNumber');
+    const oldTeam    = document.getElementById('teamNumber');
+    if (!matchInput || !oldTeam) return;
+
+    const teamSel = document.createElement('select');
+    teamSel.id = 'teamNumber';
+    teamSel.required = true;
+    teamSel.disabled = true;
+    teamSel.dataset.tba = 'true';
+    teamSel.appendChild(new Option('— Enter qual match # first —', ''));
+    oldTeam.parentNode.replaceChild(teamSel, oldTeam);
+
+    teamSel.addEventListener('change', () => {
+        teamSel.classList.remove('is-invalid');
+        const msg = document.getElementById('formError');
+        if (msg) msg.hidden = true;
     });
 
-    const oldMatch = document.getElementById('matchNumber');
-    const oldTeam  = document.getElementById('teamNumber');
-    if (!oldMatch || !oldTeam) return;
-
-    const matchOptions = [{ value: '', label: '— Select match —' }];
-    matches.forEach(m => {
-        matchOptions.push({ value: `${m.comp_level}|${m.set_number}|${m.match_number}`, label: formatMatchLabel(m) });
-    });
-    const matchSel = replaceWithSelect(oldMatch, matchOptions);
-
-    const teamSel = replaceWithSelect(oldTeam, [{ value: '', label: '— Select match first —' }]);
-
-    matchSel.addEventListener('change', () => {
-        const v = matchSel.value;
+    const updateTeams = () => {
+        const raw = matchInput.value.trim();
         teamSel.innerHTML = '';
-        if (!v) {
-            teamSel.appendChild(new Option('— Select match first —', ''));
+
+        if (!raw) {
+            teamSel.disabled = true;
+            teamSel.appendChild(new Option('— Enter qual match # first —', ''));
+            matchInput.classList.remove('is-valid');
             return;
         }
-        const [lvl, setN, matchN] = v.split('|');
-        const m = matches.find(x =>
-            x.comp_level === lvl &&
-            String(x.set_number) === setN &&
-            String(x.match_number) === matchN
-        );
-        if (!m || !m.alliances) {
-            teamSel.appendChild(new Option('— No teams found —', ''));
+
+        const n = Number(raw);
+        const m = Number.isInteger(n) && n > 0 ? qualByNumber.get(n) : null;
+        if (!m) {
+            teamSel.disabled = true;
+            teamSel.appendChild(new Option('— Not a valid qual match —', ''));
+            matchInput.classList.remove('is-valid');
+            matchInput.classList.add('is-invalid');
             return;
         }
+
+        matchInput.classList.remove('is-invalid');
+        matchInput.classList.add('is-valid');
+        teamSel.disabled = false;
         teamSel.appendChild(new Option('— Select team —', ''));
         ['red', 'blue'].forEach(color => {
             const og = document.createElement('optgroup');
             og.label = color === 'red' ? 'Red Alliance' : 'Blue Alliance';
-            (m.alliances[color]?.team_keys || []).forEach(tk => {
+            (m.alliances?.[color]?.team_keys || []).forEach(tk => {
                 const num = teamNumberFromKey(tk);
                 og.appendChild(new Option(String(num), String(num)));
             });
             teamSel.appendChild(og);
         });
-    });
+    };
 
-    matchSel.dataset.tba = 'true';
-    teamSel.dataset.tba = 'true';
-
-    // The original "input" listener doesn't fire on selects — wire change to clear errors.
-    [matchSel, teamSel].forEach(el => {
-        el.addEventListener('change', () => {
-            el.classList.remove('is-invalid');
-            const msg = document.getElementById('formError');
-            if (msg) msg.hidden = true;
-        });
-    });
+    matchInput.addEventListener('input', updateTeams);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -129,39 +105,37 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    await tryWireTbaDropdowns();
+    await tryWireQualLookup();
 
     submitButton.addEventListener('click', async () => {
         const matchNumberEl = document.getElementById('matchNumber');
         const teamNumberEl  = document.getElementById('teamNumber');
-        const rawMatch = matchNumberEl?.value || '';
-        const rawTeam  = teamNumberEl?.value || '';
-
-        // For TBA dropdowns the value is "qm|1|12" — extract the human match number for storage.
-        let matchNumber = rawMatch.trim();
-        if (matchNumberEl?.dataset.tba === 'true' && matchNumber.includes('|')) {
-            const [lvl, , mn] = matchNumber.split('|');
-            matchNumber = lvl === 'qm' ? mn : `${lvl.toUpperCase()}${mn}`;
-        }
-        const teamNumber = rawTeam.trim();
+        const matchNumber = (matchNumberEl?.value || '').trim();
+        const teamNumber  = (teamNumberEl?.value || '').trim();
 
         matchNumberEl?.classList.remove('is-invalid');
         teamNumberEl?.classList.remove('is-invalid');
 
-        const missing = [];
+        const errors = [];
         if (!matchNumber) {
-            missing.push('Match Number');
+            errors.push('Match Number');
             matchNumberEl?.classList.add('is-invalid');
+        } else if (qualByNumber) {
+            const n = Number(matchNumber);
+            if (!Number.isInteger(n) || n <= 0 || !qualByNumber.has(n)) {
+                errors.push('a valid qualification Match Number');
+                matchNumberEl?.classList.add('is-invalid');
+            }
         }
         if (!teamNumber) {
-            missing.push('Team Number');
+            errors.push('Team Number');
             teamNumberEl?.classList.add('is-invalid');
         }
 
-        if (missing.length > 0) {
+        if (errors.length > 0) {
             const errorMsg = document.getElementById('formError');
             if (errorMsg) {
-                errorMsg.textContent = `Please enter ${missing.join(' and ')} before submitting.`;
+                errorMsg.textContent = `Please enter ${errors.join(' and ')} before submitting.`;
                 errorMsg.hidden = false;
             }
             const firstInvalid = matchNumberEl?.classList.contains('is-invalid')
