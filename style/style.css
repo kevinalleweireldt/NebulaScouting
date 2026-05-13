@@ -2845,3 +2845,10 @@ body.landing .main {
     }
     .match-info span { font-size: 40px; }
 }
+
+.team-nickname {
+    color: var(--text-muted);
+    font-weight: normal;
+    font-size: 0.9em;
+    margin-left: 4px;
+}

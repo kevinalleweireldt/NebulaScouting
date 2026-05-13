@@ -3,9 +3,26 @@ import { db }           from './firebase-config.js';
 import { collection, query, where, getDocs, doc, getDoc, setDoc }
     from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
 import { drawSparkline, PALETTE } from './chart-theme.js';
+import { getActiveEventKey, getEventTeams } from './tba.js';
 
 let currentRole;
+let nicknameMap = new Map();
 const pickListRef = () => doc(db, 'pickList', 'current');
+
+async function loadNicknames() {
+    const eventKey = await getActiveEventKey();
+    const teams = await getEventTeams(eventKey);
+    const m = new Map();
+    teams.forEach(t => {
+        if (t.team_number != null) m.set(String(t.team_number), t.nickname || '');
+    });
+    nicknameMap = m;
+}
+
+function teamLabel(team) {
+    const nick = nicknameMap.get(String(team));
+    return nick ? `${escapeHtml(team)} <span class="team-nickname">— ${escapeHtml(nick)}</span>` : escapeHtml(team);
+}
 
 async function loadPickList() {
     const snap = await getDoc(pickListRef());
@@ -179,7 +196,7 @@ async function renderPickList() {
             row.innerHTML = `
                 <span class="drag-handle" title="Drag to reorder">≡</span>
                 <span class="rank-number">${idx + 1}</span>
-                <span class="team-number-cell">${escapeHtml(team)}</span>
+                <span class="team-number-cell">${teamLabel(team)}</span>
                 <span class="team-stat">${statLine}</span>
                 <canvas class="picklist-spark" id="${sparkId}"></canvas>
                 <span class="row-actions">
@@ -195,7 +212,7 @@ async function renderPickList() {
         } else {
             row.innerHTML = `
                 <span class="rank-number">${idx + 1}</span>
-                <span class="team-number-cell">${escapeHtml(team)}</span>
+                <span class="team-number-cell">${teamLabel(team)}</span>
                 <span class="team-stat">${statLine}</span>
                 <canvas class="picklist-spark" id="${sparkId}"></canvas>`;
         }
@@ -245,7 +262,7 @@ function renderStatsTable(list, avgMap) {
         const s = avgMap.get(team);
         html += '<tr>';
         html += `<td><strong>${idx + 1}</strong></td>`;
-        html += `<td>${escapeHtml(team)}</td>`;
+        html += `<td>${teamLabel(team)}</td>`;
         if (s) {
             html += `<td>${s.matchCount}</td>`;
             html += bar(s.avgScore, maxScore, v => `<strong>${v.toFixed(1)}</strong>`);
@@ -296,14 +313,31 @@ async function clearList() {
     await renderPickList();
 }
 
+async function seedFromEvent() {
+    const eventKey = await getActiveEventKey();
+    if (!eventKey) { alert('No event key set. Set one in /admin first.'); return; }
+    const teams = await getEventTeams(eventKey);
+    if (teams.length === 0) { alert(`No teams found for event ${eventKey}. Check the event key.`); return; }
+    const nums = teams.map(t => String(t.team_number)).filter(Boolean);
+    const existing = await loadPickList();
+    const merged = [...existing];
+    let added = 0;
+    nums.forEach(n => { if (!merged.includes(n)) { merged.push(n); added++; } });
+    if (added === 0) { alert(`All ${nums.length} event teams are already in the pick list.`); return; }
+    if (!confirm(`Add ${added} team${added === 1 ? '' : 's'} from ${eventKey} to the pick list?`)) return;
+    await savePickList(merged);
+    await renderPickList();
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     ({ role: currentRole } = await requireAuth());
 
+    await loadNicknames();
     await renderPickList();
 
     // Hide edit controls for scouters
     if (currentRole !== 'admin') {
-        ['addTeamInput', 'addTeamBtn', 'autoPopulateBtn', 'clearPicklist'].forEach(id => {
+        ['addTeamInput', 'addTeamBtn', 'autoPopulateBtn', 'clearPicklist', 'seedFromEventBtn'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.hidden = true;
         });
@@ -320,6 +354,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const autoBtn = document.getElementById('autoPopulateBtn');
     if (autoBtn) autoBtn.addEventListener('click', autoPopulate);
+
+    const seedBtn = document.getElementById('seedFromEventBtn');
+    if (seedBtn) seedBtn.addEventListener('click', seedFromEvent);
 
     const clearBtn = document.getElementById('clearPicklist');
     if (clearBtn) clearBtn.addEventListener('click', clearList);

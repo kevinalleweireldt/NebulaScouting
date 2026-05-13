@@ -1,25 +1,73 @@
-const BASE_URL = "https://www.thebluealliance.com/api/v3";
+import { db } from './firebase-config.js';
+import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
 
-const headers = {
-  "X-TBA-Auth-Key": process.env.TBA_API_KEY,
-  "Content-Type": "application/json",
-};
+const TBA_API_KEY = 'sjHDan7PDrQZk8wCmcyIuDwFiOeQxM1hliUT978SzOiJlNql8w81VzlNJnjwMC2V';
+const BASE_URL = 'https://www.thebluealliance.com/api/v3';
+const CACHE_TTL_MS = 15 * 60 * 1000;
 
-/**
- * Fetch data from The Blue Alliance API.
- * @param {string} endpoint
- * @returns {Promise<any>}
- */
+const cache = new Map();
+let cachedEventKey = null;
 
 async function fetchTBAData(endpoint) {
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
-    method: "GET",
-    headers: headers,
-  });
+    const hit = cache.get(endpoint);
+    if (hit && Date.now() - hit.t < CACHE_TTL_MS) return hit.v;
 
-  if (!response.ok) {
-    throw new Error(`API request failed with status ${response.status}`);
-  }
+    const res = await fetch(`${BASE_URL}${endpoint}`, {
+        method: 'GET',
+        headers: { 'X-TBA-Auth-Key': TBA_API_KEY, 'Content-Type': 'application/json' }
+    });
+    if (!res.ok) throw new Error(`TBA ${endpoint} failed: ${res.status}`);
+    const v = await res.json();
+    cache.set(endpoint, { t: Date.now(), v });
+    return v;
+}
 
-  return response.json();
+export async function getActiveEventKey() {
+    if (cachedEventKey !== null) return cachedEventKey;
+    try {
+        const snap = await getDoc(doc(db, 'config', 'app'));
+        cachedEventKey = (snap.exists() && snap.data().eventKey) || '';
+    } catch {
+        cachedEventKey = '';
+    }
+    return cachedEventKey;
+}
+
+export async function getEventTeams(eventKey) {
+    if (!eventKey) return [];
+    try {
+        return await fetchTBAData(`/event/${eventKey}/teams/simple`);
+    } catch {
+        return [];
+    }
+}
+
+export async function getEventMatches(eventKey) {
+    if (!eventKey) return [];
+    try {
+        return await fetchTBAData(`/event/${eventKey}/matches/simple`);
+    } catch {
+        return [];
+    }
+}
+
+export async function getNextMatch(eventKey) {
+    const matches = await getEventMatches(eventKey);
+    const unplayed = matches.filter(m => m.actual_time == null);
+    if (unplayed.length === 0) return null;
+    unplayed.sort((a, b) => (a.predicted_time || a.time || 0) - (b.predicted_time || b.time || 0));
+    return unplayed[0];
+}
+
+export function teamNumberFromKey(teamKey) {
+    return Number(String(teamKey).replace(/^frc/, ''));
+}
+
+export function formatMatchLabel(m) {
+    const lvl = (m.comp_level || '').toUpperCase();
+    if (lvl === 'QM') return `Qual ${m.match_number}`;
+    if (lvl === 'QF') return `QF ${m.set_number}-${m.match_number}`;
+    if (lvl === 'SF') return `SF ${m.set_number}-${m.match_number}`;
+    if (lvl === 'F')  return `Final ${m.match_number}`;
+    return `${lvl} ${m.match_number}`;
 }

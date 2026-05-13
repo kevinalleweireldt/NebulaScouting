@@ -40,6 +40,21 @@
             </div>
 
             <div class="section-card section-card--tight">
+                <h2>Event Configuration</h2>
+                <p class="subtitle">TBA event key for the active competition (e.g. <code>2026miket</code>). Drives match-form dropdowns, team nicknames, and the Next Match KPI.</p>
+                <div class="match-inputs match-inputs--row">
+                    <div class="input-field">
+                        <label for="eventKey">TBA Event Key</label>
+                        <input type="text" id="eventKey" placeholder="2026miket" autocomplete="off" />
+                    </div>
+                </div>
+                <p id="eventKeyStatus" class="form-error" hidden></p>
+                <div class="buttons-container">
+                    <button class="btn" id="saveEventKeyBtn">Save Event Key</button>
+                </div>
+            </div>
+
+            <div class="section-card section-card--tight">
                 <h2>Accounts</h2>
                 <div id="userListContainer"><p class="empty-state">Loading…</p></div>
             </div>

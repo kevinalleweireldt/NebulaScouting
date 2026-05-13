@@ -4,6 +4,7 @@ import { collection, query, orderBy, getDocs, deleteDoc, doc, writeBatch }
     from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
 import { applyChartDefaults, commonOptions, PALETTE, CLIMB_COLORS, seriesColor, drawSparkline }
     from './chart-theme.js';
+import { getActiveEventKey, getEventTeams } from './tba.js';
 
 const CLIMB_LABELS = ['None', 'L1', 'L2', 'L3'];
 
@@ -18,6 +19,22 @@ let chartsRendered = false;
 
 let allData = [];
 let currentUser, currentRole;
+let nicknameMap = new Map();
+
+async function loadNicknames() {
+    const eventKey = await getActiveEventKey();
+    const teams = await getEventTeams(eventKey);
+    const m = new Map();
+    teams.forEach(t => {
+        if (t.team_number != null) m.set(String(t.team_number), t.nickname || '');
+    });
+    nicknameMap = m;
+}
+
+function teamLabel(team) {
+    const nick = nicknameMap.get(String(team));
+    return nick ? `${escapeHtml(team)} <span class="team-nickname">— ${escapeHtml(nick)}</span>` : escapeHtml(team);
+}
 
 async function fetchHistory() {
     const q = query(collection(db, 'matchHistory'), orderBy('timestamp', 'asc'));
@@ -160,7 +177,7 @@ function renderAllMatchesTable() {
     rows.forEach(r => {
         html += '<tr>';
         html += `<td>${escapeHtml(r.matchNumber)}</td>`;
-        html += `<td>${escapeHtml(r.teamNumber)}</td>`;
+        html += `<td>${teamLabel(r.teamNumber)}</td>`;
         html += `<td>${r.autoFuel}</td>`;
         html += `<td>${CLIMB_LABELS[r.autoClimb] || 'None'}</td>`;
         html += `<td>${r.teleopFuel}</td>`;
@@ -244,7 +261,7 @@ function renderTeamAveragesTable() {
     teams.forEach((t, i) => {
         html += '<tr>';
         html += `<td><strong>${i + 1}</strong></td>`;
-        html += `<td>${escapeHtml(t.teamNumber)}</td>`;
+        html += `<td>${teamLabel(t.teamNumber)}</td>`;
         html += `<td>${t.matchCount}</td>`;
         html += `<td class="cell-bar"><span class="bar-fill" style="width:${Math.min(100, (t.avgScore/maxScore)*100).toFixed(1)}%"></span><span class="bar-value"><strong>${t.avgScore.toFixed(1)}</strong></span></td>`;
         html += bar(t.avgAutoFuel, maxAuto);
@@ -474,6 +491,7 @@ function switchTab(name) {
 document.addEventListener('DOMContentLoaded', async () => {
     ({ user: currentUser, role: currentRole } = await requireAuth());
 
+    await loadNicknames();
     allData = await fetchHistory();
     renderKpis();
     renderAllMatchesTable();

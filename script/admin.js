@@ -3,7 +3,7 @@ import { auth, db }      from './firebase-config.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
 import { getAuth, createUserWithEmailAndPassword }
     from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js';
-import { collection, getDocs, doc, setDoc, serverTimestamp }
+import { collection, getDocs, doc, getDoc, setDoc, serverTimestamp }
     from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
 
 let secondaryAuth = null;
@@ -50,9 +50,45 @@ async function renderUserList() {
     }
 }
 
+async function initEventKeySection() {
+    const input = document.getElementById('eventKey');
+    const btn = document.getElementById('saveEventKeyBtn');
+    const status = document.getElementById('eventKeyStatus');
+    if (!input || !btn) return;
+
+    try {
+        const snap = await getDoc(doc(db, 'config', 'app'));
+        if (snap.exists()) input.value = snap.data().eventKey ?? '';
+    } catch (err) {
+        status.textContent = `Could not load current event key: ${err.message}`;
+        status.hidden = false;
+    }
+
+    btn.addEventListener('click', async () => {
+        const eventKey = input.value.trim();
+        status.hidden = true;
+        status.style.color = '';
+        btn.disabled = true;
+        btn.textContent = 'Saving…';
+        try {
+            await setDoc(doc(db, 'config', 'app'), { eventKey }, { merge: true });
+            status.textContent = eventKey ? `Saved event key: ${eventKey}` : 'Event key cleared.';
+            status.style.color = 'var(--emerald)';
+            status.hidden = false;
+        } catch (err) {
+            status.textContent = `Error: ${err.message}`;
+            status.hidden = false;
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Save Event Key';
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     await requireAuth('admin');
     await renderUserList();
+    await initEventKeySection();
 
     const createBtn = document.getElementById('createUserBtn');
     const statusEl  = document.getElementById('createUserStatus');

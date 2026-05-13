@@ -3,6 +3,7 @@ import { db }            from './firebase-config.js';
 import { collection, query, orderBy, getDocs }
     from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
 import { drawSparkline, PALETTE } from './chart-theme.js';
+import { getActiveEventKey, getNextMatch, formatMatchLabel } from './tba.js';
 
 let currentUser, currentRole;
 
@@ -184,4 +185,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderKpis(rows);
     renderActivity(rows);
     renderLeaderboard(rows);
+    renderNextMatch();
 });
+
+async function renderNextMatch() {
+    const valEl = document.getElementById('dashNextMatch');
+    const hintEl = document.getElementById('dashNextMatchHint');
+    if (!valEl) return;
+
+    const eventKey = await getActiveEventKey();
+    if (!eventKey) {
+        if (hintEl) hintEl.textContent = 'set event key in /admin';
+        return;
+    }
+    const m = await getNextMatch(eventKey);
+    if (!m) {
+        if (hintEl) hintEl.textContent = `${eventKey} · no upcoming matches`;
+        return;
+    }
+    valEl.textContent = formatMatchLabel(m);
+    const when = m.predicted_time || m.time;
+    if (when && hintEl) {
+        const date = new Date(when * 1000);
+        hintEl.textContent = date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    } else if (hintEl) {
+        hintEl.textContent = eventKey;
+    }
+}
