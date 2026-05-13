@@ -2852,3 +2852,16 @@ body.landing .main {
     font-size: 0.9em;
     margin-left: 4px;
 }
+
+.picklist-table tr.pl-tr { cursor: grab; transition: background 0.15s ease; }
+.picklist-table tr.pl-tr:active { cursor: grabbing; }
+.picklist-table tr.pl-tr:hover { background: var(--bg-2); }
+.picklist-table tr.pl-tr.drag-over {
+    background: linear-gradient(135deg, rgba(157, 78, 255, 0.25), rgba(217, 70, 239, 0.15));
+    box-shadow: inset 0 0 0 1px var(--magenta);
+}
+.picklist-table .drag-cell { width: 24px; padding-right: 0; }
+.picklist-table .row-actions { white-space: nowrap; }
+.picklist-table .row-actions .arrow-btn,
+.picklist-table .row-actions .btn { margin-left: 4px; }
+.picklist-table .picklist-spark { display: block; margin: 0; }

@@ -126,7 +126,7 @@ function onDragStart(e) {
 }
 function onDragEnd(e) {
     e.currentTarget.style.opacity = '';
-    document.querySelectorAll('.picklist-row').forEach(r => r.classList.remove('drag-over'));
+    document.querySelectorAll('.pl-tr').forEach(r => r.classList.remove('drag-over'));
 }
 function onDragOver(e) {
     e.preventDefault();
@@ -166,61 +166,78 @@ async function removeTeam(team) {
 async function renderPickList() {
     const container = document.getElementById('pickListContainer');
     if (!container) return;
-    const list   = await loadPickList();
+    const list = await loadPickList();
     const history = await fetchHistory();
     const avgMap = computeTeamAverages(history);
     const isAdmin = currentRole === 'admin';
 
     if (list.length === 0) {
         container.innerHTML = '<div class="picklist-empty">No teams in pick list. Add a team number above, or auto-populate from your scouted data.</div>';
-        renderStatsTable(list, avgMap);
         renderKpiStrip(list, avgMap);
         return;
     }
 
-    container.innerHTML = '';
+    const scoutedStats = list.map(t => avgMap.get(t)).filter(Boolean);
+    const maxScore  = Math.max(...scoutedStats.map(s => s.avgScore || 0), 1);
+    const maxAuto   = Math.max(...scoutedStats.map(s => s.avgAutoFuel || 0), 1);
+    const maxTeleop = Math.max(...scoutedStats.map(s => s.avgTeleopFuel || 0), 1);
+
+    const bar = (val, max, fmt) => {
+        const p = Math.min(100, ((val || 0) / max) * 100);
+        return `<td class="cell-bar"><span class="bar-fill" style="width:${p.toFixed(1)}%"></span><span class="bar-value">${fmt(val)}</span></td>`;
+    };
+    const pctCell = (val) => {
+        const w = Math.min(100, (val || 0) * 100);
+        return `<td class="cell-bar"><span class="bar-fill" style="width:${w.toFixed(1)}%"></span><span class="bar-value">${((val || 0) * 100).toFixed(0)}%</span></td>`;
+    };
+
+    let html = '<table class="match-table picklist-table"><thead><tr>';
+    if (isAdmin) html += '<th></th>';
+    html += '<th>Rank</th><th>Team #</th><th>Trend</th><th>Matches</th><th>Avg Score</th><th>Avg Auto FUEL</th><th>Avg Teleop FUEL</th><th>Climb Rate</th><th>Defense %</th>';
+    if (isAdmin) html += '<th></th>';
+    html += '</tr></thead><tbody>';
+
     list.forEach((team, idx) => {
-        const stats   = avgMap.get(team);
-        const statLine = stats
-            ? `Avg Score: ${stats.avgScore.toFixed(1)} • ${stats.matchCount} match${stats.matchCount === 1 ? '' : 'es'}`
-            : 'No scouted matches yet';
+        const s = avgMap.get(team);
         const sparkId = `pk-spark-${idx}`;
-
-        const row = document.createElement('div');
-        row.className    = 'picklist-row';
-        row.dataset.team = team;
-        row.dataset.idx  = idx;
-
-        if (isAdmin) {
-            row.draggable = true;
-            row.innerHTML = `
-                <span class="drag-handle" title="Drag to reorder">≡</span>
-                <span class="rank-number">${idx + 1}</span>
-                <span class="team-number-cell">${teamLabel(team)}</span>
-                <span class="team-stat">${statLine}</span>
-                <canvas class="picklist-spark" id="${sparkId}"></canvas>
-                <span class="row-actions">
-                    <button class="arrow-btn" data-action="up"     data-idx="${idx}" title="Move up">▲</button>
-                    <button class="arrow-btn" data-action="down"   data-idx="${idx}" title="Move down">▼</button>
-                    <button class="btn btn-sm btn-danger" data-action="remove" data-team="${escapeHtml(team)}">Remove</button>
-                </span>`;
-            row.addEventListener('dragstart', onDragStart);
-            row.addEventListener('dragend',   onDragEnd);
-            row.addEventListener('dragover',  onDragOver);
-            row.addEventListener('dragleave', onDragLeave);
-            row.addEventListener('drop',      onDrop);
+        const draggableAttr = isAdmin ? ' draggable="true"' : '';
+        html += `<tr class="pl-tr" data-team="${escapeHtml(team)}" data-idx="${idx}"${draggableAttr}>`;
+        if (isAdmin) html += `<td class="drag-cell"><span class="drag-handle" title="Drag to reorder">≡</span></td>`;
+        html += `<td><strong>${idx + 1}</strong></td>`;
+        html += `<td>${teamLabel(team)}</td>`;
+        html += `<td><canvas class="picklist-spark" id="${sparkId}"></canvas></td>`;
+        if (s) {
+            html += `<td>${s.matchCount}</td>`;
+            html += bar(s.avgScore, maxScore, v => `<strong>${v.toFixed(1)}</strong>`);
+            html += bar(s.avgAutoFuel, maxAuto, v => v.toFixed(2));
+            html += bar(s.avgTeleopFuel, maxTeleop, v => v.toFixed(2));
+            html += pctCell(s.climbRate);
+            html += pctCell(s.defenseRate);
         } else {
-            row.innerHTML = `
-                <span class="rank-number">${idx + 1}</span>
-                <span class="team-number-cell">${teamLabel(team)}</span>
-                <span class="team-stat">${statLine}</span>
-                <canvas class="picklist-spark" id="${sparkId}"></canvas>`;
+            html += '<td colspan="6" class="empty-state">No scouted matches yet</td>';
         }
-
-        container.appendChild(row);
+        if (isAdmin) {
+            html += `<td class="row-actions">
+                <button class="arrow-btn" data-action="up"     data-idx="${idx}" title="Move up">▲</button>
+                <button class="arrow-btn" data-action="down"   data-idx="${idx}" title="Move down">▼</button>
+                <button class="btn btn-sm btn-danger" data-action="remove" data-team="${escapeHtml(team)}">Remove</button>
+            </td>`;
+        }
+        html += '</tr>';
     });
+    html += '</tbody></table>';
+    container.innerHTML = html;
 
-    // Sparklines need to be drawn after canvases are in the DOM and laid out.
+    if (isAdmin) {
+        container.querySelectorAll('tr.pl-tr').forEach(tr => {
+            tr.addEventListener('dragstart', onDragStart);
+            tr.addEventListener('dragend',   onDragEnd);
+            tr.addEventListener('dragover',  onDragOver);
+            tr.addEventListener('dragleave', onDragLeave);
+            tr.addEventListener('drop',      onDrop);
+        });
+    }
+
     requestAnimationFrame(() => {
         list.forEach((team, idx) => {
             const series = teamScoreSeries(history, team);
@@ -231,52 +248,7 @@ async function renderPickList() {
         });
     });
 
-    renderStatsTable(list, avgMap);
     renderKpiStrip(list, avgMap);
-}
-
-function renderStatsTable(list, avgMap) {
-    const container = document.getElementById('picklistStatsTable');
-    if (!container) return;
-    if (list.length === 0) { container.innerHTML = ''; return; }
-
-    const scoutedStats = list.map(t => avgMap.get(t)).filter(Boolean);
-    const maxScore  = Math.max(...scoutedStats.map(s => s.avgScore || 0), 1);
-    const maxAuto   = Math.max(...scoutedStats.map(s => s.avgAutoFuel || 0), 1);
-    const maxTeleop = Math.max(...scoutedStats.map(s => s.avgTeleopFuel || 0), 1);
-
-    const bar = (val, max, fmt) => {
-        const pct = Math.min(100, ((val || 0) / max) * 100);
-        return `<td class="cell-bar"><span class="bar-fill" style="width:${pct.toFixed(1)}%"></span><span class="bar-value">${fmt(val)}</span></td>`;
-    };
-    const pct = (val) => {
-        const w = Math.min(100, (val || 0) * 100);
-        return `<td class="cell-bar"><span class="bar-fill" style="width:${w.toFixed(1)}%"></span><span class="bar-value">${((val || 0) * 100).toFixed(0)}%</span></td>`;
-    };
-
-    let html = '<table class="match-table"><thead><tr>';
-    html += '<th>Rank</th><th>Team #</th><th>Matches</th><th>Avg Score</th><th>Avg Auto FUEL</th><th>Avg Teleop FUEL</th><th>Climb Rate</th><th>Defense %</th>';
-    html += '</tr></thead><tbody>';
-
-    list.forEach((team, idx) => {
-        const s = avgMap.get(team);
-        html += '<tr>';
-        html += `<td><strong>${idx + 1}</strong></td>`;
-        html += `<td>${teamLabel(team)}</td>`;
-        if (s) {
-            html += `<td>${s.matchCount}</td>`;
-            html += bar(s.avgScore, maxScore, v => `<strong>${v.toFixed(1)}</strong>`);
-            html += bar(s.avgAutoFuel, maxAuto, v => v.toFixed(2));
-            html += bar(s.avgTeleopFuel, maxTeleop, v => v.toFixed(2));
-            html += pct(s.climbRate);
-            html += pct(s.defenseRate);
-        } else {
-            html += '<td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>';
-        }
-        html += '</tr>';
-    });
-    html += '</tbody></table>';
-    container.innerHTML = html;
 }
 
 async function addTeam() {
