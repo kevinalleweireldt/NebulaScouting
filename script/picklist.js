@@ -264,16 +264,20 @@ async function addTeam() {
     await renderPickList();
 }
 
-async function autoPopulate() {
-    const existing = await loadPickList();
-    if (existing.length > 0) {
-        if (!confirm('This will replace the current pick list with teams sorted by avg score. Continue?')) return;
-    }
+async function sortByAvgScore() {
+    const list = await loadPickList();
+    if (list.length === 0) { alert('No teams in the pick list to sort.'); return; }
     const history = await fetchHistory();
-    const avgMap  = computeTeamAverages(history);
-    const ranked  = [...avgMap.values()].sort((a, b) => b.avgScore - a.avgScore).map(t => t.teamNumber);
-    if (ranked.length === 0) { alert('No scouted teams to populate from.'); return; }
-    await savePickList(ranked);
+    const avgMap = computeTeamAverages(history);
+    const sorted = [...list].sort((a, b) => {
+        const sa = avgMap.get(a)?.avgScore;
+        const sb = avgMap.get(b)?.avgScore;
+        if (sa == null && sb == null) return 0;
+        if (sa == null) return 1;
+        if (sb == null) return -1;
+        return sb - sa;
+    });
+    await savePickList(sorted);
     await renderPickList();
 }
 
@@ -325,7 +329,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (input) input.addEventListener('keypress', e => { if (e.key === 'Enter') addTeam(); });
 
     const autoBtn = document.getElementById('autoPopulateBtn');
-    if (autoBtn) autoBtn.addEventListener('click', autoPopulate);
+    if (autoBtn) autoBtn.addEventListener('click', sortByAvgScore);
 
     const seedBtn = document.getElementById('seedFromEventBtn');
     if (seedBtn) seedBtn.addEventListener('click', seedFromEvent);
