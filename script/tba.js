@@ -1,8 +1,7 @@
 import { db } from './firebase-config.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
 
-const TBA_API_KEY = 'sjHDan7PDrQZk8wCmcyIuDwFiOeQxM1hliUT978SzOiJlNql8w81VzlNJnjwMC2V';
-const BASE_URL = 'https://www.thebluealliance.com/api/v3';
+const BASE_URL = '/api/tba';
 const CACHE_TTL_MS = 15 * 60 * 1000;
 
 const cache = new Map();
@@ -12,10 +11,7 @@ async function fetchTBAData(endpoint) {
     const hit = cache.get(endpoint);
     if (hit && Date.now() - hit.t < CACHE_TTL_MS) return hit.v;
 
-    const res = await fetch(`${BASE_URL}${endpoint}`, {
-        method: 'GET',
-        headers: { 'X-TBA-Auth-Key': TBA_API_KEY, 'Content-Type': 'application/json' }
-    });
+    const res = await fetch(`${BASE_URL}${endpoint}`, { method: 'GET' });
     if (!res.ok) throw new Error(`TBA ${endpoint} failed: ${res.status}`);
     const v = await res.json();
     cache.set(endpoint, { t: Date.now(), v });
