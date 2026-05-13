@@ -1,7 +1,6 @@
 import { db } from './firebase-config.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
 
-const BASE_URL = '/api/tba';
 const CACHE_TTL_MS = 15 * 60 * 1000;
 
 const cache = new Map();
@@ -11,7 +10,8 @@ async function fetchTBAData(endpoint) {
     const hit = cache.get(endpoint);
     if (hit && Date.now() - hit.t < CACHE_TTL_MS) return hit.v;
 
-    const res = await fetch(`${BASE_URL}${endpoint}`, { method: 'GET' });
+    const url = `/api/tba?path=${encodeURIComponent(endpoint.replace(/^\/+/, ''))}`;
+    const res = await fetch(url, { method: 'GET' });
     if (!res.ok) throw new Error(`TBA ${endpoint} failed: ${res.status}`);
     const v = await res.json();
     cache.set(endpoint, { t: Date.now(), v });
