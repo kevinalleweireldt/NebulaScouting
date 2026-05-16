@@ -56,10 +56,10 @@ A fast FRC scouting web app. Scouters fill in a match form; admins review aggreg
     landing.js          ← landing-page interactions (index.html)
     admin.js            ← secondary Firebase app pattern for creating accounts; manages active event key
     app.js              ← match form: typed match # validated against TBA quals; team # is a select populated from that qual's alliances; submit → Firestore addDoc
-    dashboard.js        ← KPI strip, recent activity, top-5 leaderboard (Firestore-backed)
-    matchdata.js        ← Firestore-backed; admin sees all, scouter sees own; cells heat-map green→red by tier
-    picklist.js         ← Firestore-backed; scouter gets read-only view; sparkline per row
-    teamcomparison.js   ← Trend chart (per-match score + running avg) with multi-team chip rail
+    dashboard.js        ← KPI strip (incl. Next Match via TBA), recent activity, top-5 leaderboard
+    matchdata.js        ← Firestore-backed; everyone sees all rows; admin-only delete buttons + Clear All; tier heat-map green→red; team-nickname column from TBA
+    picklist.js         ← Firestore-backed; scouter gets read-only view; sparkline per row; admin can seed roster from TBA event teams
+    teamcomparison.js   ← Trend chart (per-match score + running avg) with multi-team chip rail; scouter sees only their own submissions (filters by submittedBy)
     matchScore.js       ← counter UI logic, imported by app.js
     chart-theme.js      ← shared Chart.js defaults, brand palette, drawSparkline() helper
     tba.js              ← TBA client: reads config/app.eventKey, fetches event/teams/matches via /api/tba, caches 15min
@@ -71,7 +71,8 @@ Every protected page body has `class="auth-loading"` (hides content). The page's
 ## Role Rules
 | Feature | Admin | Scouter |
 |---|---|---|
-| See all match data | ✓ | ✓ |
+| See all matches on /matchdata and /picklist | ✓ | ✓ |
+| /compare team comparison data | All submissions | Own submissions only |
 | Delete matches | ✓ | ✗ |
 | Clear all data | ✓ | ✗ |
 | Edit pick list | ✓ | Read-only |
